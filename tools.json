@@ -1,0 +1,490 @@
+[
+  {
+    "name": "Cursor",
+    "url": "https://cursor.com",
+    "category": "coding agents",
+    "description": "AI code editor where you review each agent change before accepting it.",
+    "use_cases": [
+      "Editor-based agent coding",
+      "Reviewing diffs before accepting",
+      "Tab completions"
+    ],
+    "pricing": "Old $20 Pro closed to new signups Oct 12, 2026. New plans: Plus $8 (Grok models only), Premium $30, Super $100, Ultra $200; Claude/GPT/Gemini billed at API price.",
+    "verdict": "wait",
+    "verdict_reason": "Keep old Pro if you have it; new plans may cost more once usage is billed. (Disclosure: bundled with X/Grok/Grok Bot.)",
+    "date_added": "2026-10-20",
+    "source": "https://cursor.com/docs/models-and-pricing.md"
+  },
+  {
+    "name": "Claude Code",
+    "url": "https://claude.com/product/claude-code",
+    "category": "coding agents",
+    "description": "Anthropic's terminal coding agent for multi-file refactors and features.",
+    "use_cases": [
+      "Multi-file refactors",
+      "Whole-codebase changes",
+      "Terminal-first workflows"
+    ],
+    "pricing": "Included in Claude Pro $20/mo ($17/mo yearly); Max from $100. Five-hour limit resets plus weekly caps.",
+    "verdict": "use",
+    "verdict_reason": "Strong pick for work that needs a whole-codebase view.",
+    "date_added": "2026-10-20",
+    "source": "https://www.llms.blog/posts/cursor-vs-claude-code-vs-codex-prices-models-and-which-to-pick-october-2026"
+  },
+  {
+    "name": "OpenAI Codex",
+    "url": "https://openai.com/codex/",
+    "category": "coding agents",
+    "description": "OpenAI's coding agent for local and background 'go fix this issue' tasks.",
+    "use_cases": [
+      "Background issue fixing",
+      "Beginner-friendly agent coding",
+      "Desktop app agent"
+    ],
+    "pricing": "Free tier with an agent model in the desktop app (subject to rollout); Plus $20/mo; Pro 200 allowance reduced for new subscribers since Sept 29.",
+    "verdict": "use",
+    "verdict_reason": "Best $0 starting point among the big three.",
+    "date_added": "2026-10-20",
+    "source": "https://www.llms.blog/posts/cursor-vs-claude-code-vs-codex-prices-models-and-which-to-pick-october-2026"
+  },
+  {
+    "name": "GitHub Copilot Pro",
+    "url": "https://github.com/features/copilot",
+    "category": "coding agents",
+    "description": "GitHub's AI pair programmer with agent mode inside popular editors.",
+    "use_cases": [
+      "Budget agent help",
+      "Inline completions",
+      "PR and issue assistance"
+    ],
+    "pricing": "Pro $10/mo with 1,500 credits (about $15 of model calls) per one tracker.",
+    "verdict": "use",
+    "verdict_reason": "Budget pick: the only $10 plan with real agent usage, per DevTools Review.",
+    "date_added": "2026-10-20",
+    "source": "https://devtoolsreview.com/reports/ai-coding-pricing-october-2026/"
+  },
+  {
+    "name": "Devin Desktop (formerly Windsurf)",
+    "url": "https://devin.ai",
+    "category": "coding agents",
+    "description": "Windsurf's editor, now Devin Desktop, plus Devin Cloud agents and the SWE-2 model.",
+    "use_cases": [
+      "Agentic IDE coding",
+      "Cloud agents (Devin Cloud)",
+      "DeepWiki codebase docs"
+    ],
+    "pricing": "Free (light quota); Pro $20/mo; Max $200/mo; Teams $80/mo + $40 per seat.",
+    "verdict": "wait",
+    "verdict_reason": "Rebrand and new SWE-2 model are fresh; give quotas time to settle.",
+    "date_added": "2026-10-20",
+    "source": "https://devin.ai/pricing"
+  },
+  {
+    "name": "Amazon Q Developer",
+    "url": "https://aws.amazon.com/q/developer/",
+    "category": "coding agents",
+    "description": "AWS's AI coding assistant.",
+    "use_cases": [
+      "AWS-centric development"
+    ],
+    "pricing": "Closed to new signups since May 15, 2026.",
+    "verdict": "skip",
+    "verdict_reason": "Not taking new customers.",
+    "date_added": "2026-10-20",
+    "source": "https://devtoolsreview.com/reports/ai-coding-pricing-october-2026/"
+  },
+  {
+    "name": "Tabnine",
+    "url": "https://www.tabnine.com",
+    "category": "coding agents",
+    "description": "AI code assistant focused on enterprise deployment.",
+    "use_cases": [
+      "Enterprise code completion"
+    ],
+    "pricing": "No longer sold self-serve.",
+    "verdict": "skip",
+    "verdict_reason": "No self-serve plan for individuals.",
+    "date_added": "2026-10-20",
+    "source": "https://devtoolsreview.com/reports/ai-coding-pricing-october-2026/"
+  },
+  {
+    "name": "Lovable",
+    "url": "https://lovable.dev",
+    "category": "vibe-coding app builders",
+    "description": "Chat-to-app builder for websites and web apps, no coding needed.",
+    "use_cases": [
+      "Prototyping web apps",
+      "Non-coder MVPs",
+      "Hosting small apps"
+    ],
+    "pricing": "Free: 5 daily build credits (up to 30/mo). Pro $25/mo (100 credits); Business $50/mo.",
+    "verdict": "use",
+    "verdict_reason": "Completed a project-tracker app in a published head-to-head where Bolt did not.",
+    "date_added": "2026-10-20",
+    "source": "https://lovable.dev/pricing"
+  },
+  {
+    "name": "Bolt.new",
+    "url": "https://bolt.new",
+    "category": "vibe-coding app builders",
+    "description": "Prompt-to-app builder in the browser by StackBlitz.",
+    "use_cases": [
+      "Quick prototypes",
+      "Mobile app workflows",
+      "Prompt-driven edits"
+    ],
+    "pricing": "Free tier; paid from $25/mo (up to $30/mo) per Quotadex.",
+    "verdict": "wait",
+    "verdict_reason": "Failed one published head-to-head app test; model training setting on by default outside EU/UK/CH.",
+    "date_added": "2026-10-20",
+    "source": "https://aicrier.com/post/w71bjotqqw96fppg3bs1"
+  },
+  {
+    "name": "v0",
+    "url": "https://v0.app",
+    "category": "vibe-coding app builders",
+    "description": "Vercel's AI app and UI builder.",
+    "use_cases": [
+      "React/Next.js UI generation",
+      "Team prototyping"
+    ],
+    "pricing": "Free (7 messages/day); Plus $30/user/mo; Business $100/user/mo; Premium $20 being sunset.",
+    "verdict": "wait",
+    "verdict_reason": "Free tier is thin and plans just reshuffled; fine to try, wait before paying.",
+    "date_added": "2026-10-20",
+    "source": "https://v0.app/docs/pricing"
+  },
+  {
+    "name": "Replit",
+    "url": "https://replit.com",
+    "category": "vibe-coding app builders",
+    "description": "Cloud IDE with Replit Agent that builds and deploys apps from prompts.",
+    "use_cases": [
+      "Full-stack apps from a prompt",
+      "Collaborative coding",
+      "Instant deploys"
+    ],
+    "pricing": "Core $20/mo ($18 yearly); Pro $100/mo ($90 yearly).",
+    "verdict": "use",
+    "verdict_reason": "Completed the published head-to-head app test alongside Lovable.",
+    "date_added": "2026-10-20",
+    "source": "https://replit.com/pricing"
+  },
+  {
+    "name": "Base44",
+    "url": "https://base44.com",
+    "category": "vibe-coding app builders",
+    "description": "AI app builder for building apps from natural language.",
+    "use_cases": [
+      "Internal tools",
+      "Simple apps for non-coders"
+    ],
+    "pricing": "Free tier; paid from $20/mo up to $200/mo per Quotadex.",
+    "verdict": "wait",
+    "verdict_reason": "Not covered in our sources' tests yet.",
+    "date_added": "2026-10-20",
+    "source": "https://quotadex.com/"
+  },
+  {
+    "name": "n8n",
+    "url": "https://n8n.io",
+    "category": "AI agents/automation",
+    "description": "Fair-code workflow automation with an AI Agent node; self-hostable.",
+    "use_cases": [
+      "Repeating ops agents",
+      "Self-hosted automation",
+      "Bring-your-own-model workflows"
+    ],
+    "pricing": "Self-host free; Cloud Starter €20/mo (2,500 executions, annual); Pro €50/mo.",
+    "verdict": "use",
+    "verdict_reason": "Bills per full run, so retries don't multiply cost; strong default for repeat workflows.",
+    "date_added": "2026-10-20",
+    "source": "https://ivconsulting.in/blogs/openai-agents-api-vs-n8n-vs-zapier-agents/"
+  },
+  {
+    "name": "Zapier Agents",
+    "url": "https://zapier.com/agents",
+    "category": "AI agents/automation",
+    "description": "Plain-English AI agents across Zapier's 9,000+ app integrations.",
+    "use_cases": [
+      "Low-volume no-code helpers",
+      "Agents triggered from Zaps"
+    ],
+    "pricing": "Free: 400 activities/mo; Pro $33.33/mo (annual) for 1,500 activities.",
+    "verdict": "use",
+    "verdict_reason": "Good for low volume with no builder on staff; every action is billed.",
+    "date_added": "2026-10-20",
+    "source": "https://ivconsulting.in/blogs/openai-agents-api-vs-n8n-vs-zapier-agents/"
+  },
+  {
+    "name": "Make",
+    "url": "https://www.make.com",
+    "category": "AI agents/automation",
+    "description": "Visual automation platform with credit-based scenarios.",
+    "use_cases": [
+      "Visual multi-app workflows",
+      "Cheap entry automation"
+    ],
+    "pricing": "Free 1,000 credits/mo; Make plan $9/mo (annual) for 5,000 credits.",
+    "verdict": "wait",
+    "verdict_reason": "Cheap entry, but credits count per module action.",
+    "date_added": "2026-10-20",
+    "source": "https://gravity.fast/blog/ai-agent-pricing-index/"
+  },
+  {
+    "name": "Activepieces",
+    "url": "https://www.activepieces.com",
+    "category": "AI agents/automation",
+    "description": "Open-source automation platform with AI pieces.",
+    "use_cases": [
+      "Open-source automation",
+      "Per-run billing"
+    ],
+    "pricing": "Free 100 credits/day; Plus $16/mo (yearly).",
+    "verdict": "wait",
+    "verdict_reason": "Promising open-source alternative; not covered in tests we cite.",
+    "date_added": "2026-10-20",
+    "source": "https://gravity.fast/blog/ai-agent-pricing-index/"
+  },
+  {
+    "name": "Gumloop",
+    "url": "https://www.gumloop.com",
+    "category": "AI agents/automation",
+    "description": "AI workflow builder billing at cost of tokens and tools plus a fee.",
+    "use_cases": [
+      "AI-heavy workflows",
+      "Scraping and enrichment flows"
+    ],
+    "pricing": "No free plan (14-day trial); Pro $37/mo (20,000 credits) plus 8% orchestration fee.",
+    "verdict": "wait",
+    "verdict_reason": "No free plan and layered fees; try the trial first.",
+    "date_added": "2026-10-20",
+    "source": "https://gravity.fast/blog/ai-agent-pricing-index/"
+  },
+  {
+    "name": "Lindy",
+    "url": "https://www.lindy.ai",
+    "category": "AI agents/automation",
+    "description": "Prebuilt AI assistant you customize; positioned as a Slack-native teammate.",
+    "use_cases": [
+      "Email/calendar assistant",
+      "Slack teammate"
+    ],
+    "pricing": "7-day trial with $50 credits; Team $49.99/seat/mo (5,000 credits) as of Oct 13, 2026.",
+    "verdict": "wait",
+    "verdict_reason": "Pricing changed twice in October 2026.",
+    "date_added": "2026-10-20",
+    "source": "https://gravity.fast/blog/ai-agent-pricing-index/"
+  },
+  {
+    "name": "Manus",
+    "url": "https://manus.im",
+    "category": "AI agents/automation",
+    "description": "Autonomous general agent for one-off research and analysis tasks.",
+    "use_cases": [
+      "Research reports",
+      "Multi-step web tasks"
+    ],
+    "pricing": "Free access; Pro from $20/mo.",
+    "verdict": "wait",
+    "verdict_reason": "Not verified on Manus's own pricing page for this build.",
+    "date_added": "2026-10-20",
+    "source": "https://agentstackwatch.com/pricing/"
+  },
+  {
+    "name": "Microsoft Copilot Studio",
+    "url": "https://www.microsoft.com/microsoft-copilot/microsoft-copilot-studio",
+    "category": "AI agents/automation",
+    "description": "Low-code agent builder for Microsoft 365.",
+    "use_cases": [
+      "Microsoft 365 agents",
+      "Internal helpdesk bots"
+    ],
+    "pricing": "$200/mo per 25,000 Copilot Credits, or pay as you go.",
+    "verdict": "skip",
+    "verdict_reason": "Only makes sense if you're already on Microsoft 365 Copilot.",
+    "date_added": "2026-10-20",
+    "source": "https://infragentic.ai/resources/blog/ai-agent-builder-vs-buying"
+  },
+  {
+    "name": "OpenAI Agent Builder",
+    "url": "https://platform.openai.com",
+    "category": "AI agents/automation",
+    "description": "Visual canvas for multi-step agent workflows.",
+    "use_cases": [
+      "Migrating existing flows"
+    ],
+    "pricing": "Shutting down November 30, 2026; use the API/AgentKit.",
+    "verdict": "skip",
+    "verdict_reason": "Shutting down Nov 30, 2026.",
+    "date_added": "2026-10-20",
+    "source": "https://infragentic.ai/resources/blog/ai-agent-builder-vs-buying"
+  },
+  {
+    "name": "Dify",
+    "url": "https://dify.ai",
+    "category": "AI agents/automation",
+    "description": "Platform for building LLM apps and agents, with a cloud Sandbox tier.",
+    "use_cases": [
+      "LLM app prototyping",
+      "RAG chatbots"
+    ],
+    "pricing": "Free Sandbox; paid from $590/yr per pricing index.",
+    "verdict": "wait",
+    "verdict_reason": "Not covered in tests we cite.",
+    "date_added": "2026-10-20",
+    "source": "https://gravity.fast/blog/ai-agent-pricing-index/"
+  },
+  {
+    "name": "Godot AI",
+    "url": "https://github.com/hi-godot/godot-ai/",
+    "category": "gaming/game dev",
+    "description": "Free MIT plugin connecting Claude Code, Codex and other agents to a running Godot editor (46 tools).",
+    "use_cases": [
+      "Building scenes and nodes",
+      "Editing scripts and signals",
+      "Agent playtesting"
+    ],
+    "pricing": "Free, open source (MIT). Needs Godot 4.7+; telemetry on by default.",
+    "verdict": "use",
+    "verdict_reason": "Voyager tested it hands-on with Claude Code and recommends it.",
+    "date_added": "2026-10-20",
+    "source": "https://voyager.so/blog/godot-mcp"
+  },
+  {
+    "name": "Unity AI agent plugin",
+    "url": "https://unity.com/blog/unity-plugin-grok",
+    "category": "gaming/game dev",
+    "description": "Unity's official agent plugin for Claude Code, Codex and Grok Build (Unity 6+).",
+    "use_cases": [
+      "Agent-driven Unity editing",
+      "Gameplay scripting"
+    ],
+    "pricing": "Unity AI bundled with Unity Personal (free) or Pro ($210/mo/seat).",
+    "verdict": "wait",
+    "verdict_reason": "Official and promising, but not independently tested in our sources.",
+    "date_added": "2026-10-20",
+    "source": "https://unity.com/blog/unity-plugin-grok"
+  },
+  {
+    "name": "Scenario",
+    "url": "https://www.scenario.com",
+    "category": "gaming/game dev",
+    "description": "Game art generator that trains models on your own style.",
+    "use_cases": [
+      "Style-consistent 2D assets",
+      "Textures and 3D exports"
+    ],
+    "pricing": "50 free daily credits (non-commercial); Starter $15/mo, Pro $45, Max $75.",
+    "verdict": "use",
+    "verdict_reason": "Strongest style consistency per Taskade's roundup; good if you have reference art.",
+    "date_added": "2026-10-20",
+    "source": "https://www.scenario.com/pricing"
+  },
+  {
+    "name": "Meshy",
+    "url": "https://www.meshy.ai",
+    "category": "gaming/game dev",
+    "description": "Text- and image-to-3D model generation.",
+    "use_cases": [
+      "3D props from prompts",
+      "Rapid prototyping assets"
+    ],
+    "pricing": "Free 100 credits/mo; Pro from $20/mo.",
+    "verdict": "wait",
+    "verdict_reason": "Good for drafts; not verified on Meshy's own page for this build.",
+    "date_added": "2026-10-20",
+    "source": "https://resources.rework.com/tools/ai-tools/best-ai-tools-for-game-development-2026"
+  },
+  {
+    "name": "Layer AI",
+    "url": "https://www.layer.ai",
+    "category": "gaming/game dev",
+    "description": "Usage-based art production platform for game studios, unlimited seats.",
+    "use_cases": [
+      "Studio asset pipelines",
+      "Live-ops content"
+    ],
+    "pricing": "From $10/mo for 300 Creative Units.",
+    "verdict": "skip",
+    "verdict_reason": "Built for studio scale; entry tier is thin for solo devs.",
+    "date_added": "2026-10-20",
+    "source": "https://resources.rework.com/tools/ai-tools/best-ai-tools-for-game-development-2026"
+  },
+  {
+    "name": "Rosebud AI",
+    "url": "https://rosebud.ai",
+    "category": "gaming/game dev",
+    "description": "No-code builder for playable browser games from prompts.",
+    "use_cases": [
+      "Prompt-to-playable games",
+      "Remixing games",
+      "Game jams"
+    ],
+    "pricing": "Free plan with 8,000 credits (weekly refill in eligible regions); paid tiers available.",
+    "verdict": "use",
+    "verdict_reason": "Free and fast way to try vibe-coding a game.",
+    "date_added": "2026-10-20",
+    "source": "https://rosebud.ai/pricing"
+  },
+  {
+    "name": "Inworld",
+    "url": "https://inworld.ai",
+    "category": "gaming/game dev",
+    "description": "Real-time voice and speech API for AI characters and NPCs.",
+    "use_cases": [
+      "Voiced NPCs",
+      "Conversational characters"
+    ],
+    "pricing": "Free on-demand tier (70 min TTS); Creator $25/mo.",
+    "verdict": "wait",
+    "verdict_reason": "Needs engineering work to integrate.",
+    "date_added": "2026-10-20",
+    "source": "https://www.taskade.com/blog/ai-game-generators"
+  },
+  {
+    "name": "Leonardo AI",
+    "url": "https://leonardo.ai",
+    "category": "gaming/game dev",
+    "description": "2D image generator for concept art, textures and key art.",
+    "use_cases": [
+      "Concept art",
+      "Marketing key art"
+    ],
+    "pricing": "Free 150 daily credits; Apprentice $12/mo.",
+    "verdict": "wait",
+    "verdict_reason": "Not covered in tests we cite.",
+    "date_added": "2026-10-20",
+    "source": "https://resources.rework.com/tools/ai-tools/best-ai-tools-for-game-development-2026"
+  },
+  {
+    "name": "Ludo.ai",
+    "url": "https://ludo.ai",
+    "category": "gaming/game dev",
+    "description": "Game concepting and market research assistant.",
+    "use_cases": [
+      "Game ideation",
+      "Market validation"
+    ],
+    "pricing": "Free 30 credits; Indie $20/mo.",
+    "verdict": "wait",
+    "verdict_reason": "Niche; try the free credits first.",
+    "date_added": "2026-10-20",
+    "source": "https://resources.rework.com/tools/ai-tools/best-ai-tools-for-game-development-2026"
+  },
+  {
+    "name": "ElevenLabs",
+    "url": "https://elevenlabs.io",
+    "category": "general",
+    "description": "AI voice generation for voiceover, dialogue and sound.",
+    "use_cases": [
+      "Voice acting for games/videos",
+      "Narration"
+    ],
+    "pricing": "Free (no commercial rights); Starter $5/mo with commercial rights.",
+    "verdict": "use",
+    "verdict_reason": "Cheap entry with commercial rights at $5.",
+    "date_added": "2026-10-20",
+    "source": "https://resources.rework.com/tools/ai-tools/best-ai-tools-for-game-development-2026"
+  }
+]
