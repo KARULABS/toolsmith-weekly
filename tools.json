@@ -11,7 +11,7 @@
     ],
     "pricing": "Old $20 Pro closed to new signups Oct 12, 2026. New plans: Plus $8 (Grok models only), Premium $30, Super $100, Ultra $200; Claude/GPT/Gemini billed at API price.",
     "verdict": "wait",
-    "verdict_reason": "Keep old Pro if you have it; new plans may cost more once usage is billed.",
+    "verdict_reason": "Keep old Pro if you have it; new plans may cost more once usage is billed. Disclosure: Cursor is bundled with The X Subscription (per Cursor's docs).",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://cursor.com/docs/models-and-pricing.md"
@@ -60,12 +60,12 @@
       "Inline completions",
       "PR and issue assistance"
     ],
-    "pricing": "Pro $10/mo with 1,500 credits (about $15 of model calls) per one tracker.",
+    "pricing": "Free, Pro $10, Pro+ $39, Max $100 a month.",
     "verdict": "use",
     "verdict_reason": "Budget pick: the only $10 plan with real agent usage, per DevTools Review.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://devtoolsreview.com/reports/ai-coding-pricing-october-2026/"
+    "source": "https://docs.github.com/en/copilot/get-started/plans"
   },
   {
     "name": "Devin Desktop (formerly Windsurf)",
@@ -141,12 +141,12 @@
       "Mobile app workflows",
       "Prompt-driven edits"
     ],
-    "pricing": "Free tier; paid from $25/mo (up to $30/mo) per Quotadex.",
+    "pricing": "Pro $18/mo and Teams $27 per member/mo, both billed annually.",
     "verdict": "wait",
-    "verdict_reason": "Failed one published head-to-head comparison; model training setting on by default outside EU/UK/CH.",
+    "verdict_reason": "Model training is on by default outside the EU/UK/CH from Oct 7, 2026.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://aicrier.com/post/w71bjotqqw96fppg3bs1"
+    "source": "https://bolt.new/pricing"
   },
   {
     "name": "v0",
@@ -207,12 +207,12 @@
       "Self-hosted automation",
       "Bring-your-own-model workflows"
     ],
-    "pricing": "Self-host free; Cloud Starter €20/mo (2,500 executions, annual); Pro €50/mo.",
+    "pricing": "Self-host free; Cloud Starter €20/mo billed annually (2,500 executions); Pro €50/mo.",
     "verdict": "use",
-    "verdict_reason": "Bills per full run, so retries don't multiply cost; strong default for repeat workflows.",
+    "verdict_reason": "Bills per workflow execution, not per step; strong default for repeat workflows.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://ivconsulting.in/blogs/openai-agents-api-vs-n8n-vs-zapier-agents/"
+    "source": "https://n8n.io/pricing/"
   },
   {
     "name": "AI by Zapier",
@@ -415,12 +415,12 @@
       "3D props from prompts",
       "Rapid prototyping assets"
     ],
-    "pricing": "Free 100 credits/mo; Pro from $20/mo.",
+    "pricing": "Free 100 credits/mo, Pro $20, Premium $40, Ultra $100, Studio $70.",
     "verdict": "wait",
-    "verdict_reason": "Good for drafts; not verified on Meshy's own page for this build.",
+    "verdict_reason": "Good for drafts.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://resources.rework.com/tools/ai-tools/best-ai-tools-for-game-development-2026"
+    "source": "https://help.meshy.ai/en/articles/12062933-which-meshy-plan-is-right-for-you"
   },
   {
     "name": "Layer AI",
@@ -496,12 +496,12 @@
       "Game ideation",
       "Market validation"
     ],
-    "pricing": "Free 30 credits; Indie $20/mo.",
+    "pricing": "Indie $15/mo, Pro $35/mo, Studio $300/mo, all billed annually.",
     "verdict": "wait",
-    "verdict_reason": "Niche; try the free credits first.",
+    "verdict_reason": "Niche; the paid plans are billed annually.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://resources.rework.com/tools/ai-tools/best-ai-tools-for-game-development-2026"
+    "source": "https://ludo.ai/pricing"
   },
   {
     "name": "ElevenLabs",
