@@ -15,7 +15,10 @@
     "verdict_reason_key": "pricing",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://cursor.com/docs/models-and-pricing.md"
+    "source": "https://cursor.com/docs/models-and-pricing.md",
+    "pick_rank": 1,
+    "pick_reason": "On October 13, 2026, Cursor opened the Origin App Marketplace. Origin integrates with more than 20 apps, and the marketplace is open to public submissions.",
+    "pick_source": "https://cursor.com/changelog"
   },
   {
     "name": "Claude Code",
@@ -172,7 +175,10 @@
     "verdict_reason_key": "pricing",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://v0.app/docs/pricing"
+    "source": "https://v0.app/docs/pricing",
+    "pick_rank": 2,
+    "pick_reason": "On October 19, 2026, v0 added a Slack connection. With the Slack MCP integration, v0 can find messages and post updates, on all v0 plans.",
+    "pick_source": "https://v0.app/changelog"
   },
   {
     "name": "Replit",
@@ -224,7 +230,10 @@
     "verdict_short": "Bills per workflow execution",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://n8n.io/pricing/"
+    "source": "https://n8n.io/pricing/",
+    "pick_rank": 4,
+    "pick_reason": "On October 20, 2026, n8n 2.45 turned the durable scheduler on by default for Schedule Trigger nodes. Each run is stored before it is due, so a restart no longer drops a pending run.",
+    "pick_source": "https://docs.n8n.io/changelog"
   },
   {
     "name": "AI by Zapier",
@@ -478,7 +487,10 @@
     "verdict_short": "Free way to try a game",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://rosebud.ai/pricing"
+    "source": "https://rosebud.ai/pricing",
+    "pick_rank": 3,
+    "pick_reason": "On October 10, 2026, Rosebud wrote that any published Rosebud game now plays inside an X post. Followers paste the game link and press play in the feed.",
+    "pick_source": "https://rosebud.ai/engineering/making-rosebud-games-playable-in-x-posts"
   },
   {
     "name": "Inworld",

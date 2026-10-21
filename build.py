@@ -32,8 +32,6 @@ def is_new(t):
     # Hidden for the launch batch: date_added must be after 2026-10-20 and within 7 days.
     added = datetime.date.fromisoformat(t["date_added"])
     return added > LAUNCH and NEW_CUTOFF <= added <= TODAY
-# Homepage teaser. Names must exist in tools.json. Swap the list each Friday.
-PICKS = ["Claude Code", "Lovable", "n8n", "Godot AI"]
 ISSUES = [{"title": "Issue #1", "when": "Coming Oct 23, 2026",
            "note": "The first letter goes out Oct 23, 2026. No link until it is sent."}]
 # Reader-facing names for the categories stored in tools.json. Unknown categories
@@ -296,7 +294,6 @@ a.metric:hover{background:rgba(255,138,61,.06)}
 .sec-head{display:flex;justify-content:space-between;align-items:center;gap:16px 28px;flex-wrap:wrap;margin-bottom:18px}
 .sec-head p,.intro{color:var(--mu);margin:8px 0 0;max-width:40rem}
 .bento{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:12px;align-items:stretch}
-.bento .featured{grid-row:span 3}
 .pick,.catcard,.panel,.issue{background:linear-gradient(180deg,#0f1630,rgba(15,22,48,.6));border:1px solid var(--bd);border-radius:12px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 8px 24px -12px rgba(0,0,0,.6);padding:20px}
 .pick,a.catcard{text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:10px}
 .pick,.catcard{transition:border-color .2s ease,background .2s ease,transform .2s ease}
@@ -305,7 +302,7 @@ a.metric:hover{background:rgba(255,138,61,.06)}
 .pick h3 a{color:var(--tx);text-decoration:none}
 .pick h3 a:hover{color:var(--ac)}
 .pick p{margin:0;color:var(--mu);font-size:.95rem}
-.featured{position:relative;overflow:hidden;padding:28px;gap:12px;justify-content:space-between}
+.featured{position:relative;overflow:hidden;padding:28px;gap:12px;justify-content:flex-start}
 .featured .more{align-self:flex-start;font-weight:600;color:var(--ac);text-decoration:none}
 .featured .more:hover{color:var(--ac)}
 .featured::before,#signup::before{content:"";position:absolute;inset:0;background:radial-gradient(500px 260px at 0 0,rgba(255,138,61,.12),transparent 60%);pointer-events:none}
@@ -313,6 +310,10 @@ a.metric:hover{background:rgba(255,138,61,.06)}
 .featured h3{font-size:1.75rem;letter-spacing:-.03em}
 .featured .clamp{-webkit-line-clamp:5}
 .clamp{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.whyhere{line-height:1.45}
+.whyhere .label{display:block;margin:0 0 4px;color:var(--ac2);font-size:.75rem;font-weight:600;letter-spacing:.01em}
+.whyhere a{color:var(--ac);font-weight:600;text-decoration:none}
+.whyhere a:hover{text-decoration:underline}
 .cats{display:grid;grid-template-columns:repeat(__CATN__,1fr);gap:12px}
 .caticon{width:24px;height:24px;display:block;image-rendering:pixelated}
 a.catcard{min-height:0;justify-content:space-between}
@@ -624,20 +625,46 @@ def row(t, prefix):
         f'<p class="meta"><span class="price">{e(price_line(t))}</span>'
         f'<span class="cat">{e(cat_label(t["category"]))}</span></p></article>'
     )
+def pick_reason_html(t):
+    # Visible on featured and small cards. The source is a real link, so the card is an article.
+    return (f'<p class="whyhere"><span class="label">Why it\'s here</span>{e(t["pick_reason"])} '
+            f'<a href="{e(t["pick_source"])}" rel="noopener">Source</a></p>')
 def pick_card(t, featured=False):
     href = f'tools/{t["slug"]}.html'
+    why = pick_reason_html(t)
     if featured:
         return (f'<article class="pick featured">'
                 f'<h3><a href="{href}">{e(t["name"])}</a></h3>'
                 f'<p class="clamp">{e(t["description"])}</p>'
+                f'{why}'
                 f'<p class="meta"><span class="cat">{e(cat_label(t["category"]))}</span> · '
                 f'<span class="price">{e(t["pricing"])}</span></p>'
                 f'<a class="more" href="{href}">See the listing →</a></article>')
-    return (f'<a class="pick" href="{href}">'
-            f'<h3>{e(t["name"])}</h3>'
+    return (f'<article class="pick">'
+            f'<h3><a href="{href}">{e(t["name"])}</a></h3>'
             f'<p class="clamp">{e(t["description"])}</p>'
+            f'{why}'
             f'<span class="cat">{e(cat_label(t["category"]))}</span>'
-            f'<span class="price">{e(t["pricing"])}</span></a>')
+            f'<span class="price">{e(t["pricing"])}</span></article>')
+def weekly_picks(items):
+    # Optional pick_rank. A ranked pick with a blank reason stops the build.
+    picks = [t for t in items if t.get("pick_rank") is not None]
+    if not picks:
+        raise SystemExit("No homepage picks: set pick_rank on the tools for this week")
+    seen = {}
+    for t in picks:
+        rank = t.get("pick_rank")
+        if isinstance(rank, bool) or not isinstance(rank, int):
+            raise SystemExit(f"{t['name']} has pick_rank {rank!r}, which is not an integer")
+        if rank in seen:
+            raise SystemExit(f"{t['name']} and {seen[rank]} both have pick_rank {rank}")
+        seen[rank] = t["name"]
+        if not str(t.get("pick_reason") or "").strip():
+            raise SystemExit(f"{t['name']} has pick_rank but no pick_reason")
+        if not str(t.get("pick_source") or "").strip():
+            raise SystemExit(f"{t['name']} has pick_rank but no pick_source")
+    picks.sort(key=lambda t: (t["pick_rank"], t["name"].lower()))
+    return picks
 SIGNUP = f"""<div class="panel" id="signup"><p class="kicker">Free</p><h2>{e("The week's new AI tools, every Friday")}</h2>
 <p class="sub">{e("One short, free email with the newest AI tool drops, from big launches to indie projects. Each one comes with a plain-English summary, what it costs, and a direct link.")}</p>
 <ul class="points"><li>{e("Catch new AI tools the week they ship, including small indie projects")}</li>
@@ -645,11 +672,7 @@ SIGNUP = f"""<div class="panel" id="signup"><p class="kicker">Free</p><h2>{e("Th
 <li>{e("Go straight to each tool with a direct link, or browse the full directory at ")}<a href="{e(BASE)}/tools/">toolsmithweekly.com</a></li></ul>
 <p><a class="btn" href="{e(CONFIG['subscribe_url'])}">Subscribe free</a></p>
 <p class="mu">Opens the Toolsmith Weekly letter on beehiiv.</p></div>"""
-by_name = {t["name"]: t for t in tools}
-missing = [name for name in PICKS if name not in by_name]
-if missing:
-    raise SystemExit("Homepage picks missing from tools.json: " + ", ".join(missing))
-picks = [by_name[name] for name in PICKS]
+picks = weekly_picks(tools)
 counts = Counter(t["category"] for t in tools)
 known = [c for c in CAT_ORDER if c in counts]
 extra = sorted(c for c in counts if c not in CAT_LABEL)
