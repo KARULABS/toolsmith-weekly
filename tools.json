@@ -397,7 +397,7 @@
     ],
     "pricing": "Team billed monthly per active user (see lindy.ai/pricing for the current rate); 7-day trial with $50 credits.",
     "verdict": "wait",
-    "verdict_reason": "Lindy is for small teams who live in Slack, email and calendars and want one assistant to handle inboxes, scheduling and calls. It's worth a seat once you have repeat tasks it can learn and run on a schedule, or a phone line for it to answer, not just the odd one-off request. Watch the credits: monthly ones don't roll over, and Lindy's pricing page currently shows different Team entry prices, so check the current rate before you sign up a whole team.",
+    "verdict_reason": "Lindy is for small teams who live in Slack, email and calendars and want one assistant to handle inboxes, scheduling and calls. It's worth a seat once you have repeat tasks it can learn and run on a schedule, or a phone line for it to answer, not just the odd one-off request. Watch the credits: monthly ones don't roll over, so plan for what your team will use each month.",
     "verdict_reason_key": "pricing",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
@@ -426,7 +426,7 @@
         "text": "From the [Lindy pricing page](https://www.lindy.ai/pricing):",
         "items": [
           "**Free trial:** a 7-day trial with $50 in credits that last 7 days. There is no ongoing free plan.",
-          "**Team:** billed monthly per active user, with credits pooled across the team. Lindy's pricing page currently shows different entry prices on different loads, so check the [pricing page](https://www.lindy.ai/pricing) for the current rate. Top-ups are $10 per 1,000 credits. The plan includes per-task model choice, computer use and live onboarding.",
+          "**Team:** billed monthly per active user, with credits pooled across the team. See the [pricing page](https://www.lindy.ai/pricing) for the current rate. Top-ups are $10 per 1,000 credits. The plan includes per-task model choice, computer use and live onboarding.",
           "**Enterprise:** custom pricing. Adds HIPAA/BAA, SSO and SCIM, audit logs and dedicated support."
         ]
       },
