@@ -44,12 +44,14 @@ CAT_LABEL = {
 }
 CAT_ORDER = list(CAT_LABEL)
 # Neutral first sentence of Our Take. Not shown as a label.
+# "wait" has no stock sentence. That line was unverified boilerplate.
 GUIDE = {
     "use": "Worth using now for the job it claims.",
     "try": "Worth a short trial before you rely on it.",
-    "wait": "Price, access, or the evidence is not settled.",
+    "wait": "",
     "skip": "Closed, shutting down, or a poor fit.",
 }
+_TAKE_BOILERPLATE = "Price, access, or the evidence is not settled."
 suggest_href = "mailto:" + CONFIG["suggest_email"] + "?" + "&".join([
     "subject=" + quote("Tool suggestion for Toolsmith Weekly"),
     "body=" + quote("I'm an indie developer.\n\nTool name:\nWebsite:\nWhat it does:\nWhy it belongs in Toolsmith Weekly:\n")])
@@ -225,7 +227,7 @@ def cat_icon(name):
             f'shape-rendering="crispEdges">{pix(rows)}</svg>')
 CSS = """:root{--bg:#070b1a;--bg2:#0b1124;--card:#0f1630;--card-h:#141c3b;--bd:rgba(148,163,214,.14);--bd-h:rgba(148,163,214,.32);--tx:#eef2ff;--mu:#9aa6c7;--ac:#ff8a3d;--ac2:#ffc94a;--ink:#140a02;--sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;--mono:ui-monospace,"JetBrains Mono",Menlo,monospace}
 *{box-sizing:border-box}[hidden]{display:none!important}
-html{color-scheme:dark}
+html{color-scheme:dark;scroll-behavior:smooth}
 body{margin:0;font:17px/1.6 var(--sans);background-color:var(--bg);background-image:radial-gradient(900px 480px at 78% -10%,rgba(255,138,61,.10),transparent 60%),radial-gradient(800px 500px at 10% -10%,rgba(56,92,200,.14),transparent 60%);color:var(--tx)}
 a{color:var(--ac);text-underline-offset:3px;text-decoration-color:rgba(255,138,61,.5)}
 a:hover{color:var(--ac);text-decoration-color:var(--ac)}
@@ -376,13 +378,42 @@ dl dt{margin-top:16px}dl dd{margin:4px 0 0}
 .back a{color:var(--mu)}
 .back a:hover{color:var(--ac)}
 .tool-hero{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:48px;align-items:start}
+.tool-copy{grid-column:1;grid-row:1;min-width:0}
+.facts{grid-column:2;grid-row:1 / span 2;min-width:0}
+.overview{grid-column:1;grid-row:2;min-width:0}
 .tool-hero h1{max-width:none;font-size:clamp(2.25rem,4vw,3.5rem);line-height:1.05}
 .sum{margin:18px 0 0;max-width:40rem;font-size:1.25rem;line-height:1.5;color:var(--tx)}
+.overview{max-width:68ch;margin-top:8px}
+.overview h2{margin:0 0 16px;max-width:none;font-size:clamp(1.6rem,2.4vw,2rem);line-height:1.15;letter-spacing:-.03em;font-weight:650;color:var(--tx)}
+.overview .toc{display:flex;flex-wrap:wrap;gap:8px 16px;margin:0}
+.overview .toc a{font-size:.95rem;text-decoration:none}
+.overview section,.overview .whatsnew{scroll-margin-top:84px;margin:36px 0 0}
+.overview h3{display:flex;align-items:center;gap:10px;margin:0 0 12px;font-size:1.15rem;font-weight:650;letter-spacing:-.02em;color:var(--tx)}
+.overview h3::before{content:"";width:8px;height:8px;flex:none;background:var(--ac)}
+.overview p,.overview li{font-size:1.0625rem;line-height:1.7;color:#d6dcf0}
+.overview p{margin:0 0 14px}
+.overview li{margin:0 0 8px}
+.overview ul,.overview ol{margin:0;padding-left:1.25rem}
+.overview li::marker{color:var(--ac)}
+.whatsnew{padding:16px 18px 16px 16px;border:1px solid var(--ac);border-radius:12px;box-shadow:inset 3px 0 0 var(--ac);background:rgba(255,138,61,.06)}
+.whatsnew .label{margin:0 0 8px;font-family:var(--mono);font-size:.75rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ac2)}
+.whatsnew .src{margin:12px 0 0}
+.overview .disclosure{margin:28px 0 0}
+.overview .disclosure em{font-style:italic}
+.overview code{font-family:var(--mono);font-size:.92em}
+.tbl{overflow-x:auto;max-width:100%;width:100%}
+.tbl table{width:100%;border-collapse:collapse;min-width:28rem}
+.tbl caption{caption-side:top;text-align:left;margin:0 0 8px;padding:0;font-weight:650;color:var(--tx)}
+.tbl th,.tbl td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--bd);vertical-align:top;font-size:1.0625rem;line-height:1.5;color:#d6dcf0}
+.tbl th{color:var(--tx);font-weight:650;font-size:.85rem}
+hr.rule{border:0;border-top:1px solid var(--bd);margin:0}
 .take{margin:32px 0 0;padding:22px 24px;border-radius:16px;border:1px solid var(--bd);background:linear-gradient(180deg,rgba(255,138,61,.07),rgba(15,22,48,.4));box-shadow:inset 0 1px 0 rgba(255,138,61,.35)}
+.rule + .take{margin-top:56px}
 .take h2{margin:0 0 8px;font-size:1.2rem;letter-spacing:-.02em}
 .take p{margin:0;max-width:44rem;color:var(--tx);font-size:1.05rem;line-height:1.55}
 .facts{position:sticky;top:84px;padding:20px;border-radius:16px;border:1px solid var(--bd);background:linear-gradient(180deg,#0f1630,rgba(15,22,48,.6));box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 8px 24px -12px rgba(0,0,0,.6)}
 .facts dt:first-child{margin-top:0}
+.facts a,.overview a,.overview code{overflow-wrap:anywhere}
 .facts .btn{width:100%;margin-top:18px}
 @keyframes rise{from{transform:translateY(12px)}to{transform:none}}
 @keyframes drift{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,18px,0) scale(1.04)}}
@@ -400,6 +431,7 @@ header nav a.btn{display:flex;margin-top:8px;text-align:center}
 }
 @media(max-width:980px){
 .hero-grid,.split,.tool-hero{grid-template-columns:1fr}
+.tool-copy,.facts,.overview{grid-column:1;grid-row:auto}
 .facts{position:static}
 .hero-art{order:-1;justify-content:center;margin-bottom:8px}
 .anvil{width:220px}
@@ -426,8 +458,14 @@ header nav a.btn{display:flex;margin-top:8px;text-align:center}
 .band{padding:56px 0}
 .chips{flex-wrap:nowrap;overflow-x:auto}
 .chip{flex:none}
+.overview p,.overview li{font-size:1rem;line-height:1.65}
+.overview section,.overview .whatsnew{margin-top:22px}
+.overview h2{margin-bottom:10px}
+.rule + .take{margin-top:32px}
+.tbl th,.tbl td{font-size:1rem}
 }
 @media(prefers-reduced-motion:reduce){
+html{scroll-behavior:auto}
 .rise,.orb,.anvil,.spark{animation:none}
 .pick,a.catcard,.row,a.btn{transition:none}
 .pick:hover,a.catcard:hover,.row:hover,a.btn:hover{transform:none}
@@ -477,6 +515,9 @@ def price_line(t):
     def pick(text):
         for match in _PRICE_RE.finditer(text):
             if match.group("num") in ("0", "0.0", "0.00"):
+                continue
+            # A trial credit grant is not the plan price.
+            if text[match.end():].lstrip().lower().startswith("credit"):
                 continue
             unit = (match.group("unit") or match.group("per") or "").lower()
             suffix = "/mo" if unit in ("mo", "month") else "/yr" if unit in ("yr", "year") else ""
@@ -844,17 +885,216 @@ else:
     f'<header class="pagehead"><p class="kicker">{e(week_kicker)}</p><h1>{e(week_name)}</h1><p class="lede">{e(week_lede)}</p></header>{week_grid}<div class="sec">{SIGNUP}</div>',
     "this-week.html"))
 def take_paragraph(t):
-    # One plain paragraph: how to approach it, then the sourced detail.
+    # The opinion sentence, plus a guide line when that verdict has one.
+    # The old wait boilerplate is never printed.
+    # A written overview already includes the full opinion, so that card is verdict_reason alone.
+    reason = " ".join(t["verdict_reason"].replace(_TAKE_BOILERPLATE, "").split())
+    if isinstance(t.get("overview"), dict):
+        return reason
     guide = GUIDE.get(t["verdict"], "").strip()
-    reason = t["verdict_reason"].strip()
-    parts = [p for p in (guide, reason) if p]
+    parts = [p for p in (guide, reason) if p and p != _TAKE_BOILERPLATE]
     return " ".join(parts)
+def _lines(value):
+    if value is None:
+        return []
+    if isinstance(value, str):
+        return [value] if value.strip() else []
+    return [v for v in value if str(v).strip()]
+def rich(value):
+    # Editorial markdown: links, bold, and code. Wording stays as written.
+    text = e(value)
+    text = re.sub(r"`([^`]+)`", r"<code>\1</code>", text)
+    text = re.sub(
+        r"\[([^\]]+)\]\(([^)]+)\)",
+        lambda m: f'<a href="{m.group(2)}" rel="noopener">{m.group(1)}</a>',
+        text,
+    )
+    text = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", text)
+    return text
+def _paras(value):
+    return "".join(f"<p>{rich(p)}</p>" for p in _lines(value))
+def pricing_parts(pricing):
+    # A string is prose. A list, or plans inside an object, is a plan list.
+    if isinstance(pricing, dict):
+        return str(pricing.get("text") or ""), list(pricing.get("plans") or [])
+    if isinstance(pricing, list):
+        return "", pricing
+    if isinstance(pricing, str):
+        return pricing, []
+    return "", []
+def pricing_html(pricing, tool_name):
+    # items (or format "text") stay prose and a list. plans become a table at 3 or more.
+    if isinstance(pricing, dict) and not pricing.get("plans") and (pricing.get("items") or pricing.get("format") == "text"):
+        parts = []
+        if str(pricing.get("text") or "").strip():
+            parts.append(f"<p>{rich(pricing['text'])}</p>")
+        items = [item for item in pricing.get("items") or [] if str(item).strip()]
+        if items:
+            parts.append("<ul>" + "".join(f"<li>{rich(item)}</li>" for item in items) + "</ul>")
+        note = str(pricing.get("note") or "").strip()
+        if note:
+            parts.append(f"<p>{rich(note)}</p>")
+        return "".join(parts)
+    text, plans = pricing_parts(pricing)
+    plans = [p for p in plans if p]
+    if len(plans) >= 3:
+        intro = f"<p>{rich(text)}</p>" if text.strip() else ""
+        has_detail = any(isinstance(p, dict) and (p.get("detail") or p.get("notes")) for p in plans)
+        heads = ["Plan", "Price"] + (["Detail"] if has_detail else [])
+        body = []
+        for p in plans:
+            if isinstance(p, str):
+                cells = [p, ""] + ([""] if has_detail else [])
+            else:
+                cells = [p.get("name") or "", p.get("price") or ""]
+                if has_detail:
+                    cells.append(p.get("detail") or p.get("notes") or "")
+            body.append("<tr>" + "".join(f"<td>{rich(c)}</td>" for c in cells) + "</tr>")
+        head = "".join(f"<th scope=\"col\">{e(h)}</th>" for h in heads)
+        table = (f'<div class="tbl"><table><caption>{e(tool_name)} plans</caption>'
+                 f"<thead><tr>{head}</tr></thead><tbody>{''.join(body)}</tbody></table></div>")
+        note = ""
+        if isinstance(pricing, dict) and str(pricing.get("note") or "").strip():
+            note = f"<p>{rich(pricing['note'])}</p>"
+        return intro + table + note
+    bits = []
+    if text.strip():
+        bits.append(f"<p>{rich(text)}</p>")
+    for p in plans:
+        if isinstance(p, str):
+            bits.append(f"<p>{rich(p)}</p>")
+            continue
+        line = " — ".join(x for x in (p.get("name"), p.get("price")) if x)
+        detail = p.get("detail") or p.get("notes") or ""
+        if detail:
+            line = f"{line}. {detail}" if line else detail
+        if line:
+            bits.append(f"<p>{rich(line)}</p>")
+    return "".join(bits)
+def whats_new_html(raw):
+    # One paragraph, several paragraphs, or a list. Omit the aside when there is nothing new.
+    if not raw:
+        return ""
+    if isinstance(raw, str):
+        raw = {"paragraphs": [raw]}
+    if isinstance(raw, list):
+        raw = {"paragraphs": raw}
+    if not isinstance(raw, dict):
+        return ""
+    paragraphs = []
+    text = raw.get("text")
+    if isinstance(text, list):
+        paragraphs.extend(text)
+    elif str(text or "").strip():
+        paragraphs.append(text)
+    paragraphs.extend(raw.get("paragraphs") or [])
+    items = list(raw.get("items") or raw.get("list") or [])
+    paragraphs = [p for p in paragraphs if str(p).strip()]
+    items = [item for item in items if str(item).strip()]
+    if not paragraphs and not items:
+        return ""
+    body = "".join(f"<p>{rich(p)}</p>" for p in paragraphs)
+    if items:
+        body += "<ul>" + "".join(f"<li>{rich(item)}</li>" for item in items) + "</ul>"
+    src = str(raw.get("source_url") or "").strip()
+    date = str(raw.get("date") or "").strip()
+    bits = []
+    if src:
+        bits.append(f'<a href="{e(src)}" rel="noopener">Source</a>')
+    if date:
+        bits.append(f'<time datetime="{e(date)}">{e(fmt_date(date))}</time>')
+    line = f'<p class="src">{" · ".join(bits)}</p>' if bits else ""
+    return f'<aside class="whatsnew" id="whats-new"><p class="label">What\'s new</p>{body}{line}</aside>'
+def overview_html(t):
+    # Absent overview renders nothing. Empty sections are left out, including What's new.
+    ov = t.get("overview")
+    if not isinstance(ov, dict):
+        return ""
+    blocks = []
+    links = []
+    def add_section(anchor, title, inner):
+        if not inner:
+            return
+        links.append(f'<a href="#{anchor}">{e(title)}</a>')
+        blocks.append(f'<section id="{anchor}"><h3>{e(title)}</h3>{inner}</section>')
+    add_section("what-it-is", "What it is", _paras(ov.get("what_it_is")))
+    fresh = whats_new_html(ov.get("whats_new"))
+    if fresh:
+        links.append('<a href="#whats-new">What\'s new</a>')
+        blocks.append(fresh)
+    features = _lines(ov.get("key_features"))
+    if features:
+        add_section("key-features", "Key features",
+                    "<ul>" + "".join(f"<li>{rich(item)}</li>" for item in features) + "</ul>")
+    steps = _lines(ov.get("getting_started"))
+    if steps:
+        add_section("getting-started", "Getting started",
+                    "<ol>" + "".join(f"<li>{rich(item)}</li>" for item in steps) + "</ol>")
+    add_section("pricing", "Pricing", pricing_html(ov.get("pricing"), t["name"]))
+    notes = _lines(ov.get("good_to_know"))
+    if notes:
+        add_section("good-to-know", "Good to know",
+                    "<ul>" + "".join(f"<li>{rich(item)}</li>" for item in notes) + "</ul>")
+    if not blocks:
+        return ""
+    disclosure = str(ov.get("disclosure") or "").strip()
+    note = f'<p class="disclosure"><em>{rich(disclosure)}</em></p>' if disclosure else ""
+    toc = f'<nav class="toc" aria-label="On this page">{"".join(links)}</nav>'
+    return f'<article class="overview"><h2>{e(t["name"])} overview</h2>{toc}{"".join(blocks)}{note}</article>'
+_MONEY = re.compile(r"([$€])\s*(\d{1,3}(?:,\d{3})+|\d+(?:\.\d+)?)")
+def _offer(plan):
+    if isinstance(plan, str):
+        return {"@type": "Offer", "description": plan}
+    offer = {"@type": "Offer", "name": plan.get("name") or "Plan"}
+    found = _MONEY.search(str(plan.get("price") or ""))
+    if found:
+        offer["priceCurrency"] = "USD" if found.group(1) == "$" else "EUR"
+        offer["price"] = found.group(2).replace(",", "")
+    detail = plan.get("detail") or plan.get("notes") or ""
+    if detail:
+        offer["description"] = detail
+    return offer
+def software_offers(t):
+    # No ratings. Plan rows become offers. Prose pricing, including an items list, stays one offer.
+    pricing = (t.get("overview") or {}).get("pricing")
+    text, plans = pricing_parts(pricing)
+    plans = [p for p in plans if p]
+    if plans:
+        offers = [_offer(p) for p in plans]
+        if len(offers) == 1:
+            return offers[0]
+        return {"@type": "AggregateOffer", "offerCount": len(offers), "offers": offers}
+    parts = []
+    if str(text or "").strip():
+        parts.append(str(text).strip())
+    if isinstance(pricing, dict):
+        parts.extend(str(item).strip() for item in (pricing.get("items") or []) if str(item).strip())
+        if str(pricing.get("note") or "").strip():
+            parts.append(str(pricing["note"]).strip())
+    return {"@type": "Offer", "description": " ".join(parts) if parts else t["pricing"]}
+def software_ld(t):
+    data = {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": t["name"],
+        "url": t["url"],
+        "applicationCategory": t["category"],
+        "description": t["description"],
+        "offers": software_offers(t),
+        "dateModified": checked_iso(t),
+    }
+    raw = json.dumps(data, ensure_ascii=False).replace("<", "\\u003c")
+    return f'<script type="application/ld+json">{raw}</script>'
 for t in tools:
+    ov = overview_html(t)
+    rule = '<hr class="rule">' if ov else ""
     b = f"""<div class="tool-hero"><div class="tool-copy"><p class="back"><a href="index.html">Tool directory</a> · {e(cat_label(t['category']))}</p><h1>{e(t['name'])}</h1><p class="vrow">{badge_html(t)}{verdict_stamp(t)}</p><p class="sum">{e(t['description'])}</p>
-<script type="application/ld+json">{json.dumps({"@context":"https://schema.org","@type":"SoftwareApplication","name":t["name"],"url":t["url"],"applicationCategory":t["category"],"description":t["description"],"dateModified":checked_iso(t)})}</script></div>
+{software_ld(t)}</div>
 <aside class="facts" aria-label="Facts"><dl><dt>Use cases</dt><dd><ul>{''.join(f'<li>{e(u)}</li>' for u in t['use_cases'])}</ul></dd><dt>Pricing</dt><dd>{e(t['pricing'])}</dd><dt>Website</dt><dd><a href="{e(t['url'])}" rel="noopener">{e(t['url'])}</a></dd>
 <dt>Source</dt><dd><a href="{e(t['source'])}" rel="noopener">{e(t['source'])}</a></dd><dt>Added</dt><dd><time datetime="{e(t['date_added'])}">{e(fmt_date(t['date_added']))}</time></dd></dl>
-<a class="btn" href="{e(t['url'])}" rel="nofollow noopener">Visit website</a></aside></div>
+<a class="btn" href="{e(t['url'])}" rel="nofollow noopener">Visit website</a></aside>
+{ov}</div>
+{rule}
 <section class="take" aria-labelledby="our-take"><h2 id="our-take">Our Take</h2><p>{e(take_paragraph(t))} <a href="{e(t['source'])}" rel="noopener">Source</a></p></section>"""
     (OUT / "tools" / f"{t['slug']}.html").write_text(page(
         f"{t['name']} — {N}",
