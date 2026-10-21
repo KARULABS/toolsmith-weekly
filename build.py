@@ -21,9 +21,10 @@ for t in tools:
 tools.sort(key=lambda t: (t["date_added"], t["name"]), reverse=True)
 TODAY = datetime.date.today()
 NEW_CUTOFF = TODAY - datetime.timedelta(days=7)
+LAUNCH = datetime.date(2026, 10, 20)  # initial batch; do not badge these
 def is_new(t):
     added = datetime.date.fromisoformat(t["date_added"])
-    return NEW_CUTOFF <= added <= TODAY
+    return added > LAUNCH and NEW_CUTOFF <= added <= TODAY
 ISSUES = [{"title": "Issue #1", "when": "Coming Friday, Oct 23",
            "note": "The first letter goes out Friday, October 23, 2026. No link until it is sent."}]
 suggest_href = "mailto:" + CONFIG["suggest_email"] + "?" + "&".join([
@@ -122,7 +123,7 @@ llms = [
     "",
     f"> {CONFIG['tagline']}",
     "",
-    f"{N} is a directory of new AI tools for coding agents, vibe coding, automation, and game development. Each tool has a use, skip, or wait verdict based on a linked public source. Tools added in the last 7 days are marked New this week.",
+    f"{N} is a directory of new AI tools for coding agents, vibe coding, automation, and game development. Each tool has a use, skip, or wait verdict based on a linked public source. Tools added after 2026-10-20 and within the last 7 days are marked New this week.",
     "",
     "## Pages",
     "",
