@@ -3,10 +3,10 @@
 import json, html, re, shutil, datetime, pathlib
 CONFIG = {"site_name": "Toolsmith Weekly",  # <- swap the brand name here
           "tagline": "Tested, not hyped. The newest AI tools, with a straight verdict.",
-          "base_url": "https://karulabs.github.io/toolsmith-weekly"}  # no trailing slash; canonical URLs + sitemap
+          "base_url": "https://toolsmithweekly.com"}  # no trailing slash; canonical URLs, sitemap, robots
 CONFIG["base_url"] = CONFIG["base_url"].rstrip("/")
 # Links and assets stay relative (style.css, tools/<slug>.html, ../index.html) so they
-# resolve under the GitHub Pages project subpath and in a local dist/ preview.
+# work on the custom-domain root and in a local dist/ preview.
 N = CONFIG["site_name"]; R = pathlib.Path(__file__).parent; OUT = R / "dist"
 e = lambda s: html.escape(str(s), quote=True)
 slug = lambda s: re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
@@ -28,9 +28,12 @@ button{background:var(--ac);color:#000;border:0;border-radius:8px;padding:10px 1
 dl dt{color:var(--mu);margin-top:14px;font-size:.85rem;text-transform:uppercase}dl dd{margin:4px 0 0}"""
 def page(title, desc, body, path, depth=0):
     p = "../" * depth
+    canon = f"{CONFIG['base_url']}/{path}" if CONFIG["base_url"] else ""
+    og_url = f'<meta property="og:url" content="{canon}">' if canon else ""
+    canonical = f'<link rel="canonical" href="{canon}">' if canon else ""
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{e(title)}</title><meta name="description" content="{e(desc)}"><meta property="og:title" content="{e(title)}"><meta property="og:description" content="{e(desc)}"><meta property="og:type" content="website"><meta name="twitter:card" content="summary">
-{f'<link rel="canonical" href="{CONFIG["base_url"]}/{path}">' if CONFIG["base_url"] else ''}<link rel="stylesheet" href="{p}style.css"></head><body>
+<title>{e(title)}</title><meta name="description" content="{e(desc)}"><meta property="og:title" content="{e(title)}"><meta property="og:description" content="{e(desc)}"><meta property="og:type" content="website">{og_url}<meta name="twitter:card" content="summary">
+{canonical}<link rel="stylesheet" href="{p}style.css"></head><body>
 <header><div class="w"><a class="logo" href="{p}index.html">{e(N)}</a><nav><a href="{p}index.html">Directory</a><a href="{p}this-week.html">This week</a><a href="{p}index.html#signup">Newsletter</a></nav></div></header>
 <main class="w">{body}</main><footer><div class="w">{e(N)} — {e(CONFIG["tagline"])} Verdicts are based on linked public sources unless stated otherwise.</div></footer></body></html>"""
 def card(t, p=""):
@@ -63,5 +66,26 @@ for t in tools:
 <script type="application/ld+json">{json.dumps({"@context":"https://schema.org","@type":"SoftwareApplication","name":t['name'],"url":t['url'],"applicationCategory":t['category'],"description":t['description']})}</script>"""
     (OUT / "tools" / f"{t['slug']}.html").write_text(page(f"{t['name']} review: {t['verdict'].upper()} — {N}", f"{t['name']}: {t['description']} Verdict: {t['verdict']} — {t['verdict_reason']}"[:300], b, f"tools/{t['slug']}.html", 1))
 urls = ["index.html", "this-week.html"] + [f"tools/{t['slug']}.html" for t in tools]
-(OUT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + "".join(f"<url><loc>{CONFIG['base_url']}/{u}</loc></url>" for u in urls) + "</urlset>")
+base = CONFIG["base_url"]
+(OUT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + "".join(f"<url><loc>{base}/{u}</loc></url>" for u in urls) + "</urlset>")
+shutil.copyfile(R / "CNAME", OUT / "CNAME")
+(OUT / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {base}/sitemap.xml\n")
+llms = [
+    f"# {N}",
+    "",
+    f"> {CONFIG['tagline']}",
+    "",
+    f"{N} is a directory of new AI tools for coding agents, vibe coding, automation, and game development. Each tool has a use, skip, or wait verdict based on a linked public source.",
+    "",
+    "## Pages",
+    "",
+    f"- [Directory]({base}/index.html): Search, filter by category, and sort the full list.",
+    f"- [This week]({base}/this-week.html): Tools added in the seven days up to the newest date in the directory.",
+    "",
+    "## Tools",
+    "",
+]
+for t in tools:
+    llms.append(f"- [{t['name']}]({base}/tools/{t['slug']}.html): {t['verdict'].upper()} — {t['description']}")
+(OUT / "llms.txt").write_text("\n".join(llms) + "\n")
 print(f"Built {len(tools)} tool pages into {OUT}")

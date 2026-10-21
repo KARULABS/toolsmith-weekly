@@ -1,8 +1,8 @@
 # Toolsmith Weekly — AI tools directory (static)
 
-Live site: https://karulabs.github.io/toolsmith-weekly/
+Live site: https://toolsmithweekly.com/
 
-Brand, tagline, and canonical base URL live in `CONFIG` at the top of `build.py`. `base_url` is `https://karulabs.github.io/toolsmith-weekly` (no trailing slash) so canonical tags and `sitemap.xml` use the GitHub Pages project subpath. Page links and the stylesheet are relative (`style.css`, `tools/….html`, `../index.html`), so they resolve under `/toolsmith-weekly/` and still work if you preview `dist/` locally.
+Brand, tagline, and canonical base URL live in `CONFIG` at the top of `build.py`. `base_url` is `https://toolsmithweekly.com` (no trailing slash) so canonical tags, Open Graph URLs, `sitemap.xml`, and the `robots.txt` sitemap line use that domain. Page links and the stylesheet are relative (`style.css`, `tools/….html`, `../index.html`), so they work on the custom-domain root and in a local `dist/` preview. The repo-root `CNAME` (`toolsmithweekly.com`) is copied into `dist/` on every build.
 
 ## Add a tool
 Append an object to `tools.json`:
@@ -18,7 +18,7 @@ Categories: `coding agents`, `vibe-coding app builders`, `AI agents/automation`,
 python3 build.py                     # writes dist/ (no dependencies, Python 3.8+)
 cd dist && python3 -m http.server 8765
 ```
-Output: `dist/index.html` (search, category filter, newest/oldest/A–Z sort), `dist/this-week.html` (tools added in the 7 days up to the newest `date_added`), `dist/tools/<slug>.html` (one SEO page per tool with title, meta description, OpenGraph, JSON-LD), `dist/sitemap.xml`.
+Output: `dist/index.html` (search, category filter, newest/oldest/A–Z sort), `dist/this-week.html` (tools added in the 7 days up to the newest `date_added`), `dist/tools/<slug>.html` (one SEO page per tool with title, meta description, OpenGraph, JSON-LD), `dist/sitemap.xml`, `dist/robots.txt`, `dist/llms.txt`, and `dist/CNAME`.
 
 ## Deploy (GitHub Pages)
 Pushes to `main` run `.github/workflows/pages.yml`. The workflow runs `python3 build.py` and deploys `dist/` with `actions/upload-pages-artifact` and `actions/deploy-pages`.
