@@ -299,12 +299,17 @@ a.metric:hover{background:rgba(255,138,61,.06)}
 .bento{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:12px;align-items:stretch}
 .bento .featured{grid-row:span 3}
 .pick,.catcard,.card,.vk,.panel,.issue{background:linear-gradient(180deg,#0f1630,rgba(15,22,48,.6));border:1px solid var(--bd);border-radius:12px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 8px 24px -12px rgba(0,0,0,.6);padding:20px}
-a.pick,a.catcard{text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:10px}
+.pick,a.catcard{text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:10px}
+.pick > .v{display:inline-flex;width:auto;align-self:flex-start}
 .pick,.catcard,.card{transition:border-color .2s ease,background .2s ease,transform .2s ease}
-a.pick:hover,a.catcard:hover,.card:hover{border-color:var(--bd-h);background:#141c3b;transform:translateY(-2px)}
-a.pick h3{margin:0;color:var(--tx);font-size:1.05rem}
-a.pick p{margin:0;color:var(--mu);font-size:.95rem}
-.featured{position:relative;overflow:hidden;padding:28px;gap:12px}
+.pick:hover,a.catcard:hover,.card:hover{border-color:var(--bd-h);background:#141c3b;transform:translateY(-2px)}
+.pick h3{margin:0;color:var(--tx);font-size:1.05rem}
+.pick h3 a{color:var(--tx);text-decoration:none}
+.pick h3 a:hover{color:var(--ac)}
+.pick p{margin:0;color:var(--mu);font-size:.95rem}
+.featured{position:relative;overflow:hidden;padding:28px;gap:12px;justify-content:space-between}
+.featured .more{align-self:flex-start;font-weight:600;color:var(--ac);text-decoration:none}
+.featured .more:hover{color:var(--ac)}
 .featured::before,#signup::before{content:"";position:absolute;inset:0;background:radial-gradient(500px 260px at 0 0,rgba(255,138,61,.12),transparent 60%);pointer-events:none}
 .featured > *,#signup > *{position:relative;z-index:1}
 .featured h3{font-size:1.75rem;letter-spacing:-.03em}
@@ -414,8 +419,8 @@ header nav a.btn{display:flex;margin-top:8px;text-align:center}
 }
 @media(prefers-reduced-motion:reduce){
 .rise,.orb,.anvil,.spark{animation:none}
-a.pick,a.catcard,.card,a.btn{transition:none}
-a.pick:hover,a.catcard:hover,.card:hover,a.btn:hover{transform:none}
+.pick,a.catcard,.card,a.btn{transition:none}
+.pick:hover,a.catcard:hover,.card:hover,a.btn:hover{transform:none}
 }
 """
 _MONTHS = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
@@ -552,10 +557,13 @@ def card(t, prefix, level="h2"):
 def pick_card(t, featured=False):
     head = f'<span class="v v-{e(t["verdict"])}">{e(vlabel(t))}</span><h3>{e(t["name"])}</h3>'
     if featured:
-        return (f'<a class="pick featured" href="tools/{t["slug"]}.html">{head}'
+        href = f'tools/{t["slug"]}.html'
+        return (f'<article class="pick featured"><span class="v v-{e(t["verdict"])}">{e(vlabel(t))}</span>'
+                f'<h3><a href="{href}">{e(t["name"])}</a></h3>'
                 f'<p class="clamp">{e(t["description"])}</p>'
                 f'<p class="meta"><span class="cat">{e(cat_label(t["category"]))}</span> · '
-                f'<span class="price">{e(t["pricing"])}</span></p>{verdict_stamp(t)}</a>')
+                f'<span class="price">{e(t["pricing"])}</span></p>{verdict_stamp(t)}'
+                f'<a class="more" href="{href}">Read the verdict →</a></article>')
     return (f'<a class="pick" href="tools/{t["slug"]}.html">{head}'
             f'<p class="clamp">{e(t["verdict_reason"])}</p>'
             f'<span class="cat">{e(cat_label(t["category"]))}</span>{verdict_stamp(t)}</a>')
