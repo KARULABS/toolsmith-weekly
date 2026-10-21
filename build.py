@@ -861,11 +861,13 @@ else:
 def take_paragraph(t):
     # The opinion sentence, plus a guide line when that verdict has one.
     # The old wait boilerplate is never printed.
+    # A written overview already includes the full opinion, so that card is verdict_reason alone.
+    reason = " ".join(t["verdict_reason"].replace(_TAKE_BOILERPLATE, "").split())
+    if isinstance(t.get("overview"), dict):
+        return reason
     guide = GUIDE.get(t["verdict"], "").strip()
-    reason = t["verdict_reason"].strip()
     parts = [p for p in (guide, reason) if p and p != _TAKE_BOILERPLATE]
-    text = " ".join(parts).replace(_TAKE_BOILERPLATE, "")
-    return " ".join(text.split())
+    return " ".join(parts)
 def _lines(value):
     if value is None:
         return []
