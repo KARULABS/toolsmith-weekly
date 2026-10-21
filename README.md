@@ -11,7 +11,7 @@ Append an object to `tools.json`:
  "use_cases":["..."],"pricing":"Free; Pro $X/mo","verdict":"use|try|wait|skip",
  "verdict_reason":"One line.","verdict_checked":"YYYY-MM-DD","date_added":"YYYY-MM-DD","source":"https://source-link"}
 ```
-Categories: `coding agents`, `vibe-coding app builders`, `AI agents/automation`, `gaming/game dev`, `general` (new ones get a filter chip and a category tile automatically). Reader-facing labels live in `CAT_LABEL` in `build.py`. Every fact needs a source link. Verdicts are based on public reports and benchmarks and are re-checked twice a week. Do not write that the site tested a tool, and do not add an aside that the source does not support. `verdict_checked` is the date that verdict was last re-reviewed. It is optional: if you omit it, the site shows `date_added`. Cards, tool pages, and the Current verdicts page all read it through `checked_iso()` / `verdict_stamp()`.
+Categories: `coding agents`, `vibe-coding app builders`, `AI agents/automation`, `gaming/game dev` (new ones get a filter chip and a category tile automatically). Reader-facing labels are title case in `CAT_LABEL` in `build.py`: Coding Agents, Vibe Coding, Automation, Gaming. There is no separate `general` category. Every fact needs a source link. If a price is not on a public page, write `Pricing unverified` instead of a number. Verdicts are based on public reports and benchmarks and are re-checked twice a week. The site is researched and drafted with AI tools and reviewed by a human. Do not write that the site tested a tool, and do not add an aside that the source does not support. `verdict_checked` is the date that verdict was last re-reviewed. It is optional: if you omit it, the site shows `date_added`. Cards and the Current verdicts page show `Verdict checked` once per tool. Tool pages show that stamp once.
 
 Homepage "This week's picks" are the four names in `PICKS` at the top of `build.py`. Swap that list each Friday. The build stops if a name is missing from `tools.json`.
 
@@ -26,9 +26,9 @@ Output:
 - `dist/tools/` — directory with a sticky search bar, category chips, and a dense card grid. `?cat=` opens a category. `?q=` fills the search box.
 - `dist/tools/<slug>.html` — one page per tool, with Open Graph and JSON-LD
 - `dist/verdicts/` — tools grouped under Use it, Try it, Wait, and Skip
-- `dist/this-week.html` — tools added in the last seven days
+- `dist/this-week.html` — tools added in the last seven days. The initial batch is labeled Launch week.
 - `dist/newsletter/` — newsletter archive
-- `dist/issues/` — meta refresh to `/newsletter/` (not listed in the sitemap)
+- `dist/issues/`, `dist/archive/`, and `dist/newsletters/` — meta refresh to `/newsletter/` (not listed in the sitemap)
 - `dist/suggest/` — mailto for indie devs
 - `dist/og.jpg` — 1200×630 share image. The homepage anvil is an inline pixel drawing, not a photo.
 - `dist/sitemap.xml`, `dist/robots.txt`, `dist/llms.txt`, `dist/CNAME`
@@ -41,7 +41,7 @@ Pushes to `main` run `.github/workflows/pages.yml`. The workflow runs `python3 b
 In the repository settings, Pages → Build and deployment → Source must be **GitHub Actions**. `dist/` is generated output and is listed in `.gitignore`.
 
 ## Newsletter
-Every signup box links to the public beehiiv page `https://toolsmithweekly.beehiiv.com/subscribe`. That page does not prefill an email address, so the site uses a "Subscribe free" link and no API key. The nav label is Subscribe. The archive is "Newsletter Archive" at `/newsletter/`.
+Every signup box links to the public beehiiv page `https://toolsmithweekly.beehiiv.com/subscribe`. That page does not prefill an email address, so the site uses a "Subscribe free" link and no API key. The nav label is Subscribe. The archive is "Newsletter Archive" at `/newsletter/`. `/issues/`, `/archive/`, and `/newsletters/` redirect there.
 
 ## Suggest a tool
 `/suggest/` is a `mailto:hello@toolsmithweekly.com` link with a subject and a short body for indie developers. No third-party form.

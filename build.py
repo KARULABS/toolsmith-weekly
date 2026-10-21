@@ -17,6 +17,7 @@ BASE = CONFIG["base_url"]
 VALUE = CONFIG["tagline"]
 # Verdicts cite public reports. The site does not claim a hands-on check of its own.
 METHOD = "Verdicts based on public reports and benchmarks, re-checked twice a week."
+AI_NOTE = "Researched and drafted with AI tools and reviewed by a human; every fact links to a public source."
 e = lambda s: html.escape(str(s), quote=True)
 slug = lambda s: re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
 tools = json.load(open(R / "tools.json"))
@@ -34,23 +35,15 @@ def is_new(t):
     return added > LAUNCH and NEW_CUTOFF <= added <= TODAY
 # Homepage teaser. Names must exist in tools.json. Swap the list each Friday.
 PICKS = ["Claude Code", "Lovable", "n8n", "Godot AI"]
-ISSUES = [{"title": "Issue #1", "when": "Coming Friday, Oct 23",
-           "note": "The first letter goes out Friday, October 23, 2026. No link until it is sent."}]
+ISSUES = [{"title": "Issue #1", "when": "Coming Oct 23, 2026",
+           "note": "The first letter goes out Oct 23, 2026. No link until it is sent."}]
 # Reader-facing names for the categories stored in tools.json. Unknown categories
 # fall through to the raw name so a new one still appears in the grid and the filters.
 CAT_LABEL = {
-    "coding agents": "Coding agents",
-    "vibe-coding app builders": "Vibe coding",
+    "coding agents": "Coding Agents",
+    "vibe-coding app builders": "Vibe Coding",
     "AI agents/automation": "Automation",
     "gaming/game dev": "Gaming",
-    "general": "Creative",
-}
-CAT_BLURB = {
-    "coding agents": "Editors and terminal agents that change a codebase.",
-    "vibe-coding app builders": "Prompt-to-app builders for sites and web apps.",
-    "AI agents/automation": "Workflow tools and agents that run a task for you.",
-    "gaming/game dev": "Engines, assets, and tools for making games.",
-    "general": "Voice, image, and other creative tools.",
 }
 CAT_ORDER = list(CAT_LABEL)
 VERDICTS = [
@@ -277,9 +270,6 @@ def cat_label(name):
 def verdict_stamp(t):
     iso = checked_iso(t)
     return f'<span class="checked">Verdict checked <time datetime="{e(iso)}">{e(fmt_date(iso))}</time></span>'
-def verdict_checked_row(t):
-    iso = checked_iso(t)
-    return f'<dt>Verdict checked</dt><dd><time datetime="{e(iso)}">{e(fmt_date(iso))}</time></dd>'
 NAV = [
     ("index.html", "Home", "home"),
     ("tools/", "Tool Directory", "tools"),
@@ -319,7 +309,7 @@ def foot_html(depth):
     links = "".join(f'<a href="{p}{href}">{label}</a>' for href, label, _ in NAV)
     links += f'<a href="{e(CONFIG["subscribe_url"])}">Subscribe</a>'
     return (f'<nav aria-label="Footer">{links}</nav>'
-            f'<p>{e(N)}. {e(VALUE)} {e(METHOD)}</p>')
+            f'<p>{e(N)}. {e(VALUE)} {e(METHOD)} {e(AI_NOTE)}</p>')
 def schema_graph(extra=None):
     # Organization and WebSite on every page. SearchAction matches the directory ?q= filter.
     graph = {
@@ -438,6 +428,11 @@ else:
         f' to <time datetime="{e(checked_dates[-1])}">{e(fmt_date(checked_dates[-1]))}</time>'
     )
 pick_html = "".join(pick_card(t, i == 0) for i, t in enumerate(picks))
+latest = max(datetime.date.fromisoformat(t["date_added"]) for t in tools)
+cut = latest - datetime.timedelta(days=7)
+wk = [t for t in tools if datetime.date.fromisoformat(t["date_added"]) > cut]
+launch_only = bool(wk) and all(t["date_added"] == LAUNCH.isoformat() for t in wk)
+week_link = "See launch week" if launch_only else "See this week"
 home = f"""<section class="hero"><div class="orb orb-a" aria-hidden="true"></div><div class="orb orb-b" aria-hidden="true"></div>
 <div class="w hero-grid"><div class="hero-copy">
 <h1 class="rise">{e(VALUE)}</h1>
@@ -445,12 +440,12 @@ home = f"""<section class="hero"><div class="orb orb-a" aria-hidden="true"></div
 <p class="actions rise d3"><a class="btn" href="{e(CONFIG['subscribe_url'])}">Subscribe free</a><a href="tools/">Open the directory</a></p>
 </div><div class="hero-art" aria-hidden="true"><div class="anvil-glow"></div>{anvil_svg()}</div></div>
 <div class="w"><div class="metrics rise d4"><div class="metric"><b>{len(tools)}</b><span>Tools</span></div><div class="metric"><b><time datetime="{e(checked_dates[-1])}">{e(fmt_date(checked_dates[-1]))}</time></b><span>Verdicts checked</span></div><a class="metric" href="#how"><b>Public sources</b><span>Re-checked twice a week</span></a></div></div></section>
-<section class="band" id="picks"><div class="w"><div class="band-head"><h2>This week's picks</h2><a href="this-week.html">See this week</a></div>
+<section class="band" id="picks"><div class="w"><div class="band-head"><h2>This week's picks</h2><a href="this-week.html">{week_link}</a></div>
 <div class="bento">{pick_html}</div></div></section>
 <section class="band band-alt" id="categories"><div class="w"><div class="band-head"><h2>Browse by category</h2><a href="tools/">Full directory</a></div>
 <div class="cats">{cat_cards}</div></div></section>
 <section class="band" id="how"><div class="w"><div class="band-head"><h2>How we verdict</h2><a href="verdicts/">See current verdicts</a></div>
-<p class="lede">{e(METHOD)} Each verdict links the report it came from.</p>
+<p class="lede">{e(METHOD)} Each verdict links the report it came from. {e(AI_NOTE)}</p>
 <div class="vkey">{verdict_key}</div></div></section>
 <section class="band band-alt" id="letter"><div class="w"><div class="split"><article class="panel"><p class="kicker">Newsletter</p><h2>{e(latest_issue['title'])}</h2><p>{e(latest_issue['when'])}</p><p class="mu">{e(latest_issue['note'])}</p><p><a href="newsletter/">Newsletter archive</a></p></article>{SIGNUP}</div></div></section>"""
 (OUT / "index.html").write_text(page(
@@ -489,25 +484,30 @@ for key, label, blurb in VERDICTS:
 (OUT / "verdicts" / "index.html").write_text(page(
     f"Current verdicts — {N}",
     "Tools grouped under Use it, Try it, Wait, and Skip, with the date each verdict was checked.",
-    f'<header class="pagehead"><p class="kicker">Checked {e(fmt_date(checked_dates[-1]))}</p><h1>Current verdicts</h1><p class="lede">Grouped by the latest check. The stamp is the day that verdict was last reviewed.</p></header>{"".join(buckets)}',
+    f'<header class="pagehead"><p class="kicker">Use, try, wait, or skip</p><h1>Current verdicts</h1><p class="lede">Grouped by the latest check. Each card shows the day that verdict was last reviewed.</p></header>{"".join(buckets)}',
     "verdicts/", 1, nodes=[item_list("Current verdicts", tools)]))
-latest = max(datetime.date.fromisoformat(t["date_added"]) for t in tools)
-cut = latest - datetime.timedelta(days=7)
-wk = [t for t in tools if datetime.date.fromisoformat(t["date_added"]) > cut]
 week_grid = f"<div class='grid'>{''.join(card(t, 'tools/') for t in wk)}</div>" if wk else "<p class='mu'>Nothing new in the last seven days.</p>"
+if launch_only:
+    week_name = "Launch week"
+    week_kicker = "First batch"
+    week_lede = f"The first batch of tools, added {fmt_date(LAUNCH.isoformat())}."
+else:
+    week_name = "This week"
+    week_kicker = f"Added through {fmt_date(latest.isoformat())}"
+    week_lede = f"{len(wk)} tools added in the 7 days up to {fmt_date(latest.isoformat())}."
 (OUT / "this-week.html").write_text(page(
-    f"This week in AI tools — {N}",
-    f"AI tools added in the week ending {latest}.",
-    f'<header class="pagehead"><p class="kicker">Added through {e(fmt_date(latest.isoformat()))}</p><h1>This week</h1><p class="lede">{len(wk)} tools added in the 7 days up to {e(fmt_date(latest.isoformat()))}.</p></header>{week_grid}<div class="sec">{SIGNUP}</div>',
+    f"{week_name} — {N}",
+    week_lede,
+    f'<header class="pagehead"><p class="kicker">{e(week_kicker)}</p><h1>{e(week_name)}</h1><p class="lede">{e(week_lede)}</p></header>{week_grid}<div class="sec">{SIGNUP}</div>',
     "this-week.html"))
 for t in tools:
     b = f"""<p class="back"><a href="index.html">Tool directory</a> · {e(cat_label(t['category']))}</p><h1>{e(t['name'])}</h1><p class="vrow">{badge_html(t)}<span class="v v-{e(t['verdict'])}">{e(vlabel(t))}</span> {verdict_stamp(t)}</p><p>{e(t['verdict_reason'])}</p><p>{e(t['description'])}</p>
 <dl><dt>Use cases</dt><dd><ul>{''.join(f'<li>{e(u)}</li>' for u in t['use_cases'])}</ul></dd><dt>Pricing</dt><dd>{e(t['pricing'])}</dd><dt>Website</dt><dd><a href="{e(t['url'])}" rel="noopener">{e(t['url'])}</a></dd>
-<dt>Source</dt><dd><a href="{e(t['source'])}" rel="noopener">{e(t['source'])}</a></dd>{verdict_checked_row(t)}<dt>Added</dt><dd><time datetime="{e(t['date_added'])}">{e(fmt_date(t['date_added']))}</time></dd></dl>
+<dt>Source</dt><dd><a href="{e(t['source'])}" rel="noopener">{e(t['source'])}</a></dd><dt>Added</dt><dd><time datetime="{e(t['date_added'])}">{e(fmt_date(t['date_added']))}</time></dd></dl>
 <p><a href="../verdicts/#{e(t['verdict'])}">More {e(vlabel(t))} verdicts</a></p>
 <script type="application/ld+json">{json.dumps({"@context":"https://schema.org","@type":"SoftwareApplication","name":t["name"],"url":t["url"],"applicationCategory":t["category"],"description":t["description"],"dateModified":checked_iso(t)})}</script>"""
     (OUT / "tools" / f"{t['slug']}.html").write_text(page(
-        f"{t['name']} review: {vlabel(t)} — {N}",
+        f"{t['name']} verdict: {vlabel(t)} — {N}",
         f"{t['name']}: {t['description']} Verdict: {vlabel(t)} — {t['verdict_reason']}"[:300],
         b, f"tools/{t['slug']}.html", 1))
 issue_cards = "".join(
@@ -515,11 +515,13 @@ issue_cards = "".join(
     for i in ISSUES)
 (OUT / "newsletter" / "index.html").write_text(page(
     f"Newsletter Archive — {N}",
-    "Archive of Toolsmith Weekly letters. Issue 1 arrives Friday, October 23, 2026.",
+    "Archive of Toolsmith Weekly letters. Issue 1 arrives Oct 23, 2026.",
     f'<header class="pagehead"><p class="kicker">Letters</p><h1>Newsletter Archive</h1><p class="lede">The weekly letter. Upcoming letters are listed here, and a link is added only after the letter is sent.</p></header>{issue_cards}<div class="sec">{SIGNUP}</div>',
     "newsletter/", 1))
-# Old /issues/ path. Meta refresh plus a plain link. Kept out of the sitemap.
-(OUT / "issues" / "index.html").write_text(f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+# Alias paths. Meta refresh plus a plain link. Kept out of the sitemap.
+def alias_page(folder):
+    (OUT / folder).mkdir(parents=True, exist_ok=True)
+    (OUT / folder / "index.html").write_text(f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Newsletter Archive — {e(N)}</title>
 <meta name="robots" content="noindex">
 <meta http-equiv="refresh" content="0; url=../newsletter/">
@@ -529,6 +531,8 @@ issue_cards = "".join(
 <main class="w" style="padding:48px 0"><h1>Newsletter Archive</h1>
 <p>This page has moved.</p>
 <p><a href="../newsletter/">Go to the newsletter archive</a></p></main></body></html>""")
+for alias in ("issues", "archive", "newsletters"):
+    alias_page(alias)
 suggest_body = f"""<header class="pagehead"><p class="kicker">For builders</p><h1>Suggest a tool</h1><p class="lede">Indie developers: send a tool you built, or one you want a straight verdict on.</p></header>
 <p><a class="btn" href="{e(suggest_href)}">Suggest a tool by email</a></p>
 <p class="mu">Opens your mail app to {e(CONFIG['suggest_email'])} with the subject filled in. No account and no third-party form.</p><div class="sec">{SIGNUP}</div>"""
@@ -545,7 +549,7 @@ llms = [
     "",
     f"> {VALUE}",
     "",
-    f"{N} sorts new AI tools for coding, vibe coding, automation, games, and creative work. {METHOD} Each tool has a use, try, wait, or skip verdict, and the date on a verdict is the day it was last checked. The directory currently lists {len(tools)} tools. Tools added after 2026-10-20 and within the last 7 days are marked New this week on the website only. That badge is not used in the newsletter.",
+    f"{N} sorts new AI tools for coding, vibe coding, automation, and games. {METHOD} {AI_NOTE} Each tool has a use, try, wait, or skip verdict, and the date on a verdict is the day it was last checked. The directory currently lists {len(tools)} tools. Tools added after 2026-10-20 and within the last 7 days are marked New this week on the website only. That badge is not used in the newsletter. The first batch is labeled Launch week.",
     "",
     "## Pages",
     "",
@@ -553,7 +557,7 @@ llms = [
     f"- [Tool directory]({BASE}/tools/): Search, filter by category, and sort the full list. Newest is the default sort. Category links use a ?cat= query. A text search uses ?q=.",
     f"- [Current verdicts]({BASE}/verdicts/): Tools grouped under Use it, Try it, Wait, and Skip, with the date each verdict was checked.",
     f"- [This week]({BASE}/this-week.html): Tools added in the seven days up to the newest date in the directory.",
-    f"- [Newsletter archive]({BASE}/newsletter/): The weekly letter. Issue 1 is coming Friday, October 23, 2026. The old /issues/ path redirects here.",
+    f"- [Newsletter archive]({BASE}/newsletter/): The weekly letter. Issue 1 is coming Oct 23, 2026. /issues/, /archive/, and /newsletters/ redirect here.",
     f"- [Suggest a tool]({BASE}/suggest/): Indie developers can email {CONFIG['suggest_email']} with a tool suggestion.",
     f"- [Subscribe]({CONFIG['subscribe_url']}): Free weekly letter on beehiiv.",
     "",

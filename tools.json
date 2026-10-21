@@ -9,7 +9,7 @@
       "Reviewing diffs before accepting",
       "Tab completions"
     ],
-    "pricing": "Old $20 Pro closed to new signups Oct 12, 2026. New plans: Plus $8 (Grok models only), Premium $30, Super $100, Ultra $200; Claude/GPT/Gemini billed at API price.",
+    "pricing": "Legacy $20 Pro is closed to new signups. New plans: Plus $8 (Grok models only), Premium $30, Super $100, Ultra $200; Claude/GPT/Gemini billed at API price.",
     "verdict": "wait",
     "verdict_reason": "Keep old Pro if you have it; new plans may cost more once usage is billed. Disclosure: Cursor is bundled with The X Subscription (per Cursor's docs).",
     "verdict_checked": "2026-10-21",
@@ -43,12 +43,12 @@
       "Beginner-friendly agent coding",
       "Desktop app agent"
     ],
-    "pricing": "Free tier with an agent model in the desktop app (subject to rollout); Plus $20/mo; Pro 200 allowance reduced for new subscribers since Sept 29.",
+    "pricing": "Free $0, Go $8, Plus $20, Pro from $100 ($100/$200/$500).",
     "verdict": "use",
-    "verdict_reason": "Best $0 starting point among the big three.",
+    "verdict_reason": "There is a free tier, then Go, Plus, and Pro.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://www.llms.blog/posts/cursor-vs-claude-code-vs-codex-prices-models-and-which-to-pick-october-2026"
+    "source": "https://learn.chatgpt.com/docs/pricing"
   },
   {
     "name": "GitHub Copilot Pro",
@@ -62,7 +62,7 @@
     ],
     "pricing": "Free, Pro $10, Pro+ $39, Max $100 a month.",
     "verdict": "use",
-    "verdict_reason": "Budget pick: the only $10 plan with real agent usage, per DevTools Review.",
+    "verdict_reason": "Pro is $10 a month on GitHub's plans page.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://docs.github.com/en/copilot/get-started/plans"
@@ -92,12 +92,12 @@
     "use_cases": [
       "AWS-centric development"
     ],
-    "pricing": "Closed to new signups since May 15, 2026.",
-    "verdict": "skip",
-    "verdict_reason": "Not taking new customers.",
+    "pricing": "Free, plus Pro at $19 per user a month.",
+    "verdict": "wait",
+    "verdict_reason": "Free and Pro are both listed on the AWS pricing page.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://devtoolsreview.com/reports/ai-coding-pricing-october-2026/"
+    "source": "https://aws.amazon.com/q/developer/pricing/"
   },
   {
     "name": "Tabnine",
@@ -107,12 +107,12 @@
     "use_cases": [
       "Enterprise code completion"
     ],
-    "pricing": "No longer sold self-serve.",
-    "verdict": "skip",
-    "verdict_reason": "No self-serve plan for individuals.",
+    "pricing": "Pricing unverified.",
+    "verdict": "wait",
+    "verdict_reason": "Pricing unverified. The pricing page redirects to tricentis.com.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://devtoolsreview.com/reports/ai-coding-pricing-october-2026/"
+    "source": "https://www.tabnine.com/pricing"
   },
   {
     "name": "Lovable",
@@ -126,7 +126,7 @@
     ],
     "pricing": "Free: 5 daily build credits (up to 30/mo). Pro $25/mo (100 credits); Business $50/mo.",
     "verdict": "use",
-    "verdict_reason": "Completed a project-tracker app in a published head-to-head where Bolt did not.",
+    "verdict_reason": "Free tier, then Pro and Business, on Lovable's pricing page.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://lovable.dev/pricing"
@@ -176,7 +176,7 @@
     ],
     "pricing": "Core $20/mo ($18 yearly); Pro $100/mo ($90 yearly).",
     "verdict": "use",
-    "verdict_reason": "Completed the published head-to-head comparison alongside Lovable.",
+    "verdict_reason": "Core and Pro are listed on Replit's pricing page.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://replit.com/pricing"
@@ -190,12 +190,12 @@
       "Internal tools",
       "Simple apps for non-coders"
     ],
-    "pricing": "Free tier; paid from $20/mo up to $200/mo per Quotadex.",
+    "pricing": "Starter $16/mo, Builder $40/mo, Pro $80/mo, Elite $160/mo, all billed annually.",
     "verdict": "wait",
-    "verdict_reason": "Not covered in the public reports we cite yet.",
+    "verdict_reason": "Paid plans are billed annually, starting at $16/mo.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://quotadex.com/"
+    "source": "https://base44.com/pricing"
   },
   {
     "name": "n8n",
@@ -216,19 +216,19 @@
   },
   {
     "name": "AI by Zapier",
-    "url": "https://help.zapier.com/hc/en-us/articles/8496342944013-Use-AI-by-Zapier-to-analyze-and-return-data",
+    "url": "https://zapier.com",
     "category": "AI agents/automation",
     "description": "AI step inside a Zap for tool calling and reasoning. A run that passes 75 tasks pauses.",
     "use_cases": [
       "AI step inside a Zap",
       "Tool calling and reasoning"
     ],
-    "pricing": "Billed in Zapier tasks.",
+    "pricing": "Agents Pro $33.33/mo billed annually ($400/yr), 1,500 activities (zapier.com/pricing).",
     "verdict": "use",
-    "verdict_reason": "Renamed from Zapier Agents on Oct 6, 2026: https://zapier.com/blog/zapier-agents-is-now-ai-by-zapier/",
+    "verdict_reason": "Agents Pro is billed annually and includes 1,500 activities.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://zapier.com/blog/zapier-agents-is-now-ai-by-zapier/"
+    "source": "https://zapier.com/pricing"
   },
   {
     "name": "Make",
@@ -253,14 +253,14 @@
     "description": "Open-source automation platform with AI pieces.",
     "use_cases": [
       "Open-source automation",
-      "Per-run billing"
+      "Cloud or self-hosted"
     ],
-    "pricing": "Free 100 credits/day; Plus $16/mo (yearly).",
+    "pricing": "Free 1,000 credits/mo, Plus $20/mo.",
     "verdict": "wait",
-    "verdict_reason": "Promising open-source alternative; not covered in the public reports we cite.",
+    "verdict_reason": "Free is 1,000 credits a month; Plus is a flat $20/mo.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://gravity.fast/blog/ai-agent-pricing-index/"
+    "source": "https://www.activepieces.com/pricing"
   },
   {
     "name": "Gumloop",
@@ -273,10 +273,10 @@
     ],
     "pricing": "No free plan (14-day trial); Pro $37/mo (20,000 credits) plus 8% orchestration fee.",
     "verdict": "wait",
-    "verdict_reason": "No free plan and layered fees; try the trial first.",
+    "verdict_reason": "No free plan. Pro is $37/mo, and agent runs add an 8% orchestration fee.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://gravity.fast/blog/ai-agent-pricing-index/"
+    "source": "https://docs.gumloop.com/core-concepts/credits"
   },
   {
     "name": "Lindy",
@@ -287,12 +287,12 @@
       "Email/calendar assistant",
       "Slack teammate"
     ],
-    "pricing": "7-day trial with $50 credits; Team $49.99/seat/mo (5,000 credits) as of Oct 13, 2026.",
+    "pricing": "Free start with $50 in credits; Team from $49.99/mo (5,000 credits).",
     "verdict": "wait",
-    "verdict_reason": "Pricing changed twice in October 2026.",
+    "verdict_reason": "Team starts at $49.99/mo on Lindy's pricing page.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://gravity.fast/blog/ai-agent-pricing-index/"
+    "source": "https://www.lindy.ai/pricing"
   },
   {
     "name": "Manus",
@@ -303,12 +303,12 @@
       "Research reports",
       "Multi-step web tasks"
     ],
-    "pricing": "Free access; Pro from $20/mo.",
+    "pricing": "Pricing unverified.",
     "verdict": "wait",
-    "verdict_reason": "Not verified on Manus's own pricing page for this build.",
+    "verdict_reason": "Pricing unverified.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://agentstackwatch.com/pricing/"
+    "source": "https://manus.im"
   },
   {
     "name": "Microsoft Copilot Studio",
@@ -334,7 +334,7 @@
     "use_cases": [
       "Migrating existing flows"
     ],
-    "pricing": "Shutting down November 30, 2026; use the API/AgentKit.",
+    "pricing": "Shutting down Nov 30, 2026; use the API/AgentKit.",
     "verdict": "skip",
     "verdict_reason": "Shutting down Nov 30, 2026.",
     "verdict_checked": "2026-10-21",
@@ -401,7 +401,7 @@
     ],
     "pricing": "50 free daily credits (non-commercial); Starter $15/mo, Pro $45, Max $75.",
     "verdict": "use",
-    "verdict_reason": "Strongest style consistency per Taskade's roundup; good if you have reference art.",
+    "verdict_reason": "Trains a model on your own art. Starter, Pro, and Max are on Scenario's pricing page.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://www.scenario.com/pricing"
@@ -469,7 +469,7 @@
     "verdict_reason": "Needs engineering work to integrate.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://www.taskade.com/blog/ai-game-generators"
+    "source": "https://inworld.ai/pricing"
   },
   {
     "name": "Leonardo AI",
@@ -480,12 +480,12 @@
       "Concept art",
       "Marketing key art"
     ],
-    "pricing": "Free 150 daily credits; Apprentice $12/mo.",
+    "pricing": "Free 150 fast tokens a day; Essential $12/mo.",
     "verdict": "wait",
-    "verdict_reason": "Not covered in the public reports we cite.",
+    "verdict_reason": "Essential is the $12/mo plan, and usage is metered in tokens.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://resources.rework.com/tools/ai-tools/best-ai-tools-for-game-development-2026"
+    "source": "https://www.leonardo.ai/pricing"
   },
   {
     "name": "Ludo.ai",
@@ -506,17 +506,17 @@
   {
     "name": "ElevenLabs",
     "url": "https://elevenlabs.io",
-    "category": "general",
+    "category": "gaming/game dev",
     "description": "AI voice generation for voiceover, dialogue and sound.",
     "use_cases": [
       "Voice acting for games/videos",
       "Narration"
     ],
-    "pricing": "Free (no commercial rights); Starter $5/mo with commercial rights.",
+    "pricing": "Free; Starter $6/mo with a commercial license.",
     "verdict": "use",
-    "verdict_reason": "Cheap entry with commercial rights at $5.",
+    "verdict_reason": "Starter is $6/mo and includes a commercial license.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://resources.rework.com/tools/ai-tools/best-ai-tools-for-game-development-2026"
+    "source": "https://elevenlabs.io/pricing"
   }
 ]
