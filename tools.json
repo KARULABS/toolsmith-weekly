@@ -202,19 +202,20 @@
     "source": "https://ivconsulting.in/blogs/openai-agents-api-vs-n8n-vs-zapier-agents/"
   },
   {
-    "name": "Zapier Agents",
-    "url": "https://zapier.com/agents",
+    "name": "AI by Zapier",
+    "url": "https://help.zapier.com/hc/en-us/articles/8496342944013-Use-AI-by-Zapier-to-analyze-and-return-data",
     "category": "AI agents/automation",
-    "description": "Plain-English AI agents across Zapier's 9,000+ app integrations.",
+    "description": "AI step inside a Zap for tool calling and reasoning. A run that passes 75 tasks pauses.",
     "use_cases": [
-      "Low-volume no-code helpers",
-      "Agents triggered from Zaps"
+      "AI step inside a Zap",
+      "Tool calling and reasoning"
     ],
-    "pricing": "Free: 400 activities/mo; Pro $33.33/mo (annual) for 1,500 activities.",
+    "pricing": "Billed in Zapier tasks.",
     "verdict": "use",
-    "verdict_reason": "Good for low volume with no builder on staff; every action is billed.",
+    "verdict_reason": "Renamed from Zapier Agents on Oct 6, 2026: https://zapier.com/blog/zapier-agents-is-now-ai-by-zapier/",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://ivconsulting.in/blogs/openai-agents-api-vs-n8n-vs-zapier-agents/"
+    "source": "https://zapier.com/blog/zapier-agents-is-now-ai-by-zapier/"
   },
   {
     "name": "Make",
