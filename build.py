@@ -156,21 +156,25 @@ header nav a:hover{color:var(--tx)}
 a.btn{display:inline-flex;align-items:center;justify-content:center;background:var(--ac);color:var(--ink);text-decoration:none;border-radius:999px;padding:12px 18px;min-height:44px;font-weight:700;letter-spacing:-.01em}
 a.btn:hover{background:#eef1ff}
 header nav a.btn{color:var(--ink);padding:8px 14px;min-height:40px}
-.hero{position:relative;overflow:hidden;padding:48px 0 36px;border-bottom:1px solid var(--bd)}
+.hero{position:relative;overflow:hidden;padding:88px 0 72px;border-bottom:1px solid var(--bd)}
 .hero:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(circle at 72% 40%,#000,transparent 72%);pointer-events:none}
 .orb{position:absolute;border-radius:50%;pointer-events:none}
 .orb-a{width:380px;height:380px;right:-180px;top:-200px;background:radial-gradient(circle,rgba(90,78,170,.16),rgba(90,78,170,0) 68%);animation:drift 16s ease-in-out infinite}
 .orb-b{width:340px;height:340px;left:-80px;bottom:-180px;background:radial-gradient(circle,rgba(64,100,220,.18),rgba(64,100,220,0) 70%);animation:drift 20s ease-in-out infinite reverse}
 .hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.25fr .9fr;gap:28px;align-items:center}
 .eyebrow,.kicker{margin:0 0 12px;font-size:.8125rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ac)}
-.hero h1{margin:0 0 12px;max-width:none;font-size:clamp(2.35rem,3.6vw,3.45rem);line-height:1.05;letter-spacing:-.042em;font-weight:700}
+.hero h1{margin:0 0 14px;max-width:none;font-size:clamp(2.5rem,4vw,3.6rem);line-height:1.05;letter-spacing:-.042em;font-weight:700;color:#f2f2f2;opacity:1}
 .lede{margin:0 0 18px;max-width:36rem;font-size:1.05rem;line-height:1.45;color:var(--mu)}
-.actions{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin:0}
+.hero .lede{margin:0 0 24px;color:#b8c0d0;opacity:1}
+.actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:0}
 .actions a:not(.btn){font-weight:650;text-underline-offset:3px}
 .sec-head > a,.actions a:not(.btn),.band-head a{min-height:44px;display:inline-flex;align-items:center}
-.hero-art{position:relative;display:grid;place-items:center;padding:4px 0 8px}
-.anvil{position:relative;display:block;width:min(100%,420px);height:auto;image-rendering:pixelated}
-.metrics{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px}
+a.btn.secondary{background:transparent;color:#f2f2f2;border:1px solid #b8c0d0}
+a.btn.secondary:hover{background:rgba(242,242,242,.08);border-color:#f2f2f2}
+.hero-art{position:relative;display:grid;place-items:center;padding:12px 0 16px}
+.anvil-glow{position:absolute;left:50%;top:62%;width:min(86%,360px);height:200px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(255,146,32,.38),rgba(255,120,20,0) 68%);pointer-events:none}
+.anvil{position:relative;z-index:1;display:block;width:min(100%,420px);height:auto;image-rendering:pixelated}
+.metrics{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:44px}
 .metric{display:flex;flex-direction:column;justify-content:space-between;gap:6px;min-height:92px;padding:16px 18px;border-radius:16px;border:1px solid var(--bd);background:rgba(10,8,28,.55);color:inherit;text-decoration:none}
 a.metric:hover{border-color:rgba(215,222,254,.6);background:#1b1836}
 .metric b{color:var(--tx);font-size:1.35rem;letter-spacing:-.03em;line-height:1.15}
@@ -245,7 +249,7 @@ footer p{margin:8px 0 0;max-width:46rem}
 dl dt{color:var(--mu);margin-top:16px;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase}dl dd{margin:4px 0 0}
 .vrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px}
 .back{margin:8px 0 0}
-@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes rise{from{transform:translateY(12px)}to{transform:none}}
 @keyframes drift{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,18px,0) scale(1.05)}}
 @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 .anvil{animation:floaty 7.5s ease-in-out infinite}
@@ -259,10 +263,11 @@ header nav a{min-height:48px}
 header nav a.btn{display:flex;margin-top:8px;text-align:center}
 }
 @media(max-width:980px){
-.hero{padding:32px 0 28px}
+.hero{padding:52px 0 44px}
 .hero-grid,.split,.metrics{grid-template-columns:1fr}
 .hero-art{order:-1;justify-content:center;margin-bottom:4px}
 .anvil{width:min(100%,240px)}
+.anvil-glow{width:220px;height:130px}
 .orb-a{width:220px;height:220px;right:-120px;top:-160px}
 .vkey{grid-template-columns:1fr 1fr}
 .band{padding:36px 0 40px}
@@ -463,8 +468,8 @@ home = f"""<section class="hero"><div class="orb orb-a" aria-hidden="true"></div
 <div class="w hero-grid"><div class="hero-copy">
 <h1 class="rise">{e(VALUE)}</h1>
 <p class="lede rise d2">Use, try, wait, or skip. {e(METHOD)}</p>
-<p class="actions rise d3"><a class="btn" href="{e(CONFIG['subscribe_url'])}">Subscribe free</a><a href="tools/">Open the directory</a></p>
-</div><div class="hero-art" aria-hidden="true">{anvil_svg()}</div></div>
+<p class="actions rise d3"><a class="btn" href="{e(CONFIG['subscribe_url'])}">Subscribe free</a><a class="btn secondary" href="tools/">Browse the directory</a></p>
+</div><div class="hero-art" aria-hidden="true"><div class="anvil-glow"></div>{anvil_svg()}</div></div>
 <div class="w"><div class="metrics rise d4"><div class="metric"><b>{len(tools)}</b><span>Tools</span></div><div class="metric"><b><time datetime="{e(checked_dates[-1])}">{e(fmt_date(checked_dates[-1]))}</time></b><span>Last checked</span></div><a class="metric" href="#how"><b>Public sources</b><span>Re-checked twice a week</span></a></div></div></section>
 <section class="band" id="picks"><div class="w"><div class="band-head"><h2>This week's picks</h2><a href="this-week.html">{week_link}</a></div>
 <div class="bento">{pick_html}</div></div></section>
