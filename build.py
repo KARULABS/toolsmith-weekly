@@ -46,7 +46,7 @@ CAT_LABEL = {
     "gaming/game dev": "Gaming",
 }
 CAT_ORDER = list(CAT_LABEL)
-# Neutral guidance kept inside a collapsed section on each tool page. Not shown as a label.
+# Neutral first sentence of Our Take. Not shown as a label.
 GUIDE = {
     "use": "Worth using now for the job it claims.",
     "try": "Worth a short trial before you rely on it.",
@@ -371,11 +371,9 @@ dl dt{margin-top:16px}dl dd{margin:4px 0 0}
 .tool-hero{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:48px;align-items:start}
 .tool-hero h1{max-width:none;font-size:clamp(2.25rem,4vw,3.5rem);line-height:1.05}
 .sum{margin:18px 0 0;max-width:40rem;font-size:1.25rem;line-height:1.5;color:var(--tx)}
-.approach{margin:28px 0 0;border:1px solid var(--bd);border-radius:12px;padding:4px 18px 8px;background:linear-gradient(180deg,#0f1630,rgba(15,22,48,.6))}
-.approach summary{cursor:pointer;padding:14px 0;font-weight:650;color:var(--tx)}
-.approach summary:hover{color:var(--ac)}
-.approach p{margin:0 0 12px;color:var(--mu)}
-.approach p.guide{color:var(--tx)}
+.take{margin:32px 0 0;padding:22px 24px;border-radius:16px;border:1px solid var(--bd);background:linear-gradient(180deg,rgba(255,138,61,.07),rgba(15,22,48,.4));box-shadow:inset 0 1px 0 rgba(255,138,61,.35)}
+.take h2{margin:0 0 8px;font-size:1.2rem;letter-spacing:-.02em}
+.take p{margin:0;max-width:44rem;color:var(--tx);font-size:1.05rem;line-height:1.55}
 .facts{position:sticky;top:84px;padding:20px;border-radius:16px;border:1px solid var(--bd);background:linear-gradient(180deg,#0f1630,rgba(15,22,48,.6));box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 8px 24px -12px rgba(0,0,0,.6)}
 .facts dt:first-child{margin-top:0}
 .facts .btn{width:100%;margin-top:18px}
@@ -743,15 +741,19 @@ else:
     week_lede,
     f'<header class="pagehead"><p class="kicker">{e(week_kicker)}</p><h1>{e(week_name)}</h1><p class="lede">{e(week_lede)}</p></header>{week_grid}<div class="sec">{SIGNUP}</div>',
     "this-week.html"))
+def take_paragraph(t):
+    # One plain paragraph: how to approach it, then the sourced detail.
+    guide = GUIDE.get(t["verdict"], "").strip()
+    reason = t["verdict_reason"].strip()
+    parts = [p for p in (guide, reason) if p]
+    return " ".join(parts)
 for t in tools:
-    guide = GUIDE.get(t["verdict"], "")
-    guide_html = f'<p class="guide">{e(guide)}</p>' if guide else ""
     b = f"""<div class="tool-hero"><div class="tool-copy"><p class="back"><a href="index.html">Tool directory</a> · {e(cat_label(t['category']))}</p><h1>{e(t['name'])}</h1><p class="vrow">{badge_html(t)}{verdict_stamp(t)}</p><p class="sum">{e(t['description'])}</p>
 <script type="application/ld+json">{json.dumps({"@context":"https://schema.org","@type":"SoftwareApplication","name":t["name"],"url":t["url"],"applicationCategory":t["category"],"description":t["description"],"dateModified":checked_iso(t)})}</script></div>
 <aside class="facts" aria-label="Facts"><dl><dt>Use cases</dt><dd><ul>{''.join(f'<li>{e(u)}</li>' for u in t['use_cases'])}</ul></dd><dt>Pricing</dt><dd>{e(t['pricing'])}</dd><dt>Website</dt><dd><a href="{e(t['url'])}" rel="noopener">{e(t['url'])}</a></dd>
 <dt>Source</dt><dd><a href="{e(t['source'])}" rel="noopener">{e(t['source'])}</a></dd><dt>Added</dt><dd><time datetime="{e(t['date_added'])}">{e(fmt_date(t['date_added']))}</time></dd></dl>
 <a class="btn" href="{e(t['url'])}" rel="nofollow noopener">Visit website</a></aside></div>
-<details class="approach"><summary>How to approach this tool</summary>{guide_html}<p>{e(t['verdict_reason'])}</p></details>"""
+<section class="take" aria-labelledby="our-take"><h2 id="our-take">Our Take</h2><p>{e(take_paragraph(t))} <a href="{e(t['source'])}" rel="noopener">Source</a></p></section>"""
     (OUT / "tools" / f"{t['slug']}.html").write_text(page(
         f"{t['name']} — {N}",
         f"{t['name']}: {t['description']}"[:300],
