@@ -15,7 +15,43 @@
     "verdict_reason_key": "pricing",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://cursor.com/docs/models-and-pricing.md"
+    "source": "https://cursor.com/docs/models-and-pricing.md",
+    "overview": {
+      "what_it_is": [
+        "DRAFT: Placeholder paragraph for what this tool is. Real copy comes later.",
+        "DRAFT: A second paragraph, so this section is more than one block of text."
+      ],
+      "whats_new": {
+        "text": "DRAFT: Placeholder for what is new. This is not a real update.",
+        "source_url": "https://cursor.com/changelog",
+        "date": "2026-10-21"
+      },
+      "key_features": [
+        "DRAFT: Placeholder feature one.",
+        "DRAFT: Placeholder feature two.",
+        "DRAFT: Placeholder feature three."
+      ],
+      "getting_started": [
+        "DRAFT: Placeholder step one.",
+        "DRAFT: Placeholder step two.",
+        "DRAFT: Placeholder step three."
+      ],
+      "pricing": {
+        "plans": [
+          {"name": "DRAFT Plan A", "price": "DRAFT", "detail": "Placeholder row. Not a real plan."},
+          {"name": "DRAFT Plan B", "price": "DRAFT", "detail": "Placeholder row. Not a real plan."},
+          {"name": "DRAFT Plan C", "price": "DRAFT", "detail": "Placeholder row. Not a real plan."}
+        ]
+      },
+      "good_to_know": [
+        "DRAFT: Placeholder note.",
+        "DRAFT: This overview is not final."
+      ],
+      "sources": [
+        "https://cursor.com/changelog",
+        "https://cursor.com/docs/models-and-pricing.md"
+      ]
+    }
   },
   {
     "name": "Claude Code",
