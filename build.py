@@ -56,42 +56,79 @@ VERDICT_LABEL = {key: label for key, label, _ in VERDICTS}
 suggest_href = "mailto:" + CONFIG["suggest_email"] + "?" + "&".join([
     "subject=" + quote("Tool suggestion for Toolsmith Weekly"),
     "body=" + quote("I'm an indie developer.\n\nTool name:\nWebsite:\nWhat it does:\nWhy it belongs in Toolsmith Weekly:\n")])
-# Pixel anvil, side view. "+" is the lit top face, "#" is the body. 40 columns.
-ANVIL_ROWS = [
-    "................++++++++++++++++++......",
-    "..............+++++++++++++++++++++.....",
-    "............++++++++++++++++++++++++....",
-    "........############################....",
-    "....################################....",
-    ".####################################...",
-    "######################################..",
-    "................########................",
-    "................########................",
-    "............################............",
-    "........########################........",
-    "....################################....",
-    ".######################################.",
-    ".#######.......................########.",
-    ".######.........................#######.",
-]
+# Side-view pixel anvil. Horn left, flat face, heel, waist, two feet.
+# h lit edge, b body, m waist, d shade, Y/O/o sparks. "." stays navy.
+ANVIL_FILL = {
+    "h": "#eceef4",
+    "b": "#969cac",
+    "m": "#767c8c",
+    "d": "#484e5e",
+    "Y": "#ffd640",
+    "O": "#ff941a",
+    "o": "#ff5c10",
+}
+def anvil_grid():
+    w, h = 58, 32
+    g = [["."] * w for _ in range(h)]
+    def rect(x, y, rw, rh, c):
+        for yy in range(y, y + rh):
+            for xx in range(x, x + rw):
+                g[yy][xx] = c
+    def put(x, y, c):
+        if 0 <= x < w and 0 <= y < h:
+            g[y][x] = c
+    for x in range(2, 18):
+        y_top = round(15 - 6 * ((x - 2) / 15))
+        for y in range(y_top, 16):
+            put(x, y, "b")
+        put(x, y_top, "h")
+    rect(18, 8, 26, 2, "h")
+    rect(18, 10, 26, 6, "b")
+    rect(44, 10, 8, 6, "b")
+    rect(26, 16, 12, 5, "m")
+    rect(14, 21, 32, 3, "b")
+    rect(12, 24, 13, 4, "b")
+    rect(35, 24, 13, 4, "b")
+    filled = set("bmh")
+    for y in range(h):
+        for x in range(w):
+            if g[y][x] not in ("b", "m"):
+                continue
+            below = y + 1 < h and (g[y + 1][x] in filled or g[y + 1][x] == "d")
+            above = y > 0 and g[y - 1][x] in filled
+            right = x + 1 < w and (g[y][x + 1] in filled or g[y][x + 1] == "d")
+            if (not below) and above:
+                g[y][x] = "d"
+            elif (not right) and below:
+                g[y][x] = "d"
+    for x, y, c in (
+        (9, 1, "Y"), (12, 2, "O"), (6, 3, "Y"), (15, 1, "o"), (8, 4, "O"),
+        (4, 2, "Y"), (14, 4, "o"), (11, 5, "Y"), (7, 2, "O"), (16, 3, "Y"),
+        (5, 5, "o"), (13, 3, "O"), (3, 4, "Y"), (10, 3, "Y"), (11, 3, "Y"), (4, 4, "Y"),
+    ):
+        if g[y][x] == ".":
+            g[y][x] = c
+    return g
 def anvil_svg():
+    grid = anvil_grid()
     rects = []
-    for y, row in enumerate(ANVIL_ROWS):
+    for y, row in enumerate(grid):
         x = 0
         while x < len(row):
-            if row[x] == ".":
+            ch = row[x]
+            if ch not in ANVIL_FILL:
                 x += 1
                 continue
-            ch = row[x]
             x2 = x + 1
             while x2 < len(row) and row[x2] == ch:
                 x2 += 1
-            fill = "#ffffff" if ch == "+" else "#b9b4ea"
-            rects.append(f'<rect x="{x}" y="{y}" width="{x2 - x}" height="1" fill="{fill}"/>')
+            rects.append(
+                f'<rect x="{x}" y="{y}" width="{x2 - x}" height="1" fill="{ANVIL_FILL[ch]}"/>')
             x = x2
-    h = len(ANVIL_ROWS)
+    height = len(grid)
+    width = len(grid[0])
     return (
-        f'<svg class="anvil" viewBox="0 0 40 {h}" width="400" height="{h * 10}" '
+        f'<svg class="anvil" viewBox="0 0 {width} {height}" '
         'aria-hidden="true" focusable="false" shape-rendering="crispEdges">'
         + "".join(rects) + "</svg>"
     )
@@ -122,7 +159,7 @@ header nav a.btn{color:var(--ink);padding:8px 14px;min-height:40px}
 .hero{position:relative;overflow:hidden;padding:48px 0 36px;border-bottom:1px solid var(--bd)}
 .hero:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(circle at 72% 40%,#000,transparent 72%);pointer-events:none}
 .orb{position:absolute;border-radius:50%;pointer-events:none}
-.orb-a{width:520px;height:520px;right:-40px;top:-140px;background:radial-gradient(circle,rgba(132,112,255,.28),rgba(132,112,255,0) 68%);animation:drift 16s ease-in-out infinite}
+.orb-a{width:380px;height:380px;right:-180px;top:-200px;background:radial-gradient(circle,rgba(90,78,170,.16),rgba(90,78,170,0) 68%);animation:drift 16s ease-in-out infinite}
 .orb-b{width:340px;height:340px;left:-80px;bottom:-180px;background:radial-gradient(circle,rgba(64,100,220,.18),rgba(64,100,220,0) 70%);animation:drift 20s ease-in-out infinite reverse}
 .hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.25fr .9fr;gap:28px;align-items:center}
 .eyebrow,.kicker{margin:0 0 12px;font-size:.8125rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ac)}
@@ -131,9 +168,8 @@ header nav a.btn{color:var(--ink);padding:8px 14px;min-height:40px}
 .actions{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin:0}
 .actions a:not(.btn){font-weight:650;text-underline-offset:3px}
 .sec-head > a,.actions a:not(.btn),.band-head a{min-height:44px;display:inline-flex;align-items:center}
-.hero-art{position:relative;display:grid;place-items:center;min-height:220px}
-.anvil-glow{position:absolute;width:240px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(150,140,255,.34),rgba(150,140,255,0) 70%);transform:translateY(28px)}
-.anvil{position:relative;width:min(100%,380px);image-rendering:pixelated}
+.hero-art{position:relative;display:grid;place-items:center;padding:4px 0 8px}
+.anvil{position:relative;display:block;width:min(100%,420px);height:auto;image-rendering:pixelated}
 .metrics{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px}
 .metric{display:flex;flex-direction:column;justify-content:space-between;gap:6px;min-height:92px;padding:16px 18px;border-radius:16px;border:1px solid var(--bd);background:rgba(10,8,28,.55);color:inherit;text-decoration:none}
 a.metric:hover{border-color:rgba(215,222,254,.6);background:#1b1836}
@@ -153,19 +189,15 @@ h2{margin:0;font-size:clamp(1.6rem,2.4vw,2.05rem)}
 .sec{margin:48px 0}
 .sec-head{display:flex;justify-content:space-between;align-items:center;gap:16px 28px;flex-wrap:wrap;margin-bottom:18px}
 .sec-head p,.intro{color:var(--mu);margin:8px 0 0;max-width:40rem}
-.bento{display:grid;grid-template-columns:1.35fr 1fr 1fr;gap:12px}
-.bento .featured{grid-row:span 2}
-.bento .pick:last-child{grid-column:2 / span 2}
+.bento{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 a.pick,a.catcard,.card,.vk,.panel,.issue{background:rgba(20,18,40,.9);border:1px solid var(--bd);border-radius:16px}
-a.pick,a.catcard{text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:8px;min-height:100%;padding:16px;transition:border-color .2s ease,background .2s ease,transform .2s ease}
+a.pick.featured{border-color:rgba(215,222,254,.45)}
+a.pick,a.catcard{text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:8px;padding:16px;transition:border-color .2s ease,background .2s ease,transform .2s ease}
 a.pick:hover,a.catcard:hover{transform:translateY(-3px);border-color:rgba(215,222,254,.6);background:#1b1836}
 a.pick h3{margin:0;color:var(--tx);font-size:1.05rem}
-.featured h3{font-size:1.55rem;letter-spacing:-.03em}
-.featured .clamp{-webkit-line-clamp:3}
 a.pick p{margin:0;color:var(--mu);font-size:.95rem}
-a.pick .checked{margin-top:auto}
 .clamp{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.cats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.cats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
 a.catcard{min-height:118px;justify-content:space-between}
 a.catcard strong{color:var(--tx);font-size:1rem}
 a.catcard .num{color:var(--tx);font-size:1.7rem;letter-spacing:-.04em;font-variant-numeric:tabular-nums;line-height:1}
@@ -203,6 +235,7 @@ input:hover,select:hover{border-color:rgba(215,222,254,.45)}
 .cat,.checked,.price{font-size:.92rem;color:var(--mu)}
 .bucket{margin:36px 0 8px}
 .bucket .count{color:var(--mu);font-weight:600;font-size:1rem}
+.quiet{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin:22px 0 0}
 .issue{padding:20px;margin:16px 0}
 footer{border-top:1px solid var(--bd);padding:28px 0 40px;color:var(--mu);font-size:.95rem}
 footer nav{display:flex;gap:4px 18px;flex-wrap:wrap}
@@ -212,7 +245,6 @@ footer p{margin:8px 0 0;max-width:46rem}
 dl dt{color:var(--mu);margin-top:16px;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase}dl dd{margin:4px 0 0}
 .vrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px}
 .back{margin:8px 0 0}
-.empty{margin:8px 0 0}
 @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 @keyframes drift{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,18px,0) scale(1.05)}}
 @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
@@ -229,21 +261,15 @@ header nav a.btn{display:flex;margin-top:8px;text-align:center}
 @media(max-width:980px){
 .hero{padding:32px 0 28px}
 .hero-grid,.split,.metrics{grid-template-columns:1fr}
-.hero-art{order:-1;justify-content:start;min-height:0;margin-bottom:4px}
-.anvil{width:200px}
-.anvil-glow{width:180px;height:100px}
-.orb-a{width:280px;height:280px;right:-80px;top:-140px}
-.bento{grid-template-columns:1fr 1fr}
-.bento .featured,.bento .pick:last-child{grid-row:auto;grid-column:1 / -1}
+.hero-art{order:-1;justify-content:center;margin-bottom:4px}
+.anvil{width:min(100%,240px)}
+.orb-a{width:220px;height:220px;right:-120px;top:-160px}
 .vkey{grid-template-columns:1fr 1fr}
-.cats{grid-template-columns:repeat(3,1fr)}
 .band{padding:36px 0 40px}
 }
 @media(max-width:640px){
 .w{padding:0 18px}
 .bento,.vkey,.metrics{grid-template-columns:1fr}
-.cats{grid-template-columns:1fr 1fr}
-.cats a:last-child{grid-column:1 / -1}
 .actions{flex-direction:column;align-items:stretch}
 .hero .btn{width:100%}
 .page{padding:28px 0 56px}
@@ -438,7 +464,7 @@ home = f"""<section class="hero"><div class="orb orb-a" aria-hidden="true"></div
 <h1 class="rise">{e(VALUE)}</h1>
 <p class="lede rise d2">Use, try, wait, or skip. {e(METHOD)}</p>
 <p class="actions rise d3"><a class="btn" href="{e(CONFIG['subscribe_url'])}">Subscribe free</a><a href="tools/">Open the directory</a></p>
-</div><div class="hero-art" aria-hidden="true"><div class="anvil-glow"></div>{anvil_svg()}</div></div>
+</div><div class="hero-art" aria-hidden="true">{anvil_svg()}</div></div>
 <div class="w"><div class="metrics rise d4"><div class="metric"><b>{len(tools)}</b><span>Tools</span></div><div class="metric"><b><time datetime="{e(checked_dates[-1])}">{e(fmt_date(checked_dates[-1]))}</time></b><span>Last checked</span></div><a class="metric" href="#how"><b>Public sources</b><span>Re-checked twice a week</span></a></div></div></section>
 <section class="band" id="picks"><div class="w"><div class="band-head"><h2>This week's picks</h2><a href="this-week.html">{week_link}</a></div>
 <div class="bento">{pick_html}</div></div></section>
@@ -474,10 +500,12 @@ directory = f"""<div class="w dirhead"><h1>Tool directory</h1></div>
 buckets = []
 for key, label, blurb in VERDICTS:
     group = [t for t in tools if t["verdict"] == key]
-    if group:
-        inner = f'<div class="grid">{"".join(card(t, "../tools/", "h3") for t in group)}</div>'
-    else:
-        inner = '<p class="empty mu">Nothing in this bucket right now.</p>'
+    if not group:
+        buckets.append(
+            f'<p class="quiet" id="{key}"><span class="v v-{key}">{e(label)}</span>'
+            f'<span class="mu">Nothing in this bucket right now.</span></p>')
+        continue
+    inner = f'<div class="grid">{"".join(card(t, "../tools/", "h3") for t in group)}</div>'
     buckets.append(
         f'<section class="bucket" id="{key}"><h2><span class="v v-{key}">{e(label)}</span> <span class="count">{len(group)}</span></h2>'
         f'<p class="mu">{e(blurb)}</p>{inner}</section>')
