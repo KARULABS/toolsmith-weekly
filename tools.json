@@ -15,7 +15,10 @@
     "verdict_reason_key": "pricing",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://cursor.com/docs/models-and-pricing.md"
+    "source": "https://cursor.com/docs/models-and-pricing.md",
+    "pick_rank": 1,
+    "pick_reason": "Opened an app marketplace with 20+ apps and public submissions",
+    "pick_source": "https://cursor.com/changelog"
   },
   {
     "name": "Claude Code",
@@ -137,7 +140,10 @@
     "verdict_short": "Builds a hosted full-stack app",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://docs.lovable.dev/introduction/welcome"
+    "source": "https://docs.lovable.dev/introduction/welcome",
+    "pick_rank": 2,
+    "pick_reason": "New Growth tools plan toward goals like your first 100 signups",
+    "pick_source": "https://docs.lovable.dev/changelog"
   },
   {
     "name": "Bolt.new",
@@ -308,7 +314,10 @@
     "verdict_reason_key": "pricing",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://www.lindy.ai/pricing"
+    "source": "https://www.lindy.ai/pricing",
+    "pick_rank": 3,
+    "pick_reason": "Record a task once, and Lindy repeats it on demand or schedule",
+    "pick_source": "https://www.lindy.ai/changelog"
   },
   {
     "name": "Manus",
@@ -494,7 +503,10 @@
     "verdict_reason": "Free on-demand tier includes 70 minutes of TTS, and Creator is $25/mo.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://inworld.ai/pricing"
+    "source": "https://inworld.ai/pricing",
+    "pick_rank": 4,
+    "pick_reason": "Launched Inworld Inference, a hosted inference service",
+    "pick_source": "https://inworld.ai/blog/introducing-inworld-inference"
   },
   {
     "name": "Leonardo AI",
