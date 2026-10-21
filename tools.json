@@ -17,40 +17,66 @@
     "date_added": "2026-10-20",
     "source": "https://cursor.com/docs/models-and-pricing.md",
     "overview": {
-      "what_it_is": [
-        "DRAFT: Placeholder paragraph for what this tool is. Real copy comes later.",
-        "DRAFT: A second paragraph, so this section is more than one block of text."
-      ],
+      "what_it_is": "Cursor is an AI coding product built around agents. It includes Agent (in the editor and the command line), Chat, Cloud Agents, Automations, Bugbot code review and Origin code hosting. It's sold as part of \"The X Subscription,\" one subscription that covers Grok, Cursor and X ([models and pricing](https://cursor.com/docs/models-and-pricing.md)).",
       "whats_new": {
-        "text": "DRAFT: Placeholder for what is new. This is not a real update.",
+        "text": "On Oct 13, 2026, Cursor launched the Origin App Marketplace, with 20+ apps for deployments, CI, code review, security, monitoring and project management. Anyone can submit an app: you create it in your namespace, build against the Origin API, then submit it for Cursor's review ([changelog](https://cursor.com/changelog)).",
         "source_url": "https://cursor.com/changelog",
-        "date": "2026-10-21"
+        "date": "2026-10-13"
       },
       "key_features": [
-        "DRAFT: Placeholder feature one.",
-        "DRAFT: Placeholder feature two.",
-        "DRAFT: Placeholder feature three."
+        "**Cloud agent canvases:** cloud agents can build interactive canvases, and you share a finished one by sending its link.",
+        "**Environments API (beta):** create and manage cloud agent environments programmatically. Environments support up to 300 repositories, and according to Cursor, large ones \"load 5x faster.\"",
+        "**Remote control (Oct 6):** see and reply to local agents from the Cursor iOS app. Your computer has to stay on and online.",
+        "**Projects (Sep 10, beta):** a coordinator agent plans work and hands it off to subagents on a cloud computer.",
+        "**Rollouts and Security Review (Sep 23):** two bots, available on Teams and Enterprise only."
       ],
-      "getting_started": [
-        "DRAFT: Placeholder step one.",
-        "DRAFT: Placeholder step two.",
-        "DRAFT: Placeholder step three."
-      ],
+      "getting_started": "You can browse apps in the Origin App Marketplace now. To use remote control, download the Cursor iOS app, sign in and approve pairing in the desktop app. App builders should begin with the Origin publishing guide and API reference ([changelog](https://cursor.com/changelog)).",
       "pricing": {
+        "text": "Prices exclude tax ([models and pricing](https://cursor.com/docs/models-and-pricing.md)):",
         "plans": [
-          {"name": "DRAFT Plan A", "price": "DRAFT", "detail": "Placeholder row. Not a real plan."},
-          {"name": "DRAFT Plan B", "price": "DRAFT", "detail": "Placeholder row. Not a real plan."},
-          {"name": "DRAFT Plan C", "price": "DRAFT", "detail": "Placeholder row. Not a real plan."}
+          {
+            "name": "Free",
+            "price": "$0",
+            "detail": "Agent and Chat with limited usage (the exact limit isn't stated)"
+          },
+          {
+            "name": "Plus",
+            "price": "$8/month or $80/year",
+            "detail": "Cursor's own models only"
+          },
+          {
+            "name": "Premium",
+            "price": "$30/month or $300/year",
+            "detail": "adds Cloud Agents, Automations, Origin, Bugbot and third-party models"
+          },
+          {
+            "name": "Super",
+            "price": "$100/month or $1,000/year"
+          },
+          {
+            "name": "Ultra",
+            "price": "$200/month or $2,000/year"
+          },
+          {
+            "name": "Teams",
+            "price": "$30, $100 or $200 per seat per month"
+          },
+          {
+            "name": "Enterprise",
+            "price": "custom pricing"
+          }
         ]
       },
       "good_to_know": [
-        "DRAFT: Placeholder note.",
-        "DRAFT: This overview is not final."
+        "Included usage is a weekly pool shared across Agent, Cloud Agents, Grok Bot and the Grok apps.",
+        "Third-party models are billed at API list price from prepaid credit. Teams and Enterprise also pay a Cursor Token Rate of $0.25 per 1M tokens.",
+        "Legacy plans (Hobby, Pro and others) continue for existing customers."
       ],
       "sources": [
         "https://cursor.com/changelog",
         "https://cursor.com/docs/models-and-pricing.md"
-      ]
+      ],
+      "disclosure": "Drafted with AI assistance. No sponsorship."
     }
   },
   {
@@ -173,7 +199,38 @@
     "verdict_short": "Builds a hosted full-stack app",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://docs.lovable.dev/introduction/welcome"
+    "source": "https://docs.lovable.dev/introduction/welcome",
+    "overview": {
+      "what_it_is": "Lovable describes itself as \"an AI software engineer, which enables anyone to build for the web.\" In practice, you chat to build websites and web apps, with no technical knowledge needed. Workspaces allow unlimited members, so it suits individuals, teams, classrooms and communities. ([Lovable pricing](https://lovable.dev/pricing))",
+      "whats_new": {
+        "paragraphs": [
+          "On October 14, Lovable added [Growth tools](https://docs.lovable.dev/changelog). You set a goal, such as \"my first 100 signups,\" and Lovable builds a plan from your app, audience and traffic. It tells you what to fix first, and it says so when ads would be premature. It can set up tracking and campaigns on Google, YouTube, Facebook and Instagram, while you set the budget and approve spending. It also makes launch videos, demos, images and ad copy. Results appear in a redesigned Analytics view. Growth tools carry no extra fee. Standard chat costs apply, and Google or Meta bill your ad account directly.",
+          "Other changes from the past week include Sign in with Lovable for any website, self-restore of deleted projects within 60 days, workspace policies and an Action center, and the ability to create a Supabase project from Lovable. ([Lovable changelog](https://docs.lovable.dev/changelog))"
+        ],
+        "source_url": "https://docs.lovable.dev/changelog",
+        "date": "2026-10-14"
+      },
+      "key_features": [
+        "Chat-based building for websites and web apps",
+        "Plan Mode for planning work at 1 credit per message",
+        "Web, desktop and iOS/Android apps, plus Slack and Telegram integrations",
+        "An MCP server you can use from Claude, Grok and other clients",
+        "You own your code and outputs, subject to third-party model rights"
+      ],
+      "getting_started": "Lovable says \"starting to build on Lovable is free.\" In Default Mode, cost varies with the task. Lovable's own examples are 0.50 credits to change a button style and 1.70 credits for a landing page with images. ([Lovable pricing](https://lovable.dev/pricing))",
+      "pricing": "Plans run from Free and Pro to Business and Enterprise, priced by included credits rather than per seat. The Free plan gives 5 build credits a day (up to 30 a month), plus 20 Cloud credits and 4 credits for AI features in your apps each month. Paid plans add monthly plan credits on top of the same daily and Cloud grants, and come in monthly and annual billing. See current prices on the [Lovable pricing page](https://lovable.dev/pricing). A [student discount](https://lovable.dev/students) is available.",
+      "good_to_know": [
+        "Monthly credits expire 2 months after issue, annual credits 1 month after the annual period ends, and top-up credits after 12 months. Credits are non-refundable.",
+        "Hosting is usually covered by the included grant, but high-traffic apps draw on your credit balance.",
+        "API keys and the Action center need a Business or Enterprise plan. Workspace policies are Enterprise only."
+      ],
+      "sources": [
+        "https://lovable.dev/pricing",
+        "https://docs.lovable.dev/changelog",
+        "https://lovable.dev/students"
+      ],
+      "disclosure": "Drafted with AI assistance. No sponsorship."
+    }
   },
   {
     "name": "Bolt.new",
@@ -338,13 +395,52 @@
       "Email/calendar assistant",
       "Slack teammate"
     ],
-    "pricing": "Team from $29.99/mo (3,000 credits).",
+    "pricing": "Team billed monthly per active user (see lindy.ai/pricing for the current rate); 7-day trial with $50 credits.",
     "verdict": "wait",
     "verdict_reason": "It mentions Pro and Max plans it never defines.",
     "verdict_reason_key": "pricing",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://www.lindy.ai/pricing"
+    "source": "https://www.lindy.ai/pricing",
+    "overview": {
+      "what_it_is": "[Lindy](https://www.lindy.ai/) is an AI assistant built to work like a teammate. It works inside Slack, Gmail (through a Chrome extension), email, chat, text and phone, and handles inbox management, meetings, scheduling, briefs and routines. It connects to more than 1,500 integrations and supports MCP.",
+      "whats_new": {
+        "paragraphs": [
+          "Per the [Lindy changelog](https://www.lindy.ai/changelog):"
+        ],
+        "items": [
+          "**Watch and Learn (Oct 12):** record your screen for up to an hour, or write out the steps. Lindy learns the task and then runs it on request or on a schedule.",
+          "**Phone calls (Oct 14):** Lindy gets its own phone number. It can place calls for you, such as rescheduling an appointment or booking a table, and report back. It can also answer as a receptionist, take messages and book callers onto your calendar. Numbers are US and Canada only.",
+          "**Booking links (Oct 16):** scheduling links that Lindy positions as a Calendly replacement. You can set each link's length, hours, breaks and video app, and add a logo or make it single-use. Guests don't need a Lindy account, and meetings land on Google or Outlook calendars.",
+          "**New integrations (Oct 18):** Airtable, Intercom, Google Analytics, ClickUp, Luma and expanded Slack support, plus quick-question forms."
+        ],
+        "source_url": "https://www.lindy.ai/changelog"
+      },
+      "key_features": [
+        "**Works where you do:** Slack, Gmail, email, chat, text and phone, with 1,500+ integrations.",
+        "**Approval for outside actions:** anything with outside impact waits for your OK.",
+        "Per Lindy, your data isn't used for training, and the company says it is SOC 2 and GDPR compliant."
+      ],
+      "getting_started": "Sign up for a 7-day trial: $50 in credits that last 7 days, no credit card needed. Teammates who join through Slack get a 7-day trial before their seat is billed. Direct signups are billed right away.",
+      "pricing": {
+        "text": "From the [Lindy pricing page](https://www.lindy.ai/pricing):",
+        "items": [
+          "**Free trial:** a 7-day trial with $50 in credits that last 7 days. There is no ongoing free plan.",
+          "**Team:** billed monthly per active user, with credits pooled across the team. Lindy's pricing page currently shows different entry prices on different loads, so check the [pricing page](https://www.lindy.ai/pricing) for the current rate. Top-ups are $10 per 1,000 credits. The plan includes per-task model choice, computer use and live onboarding.",
+          "**Enterprise:** custom pricing. Adds HIPAA/BAA, SSO and SCIM, audit logs and dedicated support."
+        ]
+      },
+      "good_to_know": [
+        "Monthly credits refresh each cycle and don't roll over. Top-up credits don't expire, and there's no mid-cycle proration.",
+        "When credits run out, Lindy pauses credit-using actions rather than charging overage."
+      ],
+      "sources": [
+        "https://www.lindy.ai/",
+        "https://www.lindy.ai/changelog",
+        "https://www.lindy.ai/pricing"
+      ],
+      "disclosure": "Drafted with AI assistance. No sponsorship."
+    }
   },
   {
     "name": "Manus",
@@ -530,7 +626,64 @@
     "verdict_reason": "Free on-demand tier includes 70 minutes of TTS, and Creator is $25/mo.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://inworld.ai/pricing"
+    "source": "https://inworld.ai/pricing",
+    "overview": {
+      "what_it_is": "[Inworld](https://inworld.ai/pricing) is a voice and LLM platform for developers. It offers text-to-speech (TTS-2 and TTS-2 Flash), speech-to-text, speech-to-speech and LLM inference, all paid from one credit balance. Its new Inworld Inference is, in Inworld's words, \"an LLM inference API for consumer apps,\" serving open models such as Gemma 4, GLM, DeepSeek and MiMo.",
+      "whats_new": {
+        "text": "On Oct 14, 2026, Inworld opened [Inworld Inference](https://inworld.ai/blog/introducing-inworld-inference) to every developer, including a new Fast tier with realtime decoding.",
+        "source_url": "https://inworld.ai/blog/introducing-inworld-inference",
+        "date": "2026-10-14"
+      },
+      "key_features": [
+        "An OpenAI-compatible API with streaming support.",
+        "Four service tiers you choose per request, API key or workspace: Flex (lowest price, fails fast and unbilled when busy), Default (no rate limits), Priority (uptime commitment) and Fast (realtime decoding).",
+        "A router for fallback models, conditional rules and weighted A/B splits.",
+        "Dedicated deployments where you can bring your own weights.",
+        "Zero data retention on hosted models, with LLM inference running in the US."
+      ],
+      "getting_started": "Point the OpenAI SDK at `https://api.inworld.ai/v1`, add your Inworld API key and pick a model ID such as `inworld/models/gemma-4-26b-a4b-it`. You can also try any model in the browser playground without an API key.",
+      "pricing": {
+        "text": "[Inworld's pricing](https://inworld.ai/pricing) starts with On-Demand at $0, pay as you go, which includes up to 70 minutes of TTS or 400 minutes of STT free. Paid plans are Creator at $25 a month, Builder at $100, Developer at $300 and Growth at $1,500, each granting the same amount in monthly credits. Enterprise is custom.",
+        "plans": [
+          {
+            "name": "On-Demand",
+            "price": "$0",
+            "detail": "pay as you go, which includes up to 70 minutes of TTS or 400 minutes of STT free"
+          },
+          {
+            "name": "Creator",
+            "price": "$25 a month"
+          },
+          {
+            "name": "Builder",
+            "price": "$100"
+          },
+          {
+            "name": "Developer",
+            "price": "$300"
+          },
+          {
+            "name": "Growth",
+            "price": "$1,500"
+          },
+          {
+            "name": "Enterprise",
+            "price": "custom"
+          }
+        ],
+        "note": "TTS-2 runs from $25 per 1M characters on On-Demand down to $12.50 on Growth. LLM inference starts at $0.07 per 1M input tokens; Gemma 4 26B costs $0.07 input and $0.34 output per 1M tokens at Default rates. Yearly billing gives two months free."
+      },
+      "good_to_know": [
+        "Monthly credits roll over for up to three months while you're on a paid plan, and downgrading forfeits remaining credits.",
+        "Concurrent requests range from 5 on On-Demand to 500 on Growth.",
+        "Every plan includes a commercial license, plus GDPR and SOC 2 Type II compliance. EU and India data residency are Enterprise only."
+      ],
+      "sources": [
+        "https://inworld.ai/pricing",
+        "https://inworld.ai/blog/introducing-inworld-inference"
+      ],
+      "disclosure": "Drafted with AI assistance. No sponsorship."
+    }
   },
   {
     "name": "Leonardo AI",

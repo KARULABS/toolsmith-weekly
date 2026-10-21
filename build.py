@@ -396,6 +396,9 @@ dl dt{margin-top:16px}dl dd{margin:4px 0 0}
 .whatsnew{padding:16px 18px 16px 16px;border:1px solid var(--ac);border-radius:12px;box-shadow:inset 3px 0 0 var(--ac);background:rgba(255,138,61,.06)}
 .whatsnew .label{margin:0 0 8px;font-family:var(--mono);font-size:.75rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ac2)}
 .whatsnew .src{margin:12px 0 0}
+.overview .disclosure{margin:28px 0 0}
+.overview .disclosure em{font-style:italic}
+.overview code{font-family:var(--mono);font-size:.92em}
 .tbl{overflow-x:auto;max-width:100%;width:100%}
 .tbl table{width:100%;border-collapse:collapse;min-width:28rem}
 .tbl caption{caption-side:top;text-align:left;margin:0 0 8px;padding:0;font-weight:650;color:var(--tx)}
@@ -408,6 +411,7 @@ hr.rule{border:0;border-top:1px solid var(--bd);margin:0}
 .take p{margin:0;max-width:44rem;color:var(--tx);font-size:1.05rem;line-height:1.55}
 .facts{position:sticky;top:84px;padding:20px;border-radius:16px;border:1px solid var(--bd);background:linear-gradient(180deg,#0f1630,rgba(15,22,48,.6));box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 8px 24px -12px rgba(0,0,0,.6)}
 .facts dt:first-child{margin-top:0}
+.facts a,.overview a,.overview code{overflow-wrap:anywhere}
 .facts .btn{width:100%;margin-top:18px}
 @keyframes rise{from{transform:translateY(12px)}to{transform:none}}
 @keyframes drift{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,18px,0) scale(1.04)}}
@@ -507,6 +511,9 @@ def price_line(t):
     def pick(text):
         for match in _PRICE_RE.finditer(text):
             if match.group("num") in ("0", "0.0", "0.00"):
+                continue
+            # A trial credit grant is not the plan price.
+            if text[match.end():].lstrip().lower().startswith("credit"):
                 continue
             unit = (match.group("unit") or match.group("per") or "").lower()
             suffix = "/mo" if unit in ("mo", "month") else "/yr" if unit in ("yr", "year") else ""
@@ -861,8 +868,19 @@ def _lines(value):
     if isinstance(value, str):
         return [value] if value.strip() else []
     return [v for v in value if str(v).strip()]
+def rich(value):
+    # Editorial markdown: links, bold, and code. Wording stays as written.
+    text = e(value)
+    text = re.sub(r"`([^`]+)`", r"<code>\1</code>", text)
+    text = re.sub(
+        r"\[([^\]]+)\]\(([^)]+)\)",
+        lambda m: f'<a href="{m.group(2)}" rel="noopener">{m.group(1)}</a>',
+        text,
+    )
+    text = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", text)
+    return text
 def _paras(value):
-    return "".join(f"<p>{e(p)}</p>" for p in _lines(value))
+    return "".join(f"<p>{rich(p)}</p>" for p in _lines(value))
 def pricing_parts(pricing):
     # A string is prose. A list, or plans inside an object, is a plan list.
     if isinstance(pricing, dict):
@@ -873,10 +891,22 @@ def pricing_parts(pricing):
         return pricing, []
     return "", []
 def pricing_html(pricing, tool_name):
+    # items (or format "text") stay prose and a list. plans become a table at 3 or more.
+    if isinstance(pricing, dict) and not pricing.get("plans") and (pricing.get("items") or pricing.get("format") == "text"):
+        parts = []
+        if str(pricing.get("text") or "").strip():
+            parts.append(f"<p>{rich(pricing['text'])}</p>")
+        items = [item for item in pricing.get("items") or [] if str(item).strip()]
+        if items:
+            parts.append("<ul>" + "".join(f"<li>{rich(item)}</li>" for item in items) + "</ul>")
+        note = str(pricing.get("note") or "").strip()
+        if note:
+            parts.append(f"<p>{rich(note)}</p>")
+        return "".join(parts)
     text, plans = pricing_parts(pricing)
     plans = [p for p in plans if p]
     if len(plans) >= 3:
-        intro = f"<p>{e(text)}</p>" if text.strip() else ""
+        intro = f"<p>{rich(text)}</p>" if text.strip() else ""
         has_detail = any(isinstance(p, dict) and (p.get("detail") or p.get("notes")) for p in plans)
         heads = ["Plan", "Price"] + (["Detail"] if has_detail else [])
         body = []
@@ -887,35 +917,53 @@ def pricing_html(pricing, tool_name):
                 cells = [p.get("name") or "", p.get("price") or ""]
                 if has_detail:
                     cells.append(p.get("detail") or p.get("notes") or "")
-            body.append("<tr>" + "".join(f"<td>{e(c)}</td>" for c in cells) + "</tr>")
+            body.append("<tr>" + "".join(f"<td>{rich(c)}</td>" for c in cells) + "</tr>")
         head = "".join(f"<th scope=\"col\">{e(h)}</th>" for h in heads)
         table = (f'<div class="tbl"><table><caption>{e(tool_name)} plans</caption>'
                  f"<thead><tr>{head}</tr></thead><tbody>{''.join(body)}</tbody></table></div>")
-        return intro + table
+        note = ""
+        if isinstance(pricing, dict) and str(pricing.get("note") or "").strip():
+            note = f"<p>{rich(pricing['note'])}</p>"
+        return intro + table + note
     bits = []
     if text.strip():
-        bits.append(f"<p>{e(text)}</p>")
+        bits.append(f"<p>{rich(text)}</p>")
     for p in plans:
         if isinstance(p, str):
-            bits.append(f"<p>{e(p)}</p>")
+            bits.append(f"<p>{rich(p)}</p>")
             continue
         line = " — ".join(x for x in (p.get("name"), p.get("price")) if x)
         detail = p.get("detail") or p.get("notes") or ""
         if detail:
             line = f"{line}. {detail}" if line else detail
         if line:
-            bits.append(f"<p>{e(line)}</p>")
+            bits.append(f"<p>{rich(line)}</p>")
     return "".join(bits)
 def whats_new_html(raw):
+    # One paragraph, several paragraphs, or a list. Omit the aside when there is nothing new.
     if not raw:
         return ""
     if isinstance(raw, str):
-        raw = {"text": raw}
+        raw = {"paragraphs": [raw]}
+    if isinstance(raw, list):
+        raw = {"paragraphs": raw}
     if not isinstance(raw, dict):
         return ""
-    text = str(raw.get("text") or "").strip()
-    if not text:
+    paragraphs = []
+    text = raw.get("text")
+    if isinstance(text, list):
+        paragraphs.extend(text)
+    elif str(text or "").strip():
+        paragraphs.append(text)
+    paragraphs.extend(raw.get("paragraphs") or [])
+    items = list(raw.get("items") or raw.get("list") or [])
+    paragraphs = [p for p in paragraphs if str(p).strip()]
+    items = [item for item in items if str(item).strip()]
+    if not paragraphs and not items:
         return ""
+    body = "".join(f"<p>{rich(p)}</p>" for p in paragraphs)
+    if items:
+        body += "<ul>" + "".join(f"<li>{rich(item)}</li>" for item in items) + "</ul>"
     src = str(raw.get("source_url") or "").strip()
     date = str(raw.get("date") or "").strip()
     bits = []
@@ -924,8 +972,7 @@ def whats_new_html(raw):
     if date:
         bits.append(f'<time datetime="{e(date)}">{e(fmt_date(date))}</time>')
     line = f'<p class="src">{" · ".join(bits)}</p>' if bits else ""
-    return (f'<aside class="whatsnew" id="whats-new"><p class="label">What\'s new</p>'
-            f"<p>{e(text)}</p>{line}</aside>")
+    return f'<aside class="whatsnew" id="whats-new"><p class="label">What\'s new</p>{body}{line}</aside>'
 def overview_html(t):
     # Absent overview renders nothing. Empty sections are left out, including What's new.
     ov = t.get("overview")
@@ -946,21 +993,23 @@ def overview_html(t):
     features = _lines(ov.get("key_features"))
     if features:
         add_section("key-features", "Key features",
-                    "<ul>" + "".join(f"<li>{e(item)}</li>" for item in features) + "</ul>")
+                    "<ul>" + "".join(f"<li>{rich(item)}</li>" for item in features) + "</ul>")
     steps = _lines(ov.get("getting_started"))
     if steps:
         add_section("getting-started", "Getting started",
-                    "<ol>" + "".join(f"<li>{e(item)}</li>" for item in steps) + "</ol>")
+                    "<ol>" + "".join(f"<li>{rich(item)}</li>" for item in steps) + "</ol>")
     add_section("pricing", "Pricing", pricing_html(ov.get("pricing"), t["name"]))
     notes = _lines(ov.get("good_to_know"))
     if notes:
         add_section("good-to-know", "Good to know",
-                    "<ul>" + "".join(f"<li>{e(item)}</li>" for item in notes) + "</ul>")
+                    "<ul>" + "".join(f"<li>{rich(item)}</li>" for item in notes) + "</ul>")
     if not blocks:
         return ""
+    disclosure = str(ov.get("disclosure") or "").strip()
+    note = f'<p class="disclosure"><em>{rich(disclosure)}</em></p>' if disclosure else ""
     toc = f'<nav class="toc" aria-label="On this page">{"".join(links)}</nav>'
-    return f'<article class="overview"><h2>{e(t["name"])} overview</h2>{toc}{"".join(blocks)}</article>'
-_MONEY = re.compile(r"([$€])\s*(\d+(?:\.\d+)?)")
+    return f'<article class="overview"><h2>{e(t["name"])} overview</h2>{toc}{"".join(blocks)}{note}</article>'
+_MONEY = re.compile(r"([$€])\s*(\d{1,3}(?:,\d{3})+|\d+(?:\.\d+)?)")
 def _offer(plan):
     if isinstance(plan, str):
         return {"@type": "Offer", "description": plan}
@@ -968,21 +1017,29 @@ def _offer(plan):
     found = _MONEY.search(str(plan.get("price") or ""))
     if found:
         offer["priceCurrency"] = "USD" if found.group(1) == "$" else "EUR"
-        offer["price"] = found.group(2)
+        offer["price"] = found.group(2).replace(",", "")
     detail = plan.get("detail") or plan.get("notes") or ""
     if detail:
         offer["description"] = detail
     return offer
 def software_offers(t):
-    # No ratings. Plans become offers when an overview lists them; otherwise the pricing sentence.
-    text, plans = pricing_parts((t.get("overview") or {}).get("pricing"))
+    # No ratings. Plan rows become offers. Prose pricing, including an items list, stays one offer.
+    pricing = (t.get("overview") or {}).get("pricing")
+    text, plans = pricing_parts(pricing)
     plans = [p for p in plans if p]
     if plans:
         offers = [_offer(p) for p in plans]
         if len(offers) == 1:
             return offers[0]
         return {"@type": "AggregateOffer", "offerCount": len(offers), "offers": offers}
-    return {"@type": "Offer", "description": text or t["pricing"]}
+    parts = []
+    if str(text or "").strip():
+        parts.append(str(text).strip())
+    if isinstance(pricing, dict):
+        parts.extend(str(item).strip() for item in (pricing.get("items") or []) if str(item).strip())
+        if str(pricing.get("note") or "").strip():
+            parts.append(str(pricing["note"]).strip())
+    return {"@type": "Offer", "description": " ".join(parts) if parts else t["pricing"]}
 def software_ld(t):
     data = {
         "@context": "https://schema.org",
