@@ -77,7 +77,10 @@
         "https://cursor.com/docs/models-and-pricing.md"
       ],
       "disclosure": "Drafted with AI assistance. No sponsorship."
-    }
+    },
+    "pick_rank": 1,
+    "pick_reason": "Opened an app marketplace with 20+ apps and public submissions",
+    "pick_source": "https://cursor.com/changelog"
   },
   {
     "name": "Claude Code",
@@ -230,7 +233,10 @@
         "https://lovable.dev/students"
       ],
       "disclosure": "Drafted with AI assistance. No sponsorship."
-    }
+    },
+    "pick_rank": 2,
+    "pick_reason": "New Growth tools plan toward goals like your first 100 signups",
+    "pick_source": "https://docs.lovable.dev/changelog"
   },
   {
     "name": "Bolt.new",
@@ -440,7 +446,10 @@
         "https://www.lindy.ai/pricing"
       ],
       "disclosure": "Drafted with AI assistance. No sponsorship."
-    }
+    },
+    "pick_rank": 3,
+    "pick_reason": "Record a task once, and Lindy repeats it on demand or schedule",
+    "pick_source": "https://www.lindy.ai/changelog"
   },
   {
     "name": "Manus",
@@ -683,7 +692,10 @@
         "https://inworld.ai/blog/introducing-inworld-inference"
       ],
       "disclosure": "Drafted with AI assistance. No sponsorship."
-    }
+    },
+    "pick_rank": 4,
+    "pick_reason": "Launched Inworld Inference, a hosted inference service",
+    "pick_source": "https://inworld.ai/blog/introducing-inworld-inference"
   },
   {
     "name": "Leonardo AI",
