@@ -12,6 +12,7 @@
     "pricing": "Legacy $20 Pro is closed to new signups. New plans: Plus $8 (Grok models only), Premium $30, Super $100, Ultra $200; Claude/GPT/Gemini billed at API price.",
     "verdict": "wait",
     "verdict_reason": "Keep old Pro if you have it; new plans may cost more once usage is billed.",
+    "verdict_short": "New plans may cost more",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://cursor.com/docs/models-and-pricing.md"
@@ -29,6 +30,7 @@
     "pricing": "Included in paid Claude plans. Pro $20/mo ($17/mo billed annually); Max from $100/mo.",
     "verdict": "use",
     "verdict_reason": "Included in paid Claude plans, and terminal work shares that plan's usage.",
+    "verdict_short": "Included in paid Claude plans",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://claude.com/pricing?mode=code"
@@ -46,6 +48,7 @@
     "pricing": "Free $0, Go $8, Plus $20, Pro from $100 ($100/$200/$500).",
     "verdict": "use",
     "verdict_reason": "Runs in the CLI, an IDE, and on the web. Plus adds cloud code review and Slack.",
+    "verdict_short": "Runs in CLI, IDE, and web",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://learn.chatgpt.com/docs/pricing"
@@ -63,6 +66,7 @@
     "pricing": "Free, Pro $10, Pro+ $39, Max $100 a month.",
     "verdict": "use",
     "verdict_reason": "Pro is $10 a month on GitHub's plans page.",
+    "verdict_short": "Pro is $10 a month",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://docs.github.com/en/copilot/get-started/plans"
@@ -80,6 +84,7 @@
     "pricing": "Free (light quota); Pro $20/mo; Max $200/mo; Teams $80/mo + $40 per seat.",
     "verdict": "wait",
     "verdict_reason": "Rebrand and new SWE-2 model are fresh; give quotas time to settle.",
+    "verdict_short": "Give quotas time to settle",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://devin.ai/pricing"
@@ -95,6 +100,7 @@
     "pricing": "Free, plus Pro at $19 per user a month.",
     "verdict": "wait",
     "verdict_reason": "Free and Pro are both listed on the AWS pricing page.",
+    "verdict_short": "Evidence not settled yet",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://aws.amazon.com/q/developer/pricing/"
@@ -110,6 +116,7 @@
     "pricing": "Pricing unverified.",
     "verdict": "wait",
     "verdict_reason": "Pricing page now redirects to its parent company; plans unclear.",
+    "verdict_short": "Plans unclear at parent company",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://www.tabnine.com/pricing"
@@ -127,6 +134,7 @@
     "pricing": "Free: 5 daily build credits (up to 30/mo). Pro $25/mo (100 credits); Business $50/mo. See lovable.dev/pricing.",
     "verdict": "use",
     "verdict_reason": "Describe an app in plain language and it builds a hosted full-stack app you can sync to Git.",
+    "verdict_short": "Builds a hosted full-stack app",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://docs.lovable.dev/introduction/welcome"
@@ -144,6 +152,7 @@
     "pricing": "Pro $18/mo and Teams $27 per member/mo, both billed annually.",
     "verdict": "wait",
     "verdict_reason": "Pro and Teams are the paid plans, both billed annually.",
+    "verdict_short": "Paid plans billed annually",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://bolt.new/pricing"
@@ -160,6 +169,7 @@
     "pricing": "Free (7 messages/day); Plus $30/user/mo; Business $100/user/mo; Premium $20 being sunset.",
     "verdict": "wait",
     "verdict_reason": "Free tier is thin and plans just reshuffled; fine to try, wait before paying.",
+    "verdict_short": "Wait before paying",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://v0.app/docs/pricing"
@@ -177,6 +187,7 @@
     "pricing": "Core $20/mo ($18 yearly); Pro $100/mo ($90 yearly). See replit.com/pricing.",
     "verdict": "use",
     "verdict_reason": "Describe an app in plain language and Agent builds it, then you publish from the same project.",
+    "verdict_short": "Builds the app, then you publish",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://docs.replit.com/features/agent/overview"
@@ -193,6 +204,7 @@
     "pricing": "Starter $16/mo, Builder $40/mo, Pro $80/mo, Elite $160/mo, all billed annually.",
     "verdict": "wait",
     "verdict_reason": "Paid plans are billed annually, starting at $16/mo.",
+    "verdict_short": "Billed annually from $16",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://base44.com/pricing"
@@ -210,6 +222,7 @@
     "pricing": "Self-host free; Cloud Starter €20/mo billed annually (2,500 executions); Pro €50/mo.",
     "verdict": "use",
     "verdict_reason": "Bills per workflow execution, not per step; strong default for repeat workflows.",
+    "verdict_short": "Bills per workflow execution",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://n8n.io/pricing/"
@@ -226,6 +239,7 @@
     "pricing": "Agents Pro $33.33/mo billed annually ($400/yr), 1,500 activities (zapier.com/pricing).",
     "verdict": "use",
     "verdict_reason": "It runs an agent inside Zapier that can take actions in the apps you connect.",
+    "verdict_short": "Agent acts in connected apps",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://help.zapier.com/hc/en-us/articles/24393442652557-Build-an-agent-in-Zapier-Agents"
@@ -242,6 +256,7 @@
     "pricing": "Pricing unverified.",
     "verdict": "wait",
     "verdict_reason": "The $9 plan is Pricing unverified.",
+    "verdict_short": "Pricing unverified",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://www.make.com"
@@ -258,6 +273,7 @@
     "pricing": "Free 1,000 credits/mo, Plus $20/mo.",
     "verdict": "wait",
     "verdict_reason": "Free is 1,000 credits a month; Plus is a flat $20/mo.",
+    "verdict_short": "Plus is a flat $20/mo",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://www.activepieces.com/pricing"
@@ -274,6 +290,7 @@
     "pricing": "No free plan (14-day trial); Pro $37/mo (20,000 credits) plus 8% orchestration fee.",
     "verdict": "wait",
     "verdict_reason": "No free plan. Pro is $37/mo, and agent runs add an 8% orchestration fee.",
+    "verdict_short": "No free plan, 8% fee",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://docs.gumloop.com/core-concepts/credits"
@@ -290,6 +307,7 @@
     "pricing": "Team from $29.99/mo (3,000 credits).",
     "verdict": "wait",
     "verdict_reason": "Team starts at $29.99/mo for 3,000 credits.",
+    "verdict_short": "Team starts at $29.99/mo",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://www.lindy.ai/pricing"
@@ -306,6 +324,7 @@
     "pricing": "Pricing unverified.",
     "verdict": "wait",
     "verdict_reason": "Pricing unverified.",
+    "verdict_short": "Pricing unverified",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://manus.im"
@@ -322,6 +341,7 @@
     "pricing": "$200/mo per 25,000 Copilot Credits, or pay as you go.",
     "verdict": "wait",
     "verdict_reason": "Sold as 25,000-credit packs at $200/mo, with pay-as-you-go as well.",
+    "verdict_short": "Credit packs at $200/mo",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://www.microsoft.com/en-us/copilot/pricing/copilot-studio"
@@ -337,6 +357,7 @@
     "pricing": "Shutting down Nov 30, 2026; use the Agents SDK or ChatGPT Workspace Agents.",
     "verdict": "skip",
     "verdict_reason": "Scheduled to shut down Nov 30, 2026.",
+    "verdict_short": "Shuts down Nov 30, 2026",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://developers.openai.com/api/docs/deprecations"
@@ -353,6 +374,7 @@
     "pricing": "Professional $590 per workspace/year.",
     "verdict": "wait",
     "verdict_reason": "Professional is $590 per workspace a year.",
+    "verdict_short": "$590 a year per workspace",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://dify.ai/pricing"
@@ -370,6 +392,7 @@
     "pricing": "Free, open source (MIT). Needs Godot 4.7+; telemetry on by default.",
     "verdict": "use",
     "verdict_reason": "Voyager checked it hands-on with Claude Code and recommends it.",
+    "verdict_short": "Checked hands-on and recommended",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://voyager.so/blog/godot-mcp"
@@ -386,6 +409,7 @@
     "pricing": "Unity AI bundled with Unity Personal (free) or Pro ($210/mo/seat).",
     "verdict": "wait",
     "verdict_reason": "Official and promising, but the public reports we cite don't include an independent check.",
+    "verdict_short": "No independent check cited",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://unity.com/blog/unity-plugin-grok"
@@ -402,6 +426,7 @@
     "pricing": "50 free daily credits (non-commercial); Starter $15/mo, Pro $45, Max $75. See scenario.com/pricing.",
     "verdict": "use",
     "verdict_reason": "Train a model on your own art so new assets stay in that style.",
+    "verdict_short": "Train a model on your art",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://www.scenario.com/features/train"
@@ -418,6 +443,7 @@
     "pricing": "Free 100 credits/mo, Pro $20, Premium $40, Studio $70 per seat, Ultra $100.",
     "verdict": "wait",
     "verdict_reason": "Good for drafts.",
+    "verdict_short": "Good for drafts",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://help.meshy.ai/en/articles/12062933-which-meshy-plan-is-right-for-you"
@@ -434,6 +460,7 @@
     "pricing": "From $10/mo for 300 Creative Units.",
     "verdict": "wait",
     "verdict_reason": "You pay in Creative Units, from $10/mo for 300, with no per-seat fee.",
+    "verdict_short": "Pay in Creative Units",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://layer.ai/pricing"
@@ -451,6 +478,7 @@
     "pricing": "Free plan with 8,000 credits (weekly refill in eligible regions); paid tiers available.",
     "verdict": "use",
     "verdict_reason": "Free and fast way to try vibe-coding a game.",
+    "verdict_short": "Free way to try a game",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://rosebud.ai/pricing"
@@ -467,6 +495,7 @@
     "pricing": "Free on-demand tier (70 min TTS); Creator $25/mo.",
     "verdict": "wait",
     "verdict_reason": "Needs engineering work to integrate.",
+    "verdict_short": "Needs engineering to integrate",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://inworld.ai/pricing"
@@ -483,6 +512,7 @@
     "pricing": "Free 150 fast tokens a day; Essential $12/mo.",
     "verdict": "wait",
     "verdict_reason": "Essential is the $12/mo plan, and usage is metered in tokens.",
+    "verdict_short": "Usage metered in tokens",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://www.leonardo.ai/pricing"
@@ -499,6 +529,7 @@
     "pricing": "Indie $15/mo, Pro $35/mo, Studio $300/mo, all billed annually.",
     "verdict": "wait",
     "verdict_reason": "Niche; the paid plans are billed annually.",
+    "verdict_short": "Niche, billed annually",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://ludo.ai/pricing"
@@ -515,6 +546,7 @@
     "pricing": "Free; Starter $6/mo with a commercial license.",
     "verdict": "use",
     "verdict_reason": "Starter is $6/mo and includes a commercial license.",
+    "verdict_short": "Includes a commercial license",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://elevenlabs.io/pricing"

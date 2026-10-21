@@ -25,6 +25,11 @@ for t in tools:
     t["slug"] = slug(t["name"])
     t.setdefault("date_added", "2026-10-21")
 tools.sort(key=lambda t: (t["date_added"], t["name"]), reverse=True)
+for t in tools:
+    if t["verdict"] in ("wait", "skip"):
+        short = t.get("verdict_short", "")
+        if not short or len(short.split()) > 6:
+            raise SystemExit(f"{t['name']} needs a verdict_short of at most 6 words")
 TODAY = datetime.date.today()
 NEW_CUTOFF = TODAY - datetime.timedelta(days=7)
 LAUNCH = datetime.date(2026, 10, 20)  # initial batch; do not badge these
@@ -53,6 +58,7 @@ VERDICTS = [
     ("skip", "Skip", "Closed, shutting down, or a poor fit."),
 ]
 VERDICT_LABEL = {key: label for key, label, _ in VERDICTS}
+WHY_LABEL = {"use": "Why use", "try": "Why try", "wait": "Why wait", "skip": "Why skip"}
 suggest_href = "mailto:" + CONFIG["suggest_email"] + "?" + "&".join([
     "subject=" + quote("Tool suggestion for Toolsmith Weekly"),
     "body=" + quote("I'm an indie developer.\n\nTool name:\nWebsite:\nWhat it does:\nWhy it belongs in Toolsmith Weekly:\n")])
@@ -300,7 +306,12 @@ a.metric:hover{background:rgba(255,138,61,.06)}
 .bento .featured{grid-row:span 3}
 .pick,.catcard,.card,.vk,.panel,.issue{background:linear-gradient(180deg,#0f1630,rgba(15,22,48,.6));border:1px solid var(--bd);border-radius:12px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 8px 24px -12px rgba(0,0,0,.6);padding:20px}
 .pick,a.catcard{text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:10px}
-.pick > .v{display:inline-flex;width:auto;align-self:flex-start}
+.pick > .v,.pick > .vtag{display:inline-flex;width:auto;align-self:flex-start}
+.vtag{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;max-width:100%}
+.vshort{color:var(--mu);font-size:.92rem;font-weight:550}
+.why{margin:14px 0 0;font-size:1.02rem;line-height:1.5}
+.why .label{display:block;margin:0 0 4px;font-family:var(--mono);font-size:.75rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ac)}
+.card .why{margin:0}
 .pick,.catcard,.card{transition:border-color .2s ease,background .2s ease,transform .2s ease}
 .pick:hover,a.catcard:hover,.card:hover{border-color:var(--bd-h);background:#141c3b;transform:translateY(-2px)}
 .pick h3{margin:0;color:var(--tx);font-size:1.05rem}
@@ -437,6 +448,14 @@ def cat_label(name):
 def verdict_stamp(t):
     iso = checked_iso(t)
     return f'<span class="checked">Last checked <time datetime="{e(iso)}">{e(fmt_date(iso))}</time></span>'
+def pill_html(t):
+    # Short reason sits outside the pill so the pill stays as wide as its label.
+    short = t.get("verdict_short")
+    extra = f'<span class="vshort">· {e(short)}</span>' if short else ""
+    return f'<span class="vtag"><span class="v v-{e(t["verdict"])}">{e(vlabel(t))}</span>{extra}</span>'
+def why_html(t):
+    label = WHY_LABEL.get(t["verdict"], "Why")
+    return f'<p class="why"><span class="label">{e(label)}</span>{e(t["verdict_reason"])}</p>'
 NAV = [
     ("index.html", "Home", "home"),
     ("tools/", "Tool Directory", "tools"),
@@ -549,16 +568,16 @@ def page(title, desc, body, path, depth=0, nodes=None, bleed=False):
 def badge_html(t):
     # Website cards only. Callers on the newsletter archive must not use this.
     return '<span class="badge-new">New this week</span>' if is_new(t) else ""
-def card(t, prefix, level="h2"):
+def card(t, prefix, level="h2", why=False):
     badge = badge_html(t)
-    return f"""<article class="card" data-cat="{e(t['category'])}" data-date="{t['date_added']}" data-checked="{e(checked_iso(t))}" data-text="{e((t['name']+' '+t['description']+' '+' '.join(t['use_cases'])+' '+t['category']).lower())}">
-<div class="vrow">{badge}<span class="v v-{e(t['verdict'])}">{e(vlabel(t))}</span></div><{level} class="name"><a href="{prefix}{t['slug']}.html">{e(t['name'])}</a></{level}>
-<p class="clamp">{e(t['verdict_reason'])}</p><p class="checked">{e(cat_label(t['category']))} · {verdict_stamp(t)}</p></article>"""
+    return f"""<article class="card" data-cat="{e(t['category'])}" data-date="{t['date_added']}" data-checked="{e(checked_iso(t))}" data-text="{e((t['name']+' '+t['description']+' '+' '.join(t['use_cases'])+' '+t['category']+' '+t.get('verdict_short','')).lower())}">
+<div class="vrow">{badge}{pill_html(t)}</div><{level} class="name"><a href="{prefix}{t['slug']}.html">{e(t['name'])}</a></{level}>
+{why_html(t) if why else f'<p class="clamp">{e(t["verdict_reason"])}</p>'}<p class="checked">{e(cat_label(t['category']))} · {verdict_stamp(t)}</p></article>"""
 def pick_card(t, featured=False):
-    head = f'<span class="v v-{e(t["verdict"])}">{e(vlabel(t))}</span><h3>{e(t["name"])}</h3>'
+    head = f'{pill_html(t)}<h3>{e(t["name"])}</h3>'
     if featured:
         href = f'tools/{t["slug"]}.html'
-        return (f'<article class="pick featured"><span class="v v-{e(t["verdict"])}">{e(vlabel(t))}</span>'
+        return (f'<article class="pick featured">{pill_html(t)}'
                 f'<h3><a href="{href}">{e(t["name"])}</a></h3>'
                 f'<p class="clamp">{e(t["description"])}</p>'
                 f'<p class="meta"><span class="cat">{e(cat_label(t["category"]))}</span> · '
@@ -657,7 +676,7 @@ for key, label, blurb in VERDICTS:
             f'<p class="quiet" id="{key}"><span class="v v-{key}">{e(label)}</span>'
             f'<span class="mu">Nothing in this bucket right now.</span></p>')
         continue
-    inner = f'<div class="grid">{"".join(card(t, "../tools/", "h3") for t in group)}</div>'
+    inner = f'<div class="grid">{"".join(card(t, "../tools/", "h3", why=True) for t in group)}</div>'
     buckets.append(
         f'<section class="bucket" id="{key}"><h2><span class="v v-{key}">{e(label)}</span> <span class="count">{len(group)}</span></h2>'
         f'<p class="mu">{e(blurb)}</p>{inner}</section>')
@@ -681,7 +700,7 @@ else:
     f'<header class="pagehead"><p class="kicker">{e(week_kicker)}</p><h1>{e(week_name)}</h1><p class="lede">{e(week_lede)}</p></header>{week_grid}<div class="sec">{SIGNUP}</div>',
     "this-week.html"))
 for t in tools:
-    b = f"""<div class="tool-hero"><div class="tool-copy"><p class="back"><a href="index.html">Tool directory</a> · {e(cat_label(t['category']))}</p><h1>{e(t['name'])}</h1><p class="vrow">{badge_html(t)}<span class="v v-{e(t['verdict'])}">{e(vlabel(t))}</span> {verdict_stamp(t)}</p><p class="sum">{e(t['description'])}</p><p class="reason">{e(t['verdict_reason'])}</p>
+    b = f"""<div class="tool-hero"><div class="tool-copy"><p class="back"><a href="index.html">Tool directory</a> · {e(cat_label(t['category']))}</p><h1>{e(t['name'])}</h1><p class="vrow">{badge_html(t)}{pill_html(t)} {verdict_stamp(t)}</p><p class="sum">{e(t['description'])}</p>{why_html(t)}
 <p><a href="../verdicts/#{e(t['verdict'])}">More {e(vlabel(t))} verdicts</a></p>
 <script type="application/ld+json">{json.dumps({"@context":"https://schema.org","@type":"SoftwareApplication","name":t["name"],"url":t["url"],"applicationCategory":t["category"],"description":t["description"],"dateModified":checked_iso(t)})}</script></div>
 <aside class="facts" aria-label="Facts"><dl><dt>Use cases</dt><dd><ul>{''.join(f'<li>{e(u)}</li>' for u in t['use_cases'])}</ul></dd><dt>Pricing</dt><dd>{e(t['pricing'])}</dd><dt>Website</dt><dd><a href="{e(t['url'])}" rel="noopener">{e(t['url'])}</a></dd>
