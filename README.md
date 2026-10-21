@@ -11,7 +11,7 @@ Append an object to `tools.json`:
  "use_cases":["..."],"pricing":"Free; Pro $X/mo","verdict":"use|try|wait|skip",
  "verdict_reason":"One line.","verdict_checked":"YYYY-MM-DD","date_added":"YYYY-MM-DD","source":"https://source-link"}
 ```
-Categories: `coding agents`, `vibe-coding app builders`, `AI agents/automation`, `gaming/game dev` (new ones get a filter chip and a category tile automatically). Reader-facing labels are title case in `CAT_LABEL` in `build.py`: Coding Agents, Vibe Coding, Automation, Gaming. There is no separate `general` category. Every fact needs a source link. If a price is not on a public page, write `Pricing unverified` instead of a number. Facts come from public reports and official pricing pages and are re-checked twice a week. The site shows Last checked with that date. The site is researched and drafted with AI tools and reviewed by a human. Do not write that the site tested a tool, and do not add an aside that the source does not support. `verdict` and `verdict_reason` stay in the data. The site does not print Use, Try, Wait, or Skip labels. On a tool page, facts come first. Our Take follows as a visible card: one short paragraph that joins a neutral line from `verdict` with `verdict_reason`, plus the source link. `verdict_checked` is the date that note was last re-reviewed. It is optional: if you omit it, the site shows `date_added`. Tool pages show that stamp once.
+Categories: `coding agents`, `vibe-coding app builders`, `AI agents/automation`, `gaming/game dev` (new ones get a filter chip and a category tile automatically). Reader-facing labels are title case in `CAT_LABEL` in `build.py`: Coding Agents, Vibe Coding, Automation, Gaming. There is no separate `general` category. Every fact needs a source link. If a price is not on a public page, write `Pricing unverified` instead of a number. The footer states where the info comes from: official pricing pages, docs, and public announcements, linked on every tool page, written with AI help and reviewed for accuracy. Do not write that the site tested a tool, and do not add an aside that the source does not support. `verdict` and `verdict_reason` stay in the data and are used only to write the Our Take paragraph. The site does not print Use, Try, Wait, or Skip labels. On a tool page, facts come first. Our Take follows as a visible card: one short paragraph plus the source link. `verdict_checked` is optional: if you omit it, the site shows `date_added` as Last checked. Tool pages show that stamp once.
 
 Homepage "This week's picks" are the four names in `PICKS` at the top of `build.py`. Swap that list each Friday. The build stops if a name is missing from `tools.json`.
 
@@ -22,7 +22,7 @@ cd dist && python3 -m http.server 8765
 ```
 Output:
 
-- `dist/index.html` — product homepage: full-width hero, bento picks, category tiles, how we check, letter and signup
+- `dist/index.html` — product homepage: full-width hero, bento picks, category tiles, letter and signup
 - `dist/tools/` — directory with a search box, A–Z jump links, category chips, a free-tier toggle, and compact rows. Each row shows a one-line price summary, such as `Free tier, from $20/mo` or `Pricing unverified`. The tool page keeps the full pricing sentence. `?cat=` opens a category. `?q=` fills the search box. Newest is the default sort.
 - `dist/tools/<slug>.html` — one page per tool, with Open Graph and JSON-LD. Facts come first. Our Take follows as a short paragraph with its source link.
 - `dist/verdicts/` — meta refresh to `/tools/` (not listed in the sitemap)

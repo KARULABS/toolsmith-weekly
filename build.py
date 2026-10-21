@@ -15,9 +15,8 @@ CONFIG["base_url"] = CONFIG["base_url"].rstrip("/")
 N = CONFIG["site_name"]; R = pathlib.Path(__file__).parent; OUT = R / "dist"
 BASE = CONFIG["base_url"]
 VALUE = CONFIG["tagline"]
-# Facts cite public reports. The site does not claim a hands-on check of its own.
-METHOD = "Facts from public reports and official pricing pages, re-checked twice a week."
-AI_NOTE = "Researched and drafted with AI tools and reviewed by a human; every fact links to a public source."
+# Shown in the footer. The site does not claim a hands-on check of its own.
+SOURCE_NOTE = "Where our info comes from: official pricing pages, docs and public announcements, linked on every tool page. Written with AI help and reviewed for accuracy."
 e = lambda s: html.escape(str(s), quote=True)
 slug = lambda s: re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
 tools = json.load(open(R / "tools.json"))
@@ -275,7 +274,7 @@ h3{font-weight:650;letter-spacing:-.03em;line-height:1.15}
 .spark{animation:spark 2.4s steps(4) infinite}
 .sparks .spark:nth-child(2n){animation-delay:.6s}
 .sparks .spark:nth-child(3n){animation-delay:1.2s}
-.metrics{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:56px;border:1px solid var(--bd);border-radius:16px;background:rgba(11,17,36,.6);overflow:hidden}
+.metrics{position:relative;z-index:1;display:grid;grid-template-columns:repeat(2,1fr);gap:0;margin-top:56px;border:1px solid var(--bd);border-radius:16px;background:rgba(11,17,36,.6);overflow:hidden}
 .metric{display:flex;flex-direction:column;justify-content:center;gap:6px;min-height:0;padding:18px 22px;border:0;border-radius:0;background:transparent;color:inherit;text-decoration:none}
 .metric + .metric{border-left:1px solid var(--bd)}
 a.metric:hover{background:rgba(255,138,61,.06)}
@@ -364,6 +363,7 @@ footer nav{display:flex;gap:4px 18px;flex-wrap:wrap}
 footer nav a{color:var(--mu);text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
 footer nav a:hover{color:var(--ac)}
 footer p{margin:8px 0 0;max-width:46rem}
+footer .sources{margin-top:12px;max-width:40rem;line-height:1.5}
 dl dt{margin-top:16px}dl dd{margin:4px 0 0}
 .vrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px}
 .back{margin:0 0 14px;color:var(--mu)}
@@ -529,7 +529,8 @@ def foot_html(depth):
     links = "".join(f'<a href="{p}{href}">{label}</a>' for href, label, _ in NAV)
     links += f'<a href="{e(CONFIG["subscribe_url"])}">Subscribe</a>'
     return (f'<nav aria-label="Footer">{links}</nav>'
-            f'<p>{e(N)}. {e(VALUE)} {e(METHOD)} {e(AI_NOTE)}</p>')
+            f'<p>{e(N)}. {e(VALUE)}</p>'
+            f'<p class="sources">{e(SOURCE_NOTE)}</p>')
 def schema_graph(extra=None):
     # Organization and WebSite on every page. SearchAction matches the directory ?q= filter.
     graph = {
@@ -668,17 +669,14 @@ week_link = "See launch week" if launch_only else "See this week"
 home = f"""<section class="hero"><div class="orb orb-a" aria-hidden="true"></div>
 <div class="w hero-grid"><div class="hero-copy">
 <h1 class="rise">{e(VALUE)}</h1>
-<p class="lede rise d2">{e(METHOD)}</p>
-<p class="actions rise d3"><a class="btn" href="{e(CONFIG['subscribe_url'])}">Subscribe free</a><a class="btn secondary" href="tools/">Browse the directory</a></p>
+<p class="actions rise d2"><a class="btn" href="{e(CONFIG['subscribe_url'])}">Subscribe free</a><a class="btn secondary" href="tools/">Browse the directory</a></p>
 </div><div class="hero-art" aria-hidden="true"><div class="anvil-glow"></div>{anvil_svg()}</div></div>
-<div class="w"><div class="metrics rise d4"><div class="metric"><b>{len(tools)}</b><span>Tools</span></div><div class="metric"><b><time datetime="{e(checked_dates[-1])}">{e(fmt_date(checked_dates[-1]))}</time></b><span>Last checked</span></div><a class="metric" href="#how"><b>Public sources</b><span>Re-checked twice a week</span></a></div></div></section>
+<div class="w"><div class="metrics rise d3"><div class="metric"><b>{len(tools)}</b><span>Tools</span></div><div class="metric"><b><time datetime="{e(checked_dates[-1])}">{e(fmt_date(checked_dates[-1]))}</time></b><span>Last checked</span></div></div></div></section>
 <section class="band" id="picks"><div class="w"><div class="band-head"><h2>This week's picks</h2><a href="this-week.html">{week_link}</a></div>
 <div class="bento">{pick_html}</div></div></section>
 <section class="band band-alt" id="categories"><div class="w"><div class="band-head"><h2>Browse by category</h2><a href="tools/">Full directory</a></div>
 <div class="cats">{cat_cards}</div></div></section>
-<section class="band" id="how"><div class="w"><div class="band-head"><h2>How we check</h2><a href="tools/">Browse the directory</a></div>
-<p class="lede">{e(METHOD)} Last checked {e(fmt_date(checked_dates[-1]))}. Each listing links the report it came from. {e(AI_NOTE)}</p></div></section>
-<section class="band band-alt" id="letter"><div class="w"><div class="split"><article class="panel"><p class="kicker">Newsletter</p><h2>{e(latest_issue['title'])}</h2><p>{e(latest_issue['when'])}</p><p class="mu">{e(latest_issue['note'])}</p><p><a href="newsletter/">Newsletter archive</a></p></article>{SIGNUP}</div></div></section>"""
+<section class="band" id="letter"><div class="w"><div class="split"><article class="panel"><p class="kicker">Newsletter</p><h2>{e(latest_issue['title'])}</h2><p>{e(latest_issue['when'])}</p><p class="mu">{e(latest_issue['note'])}</p><p><a href="newsletter/">Newsletter archive</a></p></article>{SIGNUP}</div></div></section>"""
 (OUT / "index.html").write_text(page(
     f"{N} — the newest AI tools, sorted every Friday",
     VALUE,
@@ -865,11 +863,11 @@ llms = [
     "",
     f"> {VALUE}",
     "",
-    f"{N} lists new AI tools for coding, vibe coding, automation, and games. {METHOD} {AI_NOTE} The directory currently lists {len(tools)} tools. Tools added after 2026-10-20 and within the last 7 days are marked New this week on the website only. That badge is not used in the newsletter. The first batch is labeled Launch week. /verdicts/ redirects to the tool directory.",
+    f"{N} lists new AI tools for coding, vibe coding, automation, and games. {SOURCE_NOTE} The directory currently lists {len(tools)} tools. Tools added after 2026-10-20 and within the last 7 days are marked New this week on the website only. That badge is not used in the newsletter. The first batch is labeled Launch week.",
     "",
     "## Pages",
     "",
-    f"- [Home]({BASE}/): Landing page with this week's picks, categories, how listings are checked, and the latest letter.",
+    f"- [Home]({BASE}/): Landing page with this week's picks, categories, and the latest letter.",
     f"- [Tool directory]({BASE}/tools/): Search, filter by category, free tier, and letter, and sort the full list. Newest is the default sort. Category links use a ?cat= query. A text search uses ?q=.",
     f"- [This week]({BASE}/this-week.html): Tools added in the seven days up to the newest date in the directory.",
     f"- [Newsletter archive]({BASE}/newsletter/): The weekly letter. Issue 1 is coming Oct 23, 2026. /issues/, /archive/, and /newsletters/ redirect here.",
