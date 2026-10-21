@@ -9,7 +9,7 @@
       "Reviewing diffs before accepting",
       "Tab completions"
     ],
-    "pricing": "Legacy $20 Pro is closed to new signups. New plans: Plus $8 (Grok models only), Premium $30, Super $100, Ultra $200; Claude/GPT/Gemini billed at API price.",
+    "pricing": "Free; Plus $8/mo (Cursor models only); Premium $30; Super $100; Ultra $200. Third-party models billed at API price.",
     "verdict": "wait",
     "verdict_reason": "Keep old Pro if you have it; new plans may cost more once usage is billed.",
     "verdict_reason_key": "pricing",

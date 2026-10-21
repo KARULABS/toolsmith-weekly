@@ -46,12 +46,14 @@ CAT_LABEL = {
 }
 CAT_ORDER = list(CAT_LABEL)
 # Neutral first sentence of Our Take. Not shown as a label.
+# "wait" has no stock sentence. That line was unverified boilerplate.
 GUIDE = {
     "use": "Worth using now for the job it claims.",
     "try": "Worth a short trial before you rely on it.",
-    "wait": "Price, access, or the evidence is not settled.",
+    "wait": "",
     "skip": "Closed, shutting down, or a poor fit.",
 }
+_TAKE_BOILERPLATE = "Price, access, or the evidence is not settled."
 suggest_href = "mailto:" + CONFIG["suggest_email"] + "?" + "&".join([
     "subject=" + quote("Tool suggestion for Toolsmith Weekly"),
     "body=" + quote("I'm an indie developer.\n\nTool name:\nWebsite:\nWhat it does:\nWhy it belongs in Toolsmith Weekly:\n")])
@@ -857,11 +859,13 @@ else:
     f'<header class="pagehead"><p class="kicker">{e(week_kicker)}</p><h1>{e(week_name)}</h1><p class="lede">{e(week_lede)}</p></header>{week_grid}<div class="sec">{SIGNUP}</div>',
     "this-week.html"))
 def take_paragraph(t):
-    # One plain paragraph: how to approach it, then the sourced detail.
+    # The opinion sentence, plus a guide line when that verdict has one.
+    # The old wait boilerplate is never printed.
     guide = GUIDE.get(t["verdict"], "").strip()
     reason = t["verdict_reason"].strip()
-    parts = [p for p in (guide, reason) if p]
-    return " ".join(parts)
+    parts = [p for p in (guide, reason) if p and p != _TAKE_BOILERPLATE]
+    text = " ".join(parts).replace(_TAKE_BOILERPLATE, "")
+    return " ".join(text.split())
 def _lines(value):
     if value is None:
         return []
