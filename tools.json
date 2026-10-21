@@ -12,6 +12,7 @@
     "pricing": "Old $20 Pro closed to new signups Oct 12, 2026. New plans: Plus $8 (Grok models only), Premium $30, Super $100, Ultra $200; Claude/GPT/Gemini billed at API price.",
     "verdict": "wait",
     "verdict_reason": "Keep old Pro if you have it; new plans may cost more once usage is billed. (Disclosure: bundled with X/Grok/Grok Bot.)",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://cursor.com/docs/models-and-pricing.md"
   },
@@ -28,6 +29,7 @@
     "pricing": "Included in Claude Pro $20/mo ($17/mo yearly); Max from $100. Five-hour limit resets plus weekly caps.",
     "verdict": "use",
     "verdict_reason": "Strong pick for work that needs a whole-codebase view.",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://www.llms.blog/posts/cursor-vs-claude-code-vs-codex-prices-models-and-which-to-pick-october-2026"
   },
@@ -44,6 +46,7 @@
     "pricing": "Free tier with an agent model in the desktop app (subject to rollout); Plus $20/mo; Pro 200 allowance reduced for new subscribers since Sept 29.",
     "verdict": "use",
     "verdict_reason": "Best $0 starting point among the big three.",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://www.llms.blog/posts/cursor-vs-claude-code-vs-codex-prices-models-and-which-to-pick-october-2026"
   },
@@ -60,6 +63,7 @@
     "pricing": "Pro $10/mo with 1,500 credits (about $15 of model calls) per one tracker.",
     "verdict": "use",
     "verdict_reason": "Budget pick: the only $10 plan with real agent usage, per DevTools Review.",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://devtoolsreview.com/reports/ai-coding-pricing-october-2026/"
   },
@@ -76,6 +80,7 @@
     "pricing": "Free (light quota); Pro $20/mo; Max $200/mo; Teams $80/mo + $40 per seat.",
     "verdict": "wait",
     "verdict_reason": "Rebrand and new SWE-2 model are fresh; give quotas time to settle.",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://devin.ai/pricing"
   },
@@ -90,6 +95,7 @@
     "pricing": "Closed to new signups since May 15, 2026.",
     "verdict": "skip",
     "verdict_reason": "Not taking new customers.",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://devtoolsreview.com/reports/ai-coding-pricing-october-2026/"
   },
@@ -104,6 +110,7 @@
     "pricing": "No longer sold self-serve.",
     "verdict": "skip",
     "verdict_reason": "No self-serve plan for individuals.",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://devtoolsreview.com/reports/ai-coding-pricing-october-2026/"
   },
@@ -120,6 +127,7 @@
     "pricing": "Free: 5 daily build credits (up to 30/mo). Pro $25/mo (100 credits); Business $50/mo.",
     "verdict": "use",
     "verdict_reason": "Completed a project-tracker app in a published head-to-head where Bolt did not.",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://lovable.dev/pricing"
   },
@@ -136,6 +144,7 @@
     "pricing": "Free tier; paid from $25/mo (up to $30/mo) per Quotadex.",
     "verdict": "wait",
     "verdict_reason": "Failed one published head-to-head app test; model training setting on by default outside EU/UK/CH.",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://aicrier.com/post/w71bjotqqw96fppg3bs1"
   },
@@ -151,6 +160,7 @@
     "pricing": "Free (7 messages/day); Plus $30/user/mo; Business $100/user/mo; Premium $20 being sunset.",
     "verdict": "wait",
     "verdict_reason": "Free tier is thin and plans just reshuffled; fine to try, wait before paying.",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://v0.app/docs/pricing"
   },
@@ -167,6 +177,7 @@
     "pricing": "Core $20/mo ($18 yearly); Pro $100/mo ($90 yearly).",
     "verdict": "use",
     "verdict_reason": "Completed the published head-to-head app test alongside Lovable.",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://replit.com/pricing"
   },
@@ -182,6 +193,7 @@
     "pricing": "Free tier; paid from $20/mo up to $200/mo per Quotadex.",
     "verdict": "wait",
     "verdict_reason": "Not covered in our sources' tests yet.",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://quotadex.com/"
   },
@@ -198,6 +210,7 @@
     "pricing": "Self-host free; Cloud Starter €20/mo (2,500 executions, annual); Pro €50/mo.",
     "verdict": "use",
     "verdict_reason": "Bills per full run, so retries don't multiply cost; strong default for repeat workflows.",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://ivconsulting.in/blogs/openai-agents-api-vs-n8n-vs-zapier-agents/"
   },
@@ -229,6 +242,7 @@
     "pricing": "Free 1,000 credits/mo; Make plan $9/mo (annual) for 5,000 credits.",
     "verdict": "wait",
     "verdict_reason": "Cheap entry, but credits count per module action.",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://gravity.fast/blog/ai-agent-pricing-index/"
   },
@@ -244,6 +258,7 @@
     "pricing": "Free 100 credits/day; Plus $16/mo (yearly).",
     "verdict": "wait",
     "verdict_reason": "Promising open-source alternative; not covered in tests we cite.",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://gravity.fast/blog/ai-agent-pricing-index/"
   },
@@ -259,6 +274,7 @@
     "pricing": "No free plan (14-day trial); Pro $37/mo (20,000 credits) plus 8% orchestration fee.",
     "verdict": "wait",
     "verdict_reason": "No free plan and layered fees; try the trial first.",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://gravity.fast/blog/ai-agent-pricing-index/"
   },
@@ -274,6 +290,7 @@
     "pricing": "7-day trial with $50 credits; Team $49.99/seat/mo (5,000 credits) as of Oct 13, 2026.",
     "verdict": "wait",
     "verdict_reason": "Pricing changed twice in October 2026.",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://gravity.fast/blog/ai-agent-pricing-index/"
   },
@@ -289,6 +306,7 @@
     "pricing": "Free access; Pro from $20/mo.",
     "verdict": "wait",
     "verdict_reason": "Not verified on Manus's own pricing page for this build.",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://agentstackwatch.com/pricing/"
   },
@@ -304,6 +322,7 @@
     "pricing": "$200/mo per 25,000 Copilot Credits, or pay as you go.",
     "verdict": "skip",
     "verdict_reason": "Only makes sense if you're already on Microsoft 365 Copilot.",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://infragentic.ai/resources/blog/ai-agent-builder-vs-buying"
   },
@@ -318,6 +337,7 @@
     "pricing": "Shutting down November 30, 2026; use the API/AgentKit.",
     "verdict": "skip",
     "verdict_reason": "Shutting down Nov 30, 2026.",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://infragentic.ai/resources/blog/ai-agent-builder-vs-buying"
   },
@@ -333,6 +353,7 @@
     "pricing": "Free Sandbox; paid from $590/yr per pricing index.",
     "verdict": "wait",
     "verdict_reason": "Not covered in tests we cite.",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://gravity.fast/blog/ai-agent-pricing-index/"
   },
@@ -349,6 +370,7 @@
     "pricing": "Free, open source (MIT). Needs Godot 4.7+; telemetry on by default.",
     "verdict": "use",
     "verdict_reason": "Voyager tested it hands-on with Claude Code and recommends it.",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://voyager.so/blog/godot-mcp"
   },
@@ -364,6 +386,7 @@
     "pricing": "Unity AI bundled with Unity Personal (free) or Pro ($210/mo/seat).",
     "verdict": "wait",
     "verdict_reason": "Official and promising, but not independently tested in our sources.",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://unity.com/blog/unity-plugin-grok"
   },
@@ -379,6 +402,7 @@
     "pricing": "50 free daily credits (non-commercial); Starter $15/mo, Pro $45, Max $75.",
     "verdict": "use",
     "verdict_reason": "Strongest style consistency per Taskade's roundup; good if you have reference art.",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://www.scenario.com/pricing"
   },
@@ -394,6 +418,7 @@
     "pricing": "Free 100 credits/mo; Pro from $20/mo.",
     "verdict": "wait",
     "verdict_reason": "Good for drafts; not verified on Meshy's own page for this build.",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://resources.rework.com/tools/ai-tools/best-ai-tools-for-game-development-2026"
   },
@@ -409,6 +434,7 @@
     "pricing": "From $10/mo for 300 Creative Units.",
     "verdict": "skip",
     "verdict_reason": "Built for studio scale; entry tier is thin for solo devs.",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://resources.rework.com/tools/ai-tools/best-ai-tools-for-game-development-2026"
   },
@@ -425,6 +451,7 @@
     "pricing": "Free plan with 8,000 credits (weekly refill in eligible regions); paid tiers available.",
     "verdict": "use",
     "verdict_reason": "Free and fast way to try vibe-coding a game.",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://rosebud.ai/pricing"
   },
@@ -440,6 +467,7 @@
     "pricing": "Free on-demand tier (70 min TTS); Creator $25/mo.",
     "verdict": "wait",
     "verdict_reason": "Needs engineering work to integrate.",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://www.taskade.com/blog/ai-game-generators"
   },
@@ -455,6 +483,7 @@
     "pricing": "Free 150 daily credits; Apprentice $12/mo.",
     "verdict": "wait",
     "verdict_reason": "Not covered in tests we cite.",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://resources.rework.com/tools/ai-tools/best-ai-tools-for-game-development-2026"
   },
@@ -470,6 +499,7 @@
     "pricing": "Free 30 credits; Indie $20/mo.",
     "verdict": "wait",
     "verdict_reason": "Niche; try the free credits first.",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://resources.rework.com/tools/ai-tools/best-ai-tools-for-game-development-2026"
   },
@@ -485,6 +515,7 @@
     "pricing": "Free (no commercial rights); Starter $5/mo with commercial rights.",
     "verdict": "use",
     "verdict_reason": "Cheap entry with commercial rights at $5.",
+    "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://resources.rework.com/tools/ai-tools/best-ai-tools-for-game-development-2026"
   }

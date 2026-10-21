@@ -46,7 +46,22 @@ a.btn{display:inline-block;background:var(--ac);color:#000;text-decoration:none;
 .issue{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px;margin:14px 0}
 footer{border-top:1px solid var(--bd);padding:20px 0;color:var(--mu);font-size:.85rem}
 footer nav a{color:var(--mu);margin-right:14px;text-decoration:none}footer p{margin:8px 0 0}
-dl dt{color:var(--mu);margin-top:14px;font-size:.85rem;text-transform:uppercase}dl dd{margin:4px 0 0}"""
+dl dt{color:var(--mu);margin-top:14px;font-size:.85rem;text-transform:uppercase}dl dd{margin:4px 0 0}
+.vrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px}.checked{font-size:.8rem;color:var(--mu)}"""
+_MONTHS = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+def checked_iso(t):
+    # Last review date. Missing verdict_checked falls back to date_added so new tools still build.
+    # A future Current verdicts page should use checked_iso / verdict_stamp, not date_added.
+    return t.get("verdict_checked") or t["date_added"]
+def fmt_date(iso):
+    d = datetime.date.fromisoformat(iso)
+    return f"{_MONTHS[d.month - 1]} {d.day}, {d.year}"
+def verdict_stamp(t):
+    iso = checked_iso(t)
+    return f'<span class="checked">Verdict checked <time datetime="{e(iso)}">{e(fmt_date(iso))}</time></span>'
+def verdict_checked_row(t):
+    iso = checked_iso(t)
+    return f'<dt>Verdict checked</dt><dd><time datetime="{e(iso)}">{e(fmt_date(iso))}</time></dd>'
 def page(title, desc, body, path, depth=0):
     p = "../" * depth
     base = CONFIG["base_url"]
@@ -73,10 +88,10 @@ def page(title, desc, body, path, depth=0):
 <header><div class="w"><a class="logo" href="{p}index.html">{e(N)}</a><nav>{nav}</nav></div></header>
 <main class="w">{body}</main><footer><div class="w"><nav class="foot">{nav}</nav><p>{e(N)} — {e(CONFIG["tagline"])} Verdicts are based on linked public sources unless stated otherwise.</p></div></footer></body></html>"""
 def card(t, p=""):
-    badge = '<span class="badge-new">New this week</span> ' if is_new(t) else ""
-    return f"""<article class="card" data-cat="{e(t['category'])}" data-date="{t['date_added']}" data-text="{e((t['name']+' '+t['description']+' '+' '.join(t['use_cases'])+' '+t['category']).lower())}">
+    badge = '<span class="badge-new">New this week</span>' if is_new(t) else ""
+    return f"""<article class="card" data-cat="{e(t['category'])}" data-date="{t['date_added']}" data-checked="{e(checked_iso(t))}" data-text="{e((t['name']+' '+t['description']+' '+' '.join(t['use_cases'])+' '+t['category']).lower())}">
 <span class="cat">{e(t['category'])} · added {t['date_added']}</span><h3><a href="{p}tools/{t['slug']}.html">{e(t['name'])}</a></h3>
-<div>{badge}<span class="v v-{t['verdict']}">{t['verdict']}</span> <span class="mu">{e(t['verdict_reason'])}</span></div><p style="margin:4px 0">{e(t['description'])}</p><span class="cat">💲 {e(t['pricing'])}</span></article>"""
+<div class="vrow">{badge}<span class="v v-{t['verdict']}">{t['verdict']}</span> {verdict_stamp(t)}</div><p class="mu" style="margin:2px 0 0">{e(t['verdict_reason'])}</p><p style="margin:4px 0">{e(t['description'])}</p><span class="cat">💲 {e(t['pricing'])}</span></article>"""
 SIGNUP = f"""<section class="sig" id="signup"><h2 style="margin-top:0">Get the weekly verdicts</h2><p class="mu">One email a week: what to use, skip, or wait on.</p>
 <p><a class="btn" href="{e(CONFIG['subscribe_url'])}">Subscribe free</a></p>
 <p class="mu">Free. Opens the Toolsmith Weekly letter on beehiiv.</p></section>"""
@@ -98,10 +113,10 @@ latest = max(datetime.date.fromisoformat(t["date_added"]) for t in tools); cut =
 wk = [t for t in tools if datetime.date.fromisoformat(t["date_added"]) > cut]
 (OUT / "this-week.html").write_text(page(f"This week in AI tools — {N}", f"AI tools added in the week ending {latest}.", f"<h1>This week</h1><p class='mu'>{len(wk)} tools added in the 7 days up to {latest}.</p><div class='grid'>{''.join(card(t) for t in wk)}</div>{SIGNUP}", "this-week.html"))
 for t in tools:
-    badge = '<span class="badge-new">New this week</span> ' if is_new(t) else ""
-    b = f"""<p class="cat" style="margin-top:24px"><a href="../index.html">← All tools</a> · {e(t['category'])}</p><h1>{e(t['name'])}</h1><p>{badge}<span class="v v-{t['verdict']}">{t['verdict']}</span> {e(t['verdict_reason'])}</p><p>{e(t['description'])}</p>
+    badge = '<span class="badge-new">New this week</span>' if is_new(t) else ""
+    b = f"""<p class="cat" style="margin-top:24px"><a href="../index.html">← All tools</a> · {e(t['category'])}</p><h1>{e(t['name'])}</h1><p class="vrow">{badge}<span class="v v-{t['verdict']}">{t['verdict']}</span> {verdict_stamp(t)}</p><p>{e(t['verdict_reason'])}</p><p>{e(t['description'])}</p>
 <dl><dt>Use cases</dt><dd><ul>{''.join(f'<li>{e(u)}</li>' for u in t['use_cases'])}</ul></dd><dt>Pricing</dt><dd>{e(t['pricing'])}</dd><dt>Website</dt><dd><a href="{e(t['url'])}" rel="noopener">{e(t['url'])}</a></dd>
-<dt>Source</dt><dd><a href="{e(t['source'])}" rel="noopener">{e(t['source'])}</a></dd><dt>Added</dt><dd>{t['date_added']}</dd></dl>{SIGNUP}
+<dt>Source</dt><dd><a href="{e(t['source'])}" rel="noopener">{e(t['source'])}</a></dd>{verdict_checked_row(t)}<dt>Added</dt><dd>{t['date_added']}</dd></dl>{SIGNUP}
 <script type="application/ld+json">{json.dumps({"@context":"https://schema.org","@type":"SoftwareApplication","name":t['name'],"url":t['url'],"applicationCategory":t['category'],"description":t['description']})}</script>"""
     (OUT / "tools" / f"{t['slug']}.html").write_text(page(f"{t['name']} review: {t['verdict'].upper()} — {N}", f"{t['name']}: {t['description']} Verdict: {t['verdict']} — {t['verdict_reason']}"[:300], b, f"tools/{t['slug']}.html", 1))
 issue_cards = "".join(
