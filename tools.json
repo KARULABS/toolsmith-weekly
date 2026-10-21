@@ -97,13 +97,13 @@
     "use_cases": [
       "AWS-centric development"
     ],
-    "pricing": "Free, plus Pro at $19 per user a month.",
-    "verdict": "wait",
-    "verdict_reason": "Free and Pro are both listed on the AWS pricing page.",
-    "verdict_reason_key": "unsettled",
+    "pricing": "New signups stopped May 15, 2026. Support ends Apr 30, 2027.",
+    "verdict": "skip",
+    "verdict_reason": "AWS stopped new signups May 15, 2026, and support ends Apr 30, 2027.",
+    "verdict_reason_key": "shutdown",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://aws.amazon.com/q/developer/pricing/"
+    "source": "https://aws.amazon.com/blogs/devops/amazon-q-developer-end-of-support-announcement/"
   },
   {
     "name": "Tabnine",
@@ -201,10 +201,9 @@
       "Internal tools",
       "Simple apps for non-coders"
     ],
-    "pricing": "Starter $16/mo, Builder $40/mo, Pro $80/mo, Elite $160/mo, all billed annually.",
-    "verdict": "wait",
-    "verdict_reason": "Paid plans are billed annually, starting at $16/mo.",
-    "verdict_reason_key": "unsettled",
+    "pricing": "Free (25 message credits/mo). Starter $16/mo, Builder $40/mo, Pro $80/mo, Elite $160/mo.",
+    "verdict": "try",
+    "verdict_reason": "Free plan is 25 message credits a month, and the paid prices are listed.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://base44.com/pricing"
@@ -271,9 +270,8 @@
       "Cloud or self-hosted"
     ],
     "pricing": "Free 1,000 credits/mo, Plus $20/mo.",
-    "verdict": "wait",
-    "verdict_reason": "Free is 1,000 credits a month; Plus is a flat $20/mo.",
-    "verdict_reason_key": "unsettled",
+    "verdict": "try",
+    "verdict_reason": "Free is 1,000 credits a month, and Plus is a flat $20/mo.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://www.activepieces.com/pricing"
@@ -371,10 +369,9 @@
       "LLM app prototyping",
       "RAG chatbots"
     ],
-    "pricing": "Professional $590 per workspace/year.",
-    "verdict": "wait",
-    "verdict_reason": "Professional is $590 per workspace a year.",
-    "verdict_reason_key": "unsettled",
+    "pricing": "Sandbox is free. Professional is $590 per workspace a year.",
+    "verdict": "try",
+    "verdict_reason": "Sandbox is free, and Professional is $590 per workspace a year.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://dify.ai/pricing"
@@ -493,9 +490,8 @@
       "Conversational characters"
     ],
     "pricing": "Free on-demand tier (70 min TTS); Creator $25/mo.",
-    "verdict": "wait",
-    "verdict_reason": "Needs engineering work to integrate.",
-    "verdict_reason_key": "unsettled",
+    "verdict": "try",
+    "verdict_reason": "Free on-demand tier includes 70 minutes of TTS, and Creator is $25/mo.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://inworld.ai/pricing"
@@ -510,9 +506,8 @@
       "Marketing key art"
     ],
     "pricing": "Free 150 fast tokens a day; Essential $12/mo.",
-    "verdict": "wait",
-    "verdict_reason": "Essential is the $12/mo plan, and usage is metered in tokens.",
-    "verdict_reason_key": "unsettled",
+    "verdict": "try",
+    "verdict_reason": "Free tier is 150 fast tokens a day, and Essential is $12/mo.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://www.leonardo.ai/pricing"

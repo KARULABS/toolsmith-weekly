@@ -49,6 +49,8 @@ for t in tools:
         allowed = REASON_SET[t["verdict"]]
         if key != "unsettled" and key not in allowed:
             raise SystemExit(f"{t['name']} needs a {t['verdict']} verdict_reason_key")
+        if t["verdict"] == "wait" and key == "unsettled":
+            raise SystemExit(f"{t['name']} still says Evidence not settled yet")
 TODAY = datetime.date.today()
 NEW_CUTOFF = TODAY - datetime.timedelta(days=7)
 LAUNCH = datetime.date(2026, 10, 20)  # initial batch; do not badge these
