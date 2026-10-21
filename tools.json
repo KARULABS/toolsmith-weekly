@@ -12,25 +12,7 @@
     "pricing": "Legacy $20 Pro is closed to new signups. New plans: Plus $8 (Grok models only), Premium $30, Super $100, Ultra $200; Claude/GPT/Gemini billed at API price.",
     "verdict": "wait",
     "verdict_reason": "Keep old Pro if you have it; new plans may cost more once usage is billed.",
-    "verdict_short": "New plans may cost more",
-    "verdict_reasons": [
-      {
-        "reason": "New plans may cost more",
-        "source": "https://cursor.com/docs/models-and-pricing.md"
-      },
-      {
-        "reason": "Third-party models cost extra",
-        "source": "https://cursor.com/docs/models-and-pricing.md"
-      },
-      {
-        "reason": "Usage pool is shared with Grok",
-        "source": "https://cursor.com/docs/models-and-pricing.md"
-      },
-      {
-        "reason": "Teams pay $0.25 per million tokens",
-        "source": "https://cursor.com/docs/models-and-pricing.md"
-      }
-    ],
+    "verdict_reason_key": "pricing",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://cursor.com/docs/models-and-pricing.md"
@@ -101,30 +83,8 @@
     ],
     "pricing": "Free (light quota); Pro $20/mo; Max $200/mo; Teams $80/mo + $40 per seat.",
     "verdict": "wait",
-    "verdict_reason": "SWE-2 list pricing applies after October 15, 2026.",
-    "verdict_short": "SWE-2 list price after Oct 15",
-    "verdict_reasons": [
-      {
-        "reason": "SWE-2 list price after Oct 15",
-        "source": "https://docs.devin.ai/desktop/models"
-      },
-      {
-        "reason": "Free tier only gets SWE-1.6",
-        "source": "https://docs.devin.ai/desktop/models"
-      },
-      {
-        "reason": "Past quota is pay as you go",
-        "source": "https://docs.devin.ai/admin/billing/self-serve"
-      },
-      {
-        "reason": "Teams cost at least $80 a month",
-        "source": "https://docs.devin.ai/admin/billing/self-serve"
-      },
-      {
-        "reason": "Flex seats exclude Devin Desktop",
-        "source": "https://docs.devin.ai/admin/billing/self-serve"
-      }
-    ],
+    "verdict_reason": "Rebrand and new SWE-2 model are fresh; give quotas time to settle.",
+    "verdict_reason_key": "new",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://devin.ai/pricing"
@@ -139,26 +99,8 @@
     ],
     "pricing": "Free, plus Pro at $19 per user a month.",
     "verdict": "wait",
-    "verdict_reason": "The free tier includes 50 agentic requests a month.",
-    "verdict_short": "Free tier is 50 requests",
-    "verdict_reasons": [
-      {
-        "reason": "Free tier is 50 requests",
-        "source": "https://aws.amazon.com/q/developer/pricing/"
-      },
-      {
-        "reason": "Mid-month cancel bills the month",
-        "source": "https://aws.amazon.com/q/developer/pricing/"
-      },
-      {
-        "reason": "Free tier has no IP indemnity",
-        "source": "https://aws.amazon.com/q/developer/pricing/"
-      },
-      {
-        "reason": "Java overage is $0.003 a line",
-        "source": "https://aws.amazon.com/q/developer/pricing/"
-      }
-    ],
+    "verdict_reason": "Free and Pro are both listed on the AWS pricing page.",
+    "verdict_reason_key": "unsettled",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://aws.amazon.com/q/developer/pricing/"
@@ -174,17 +116,7 @@
     "pricing": "Pricing unverified.",
     "verdict": "wait",
     "verdict_reason": "Pricing page now redirects to its parent company; plans unclear.",
-    "verdict_short": "Pricing page redirects to Tricentis",
-    "verdict_reasons": [
-      {
-        "reason": "Pricing page redirects to Tricentis",
-        "source": "https://www.tabnine.com/pricing"
-      },
-      {
-        "reason": "No plan prices are listed",
-        "source": "https://www.tabnine.com/pricing"
-      }
-    ],
+    "verdict_reason_key": "pricing",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://www.tabnine.com/pricing"
@@ -219,26 +151,8 @@
     ],
     "pricing": "Pro $18/mo and Teams $27 per member/mo, both billed annually.",
     "verdict": "wait",
-    "verdict_reason": "Pro shows a $216 yearly total.",
-    "verdict_short": "Pro shows a $216 yearly total",
-    "verdict_reasons": [
-      {
-        "reason": "Pro shows a $216 yearly total",
-        "source": "https://bolt.new/pricing"
-      },
-      {
-        "reason": "Free daily cap is 300K tokens",
-        "source": "https://bolt.new/pricing"
-      },
-      {
-        "reason": "Free sites keep Bolt branding",
-        "source": "https://bolt.new/pricing"
-      },
-      {
-        "reason": "Bigger projects spend more tokens",
-        "source": "https://bolt.new/pricing"
-      }
-    ],
+    "verdict_reason": "Pro and Teams are the paid plans, both billed annually.",
+    "verdict_reason_key": "unsettled",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://bolt.new/pricing"
@@ -254,26 +168,8 @@
     ],
     "pricing": "Free (7 messages/day); Plus $30/user/mo; Business $100/user/mo; Premium $20 being sunset.",
     "verdict": "wait",
-    "verdict_reason": "The free tier is 7 messages a day, and Premium is closed to new users.",
-    "verdict_short": "Free tier is 7 messages",
-    "verdict_reasons": [
-      {
-        "reason": "Free tier is 7 messages",
-        "source": "https://v0.app/docs/pricing"
-      },
-      {
-        "reason": "Premium is closed to new users",
-        "source": "https://v0.app/docs/pricing"
-      },
-      {
-        "reason": "New free users get $5 once",
-        "source": "https://v0.app/docs/pricing"
-      },
-      {
-        "reason": "Generation pauses when credits run out",
-        "source": "https://v0.app/docs/pricing"
-      }
-    ],
+    "verdict_reason": "Free tier is thin and plans just reshuffled; fine to try, wait before paying.",
+    "verdict_reason_key": "pricing",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://v0.app/docs/pricing"
@@ -307,26 +203,8 @@
     ],
     "pricing": "Starter $16/mo, Builder $40/mo, Pro $80/mo, Elite $160/mo, all billed annually.",
     "verdict": "wait",
-    "verdict_reason": "Starter is $16/mo billed annually.",
-    "verdict_short": "Starter is billed annually",
-    "verdict_reasons": [
-      {
-        "reason": "Starter is billed annually",
-        "source": "https://base44.com/pricing"
-      },
-      {
-        "reason": "Free plan is 25 message credits",
-        "source": "https://base44.com/pricing"
-      },
-      {
-        "reason": "Free plan caps you at 5 apps",
-        "source": "https://base44.com/pricing"
-      },
-      {
-        "reason": "Message credits vary by model",
-        "source": "https://base44.com/pricing"
-      }
-    ],
+    "verdict_reason": "Paid plans are billed annually, starting at $16/mo.",
+    "verdict_reason_key": "unsettled",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://base44.com/pricing"
@@ -378,25 +256,7 @@
     "pricing": "Pricing unverified.",
     "verdict": "wait",
     "verdict_reason": "The $9 plan is Pricing unverified.",
-    "verdict_short": "Pricing unverified",
-    "verdict_reasons": [
-      {
-        "reason": "Pricing unverified",
-        "source": "https://www.make.com/en/pricing"
-      },
-      {
-        "reason": "Credits expire at term end",
-        "source": "https://www.make.com/en/pricing"
-      },
-      {
-        "reason": "Free plan is 1,000 credits",
-        "source": "https://www.make.com/en/pricing"
-      },
-      {
-        "reason": "Scenarios stop when credits run out",
-        "source": "https://www.make.com/en/pricing"
-      }
-    ],
+    "verdict_reason_key": "pricing",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://www.make.com"
@@ -413,29 +273,7 @@
     "pricing": "Free 1,000 credits/mo, Plus $20/mo.",
     "verdict": "wait",
     "verdict_reason": "Free is 1,000 credits a month; Plus is a flat $20/mo.",
-    "verdict_short": "Plus is a flat $20/mo",
-    "verdict_reasons": [
-      {
-        "reason": "Plus is a flat $20/mo",
-        "source": "https://www.activepieces.com/pricing"
-      },
-      {
-        "reason": "Free plan is 1,000 credits",
-        "source": "https://www.activepieces.com/pricing"
-      },
-      {
-        "reason": "Overage is $0.007 a credit",
-        "source": "https://www.activepieces.com/pricing"
-      },
-      {
-        "reason": "Frontier AI steps cost 20 credits",
-        "source": "https://www.activepieces.com/pricing"
-      },
-      {
-        "reason": "SOC 2 certification is not held",
-        "source": "https://www.activepieces.com/pricing"
-      }
-    ],
+    "verdict_reason_key": "unsettled",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://www.activepieces.com/pricing"
@@ -451,30 +289,8 @@
     ],
     "pricing": "No free plan (14-day trial); Pro $37/mo (20,000 credits) plus 8% orchestration fee.",
     "verdict": "wait",
-    "verdict_reason": "The Pro trial requires a card, and agent runs add an 8% fee.",
-    "verdict_short": "Pro trial requires a card",
-    "verdict_reasons": [
-      {
-        "reason": "Pro trial requires a card",
-        "source": "https://docs.gumloop.com/core-concepts/credits"
-      },
-      {
-        "reason": "Agent runs add an 8% fee",
-        "source": "https://docs.gumloop.com/core-concepts/credits"
-      },
-      {
-        "reason": "Trial rolls into paid Pro",
-        "source": "https://docs.gumloop.com/core-concepts/credits"
-      },
-      {
-        "reason": "Credits do not roll over",
-        "source": "https://docs.gumloop.com/core-concepts/credits"
-      },
-      {
-        "reason": "Compute costs 5 credits a minute",
-        "source": "https://docs.gumloop.com/core-concepts/credits"
-      }
-    ],
+    "verdict_reason": "No free plan. Pro is $37/mo, and agent runs add an 8% orchestration fee.",
+    "verdict_reason_key": "unsettled",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://docs.gumloop.com/core-concepts/credits"
@@ -491,29 +307,7 @@
     "pricing": "Team from $29.99/mo (3,000 credits).",
     "verdict": "wait",
     "verdict_reason": "Team starts at $29.99/mo for 3,000 credits.",
-    "verdict_short": "Team starts at $29.99/mo",
-    "verdict_reasons": [
-      {
-        "reason": "Team starts at $29.99/mo",
-        "source": "https://www.lindy.ai/pricing"
-      },
-      {
-        "reason": "Every active user is billed",
-        "source": "https://www.lindy.ai/pricing"
-      },
-      {
-        "reason": "Free credits last 7 days",
-        "source": "https://www.lindy.ai/pricing"
-      },
-      {
-        "reason": "Monthly credits do not roll over",
-        "source": "https://www.lindy.ai/pricing"
-      },
-      {
-        "reason": "No mid-cycle seat proration",
-        "source": "https://www.lindy.ai/pricing"
-      }
-    ],
+    "verdict_reason_key": "unsettled",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://www.lindy.ai/pricing"
@@ -527,31 +321,13 @@
       "Research reports",
       "Multi-step web tasks"
     ],
-    "pricing": "Free (300 daily credits, Lite agent). Pro from $20/mo (4,000 credits). Team from $20/seat/mo.",
+    "pricing": "Pricing unverified.",
     "verdict": "wait",
-    "verdict_reason": "Free agent mode is Manus 2.0 Lite only.",
-    "verdict_short": "Free agent mode is Lite only",
-    "verdict_reasons": [
-      {
-        "reason": "Free agent mode is Lite only",
-        "source": "https://help.manus.im/en/articles/11711111-what-is-the-current-membership-pricing-for-manus"
-      },
-      {
-        "reason": "Free plan is one concurrent task",
-        "source": "https://help.manus.im/en/articles/11711111-what-is-the-current-membership-pricing-for-manus"
-      },
-      {
-        "reason": "Pro starts at $20 a month",
-        "source": "https://help.manus.im/en/articles/11711111-what-is-the-current-membership-pricing-for-manus"
-      },
-      {
-        "reason": "Daily free credits are 300",
-        "source": "https://help.manus.im/en/articles/11711111-what-is-the-current-membership-pricing-for-manus"
-      }
-    ],
+    "verdict_reason": "Pricing unverified.",
+    "verdict_reason_key": "pricing",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
-    "source": "https://help.manus.im/en/articles/11711111-what-is-the-current-membership-pricing-for-manus"
+    "source": "https://manus.im"
   },
   {
     "name": "Microsoft Copilot Studio",
@@ -565,25 +341,7 @@
     "pricing": "$200/mo per 25,000 Copilot Credits, or pay as you go.",
     "verdict": "wait",
     "verdict_reason": "Sold as 25,000-credit packs at $200/mo, with pay-as-you-go as well.",
-    "verdict_short": "Credit packs at $200/mo",
-    "verdict_reasons": [
-      {
-        "reason": "Credit packs at $200/mo",
-        "source": "https://www.microsoft.com/en-us/copilot/pricing/copilot-studio"
-      },
-      {
-        "reason": "Agents require an Azure subscription",
-        "source": "https://www.microsoft.com/en-us/copilot/pricing/copilot-studio"
-      },
-      {
-        "reason": "Credits vary by the action",
-        "source": "https://www.microsoft.com/en-us/copilot/pricing/copilot-studio"
-      },
-      {
-        "reason": "External publishing needs Studio",
-        "source": "https://www.microsoft.com/en-us/copilot/pricing/copilot-studio"
-      }
-    ],
+    "verdict_reason_key": "unsettled",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://www.microsoft.com/en-us/copilot/pricing/copilot-studio"
@@ -599,21 +357,7 @@
     "pricing": "Shutting down Nov 30, 2026; use the Agents SDK or ChatGPT Workspace Agents.",
     "verdict": "skip",
     "verdict_reason": "Scheduled to shut down Nov 30, 2026.",
-    "verdict_short": "Shuts down Nov 30, 2026",
-    "verdict_reasons": [
-      {
-        "reason": "Shuts down Nov 30, 2026",
-        "source": "https://developers.openai.com/api/docs/deprecations"
-      },
-      {
-        "reason": "Deprecation announced June 3, 2026",
-        "source": "https://developers.openai.com/api/docs/deprecations"
-      },
-      {
-        "reason": "Migrate to the Agents SDK",
-        "source": "https://developers.openai.com/api/docs/deprecations"
-      }
-    ],
+    "verdict_reason_key": "shutdown",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://developers.openai.com/api/docs/deprecations"
@@ -630,29 +374,7 @@
     "pricing": "Professional $590 per workspace/year.",
     "verdict": "wait",
     "verdict_reason": "Professional is $590 per workspace a year.",
-    "verdict_short": "$590 a year per workspace",
-    "verdict_reasons": [
-      {
-        "reason": "$590 a year per workspace",
-        "source": "https://dify.ai/pricing"
-      },
-      {
-        "reason": "Professional allows 3 members",
-        "source": "https://dify.ai/pricing"
-      },
-      {
-        "reason": "Sandbox includes 200 message credits",
-        "source": "https://dify.ai/pricing"
-      },
-      {
-        "reason": "Team is $1,590 a year",
-        "source": "https://dify.ai/pricing"
-      },
-      {
-        "reason": "Sandbox log history is 30 days",
-        "source": "https://dify.ai/pricing"
-      }
-    ],
+    "verdict_reason_key": "unsettled",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://dify.ai/pricing"
@@ -687,21 +409,7 @@
     "pricing": "Unity AI bundled with Unity Personal (free) or Pro ($210/mo/seat).",
     "verdict": "wait",
     "verdict_reason": "Official and promising, but the public reports we cite don't include an independent check.",
-    "verdict_short": "No independent check cited",
-    "verdict_reasons": [
-      {
-        "reason": "No independent check cited",
-        "source": "https://unity.com/blog/unity-plugin-grok"
-      },
-      {
-        "reason": "Usage data comes later in October",
-        "source": "https://unity.com/blog/unity-plugin-grok"
-      },
-      {
-        "reason": "Plugin requires Unity 6 or newer",
-        "source": "https://unity.com/blog/unity-plugin-grok"
-      }
-    ],
+    "verdict_reason_key": "new",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://unity.com/blog/unity-plugin-grok"
@@ -734,26 +442,8 @@
     ],
     "pricing": "Free 100 credits/mo, Pro $20, Premium $40, Studio $70 per seat, Ultra $100.",
     "verdict": "wait",
-    "verdict_reason": "Free accounts cannot download generated models.",
-    "verdict_short": "Free accounts cannot download models",
-    "verdict_reasons": [
-      {
-        "reason": "Free accounts cannot download models",
-        "source": "https://help.meshy.ai/en/articles/12062933-which-meshy-plan-is-right-for-you"
-      },
-      {
-        "reason": "Monthly credits do not roll over",
-        "source": "https://help.meshy.ai/en/articles/12062933-which-meshy-plan-is-right-for-you"
-      },
-      {
-        "reason": "Commercial use starts at Pro",
-        "source": "https://help.meshy.ai/en/articles/12062933-which-meshy-plan-is-right-for-you"
-      },
-      {
-        "reason": "Free plan is 100 credits a month",
-        "source": "https://help.meshy.ai/en/articles/12062933-which-meshy-plan-is-right-for-you"
-      }
-    ],
+    "verdict_reason": "Good for drafts.",
+    "verdict_reason_key": "unsettled",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://help.meshy.ai/en/articles/12062933-which-meshy-plan-is-right-for-you"
@@ -770,25 +460,7 @@
     "pricing": "From $10/mo for 300 Creative Units.",
     "verdict": "wait",
     "verdict_reason": "You pay in Creative Units, from $10/mo for 300, with no per-seat fee.",
-    "verdict_short": "Pay in Creative Units",
-    "verdict_reasons": [
-      {
-        "reason": "Pay in Creative Units",
-        "source": "https://layer.ai/pricing"
-      },
-      {
-        "reason": "Plans start at $10 for 300",
-        "source": "https://layer.ai/pricing"
-      },
-      {
-        "reason": "Base rate is $0.08 a unit",
-        "source": "https://layer.ai/pricing"
-      },
-      {
-        "reason": "Annual commitment adds a discount",
-        "source": "https://layer.ai/pricing"
-      }
-    ],
+    "verdict_reason_key": "unsettled",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://layer.ai/pricing"
@@ -822,26 +494,8 @@
     ],
     "pricing": "Free on-demand tier (70 min TTS); Creator $25/mo.",
     "verdict": "wait",
-    "verdict_reason": "Usage is metered across TTS, STT, and LLMs.",
-    "verdict_short": "Metered across TTS, STT, and LLMs",
-    "verdict_reasons": [
-      {
-        "reason": "Metered across TTS, STT, and LLMs",
-        "source": "https://inworld.ai/pricing"
-      },
-      {
-        "reason": "Creator starts at $25 a month",
-        "source": "https://inworld.ai/pricing"
-      },
-      {
-        "reason": "Canceling forfeits leftover credits",
-        "source": "https://inworld.ai/pricing"
-      },
-      {
-        "reason": "Voice clones need a card on file",
-        "source": "https://inworld.ai/pricing"
-      }
-    ],
+    "verdict_reason": "Needs engineering work to integrate.",
+    "verdict_reason_key": "unsettled",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://inworld.ai/pricing"
@@ -858,29 +512,7 @@
     "pricing": "Free 150 fast tokens a day; Essential $12/mo.",
     "verdict": "wait",
     "verdict_reason": "Essential is the $12/mo plan, and usage is metered in tokens.",
-    "verdict_short": "Usage metered in tokens",
-    "verdict_reasons": [
-      {
-        "reason": "Usage metered in tokens",
-        "source": "https://www.leonardo.ai/pricing"
-      },
-      {
-        "reason": "Free images are public",
-        "source": "https://www.leonardo.ai/pricing"
-      },
-      {
-        "reason": "Leonardo holds rights to free images",
-        "source": "https://www.leonardo.ai/pricing"
-      },
-      {
-        "reason": "Free tier is 150 tokens a day",
-        "source": "https://www.leonardo.ai/pricing"
-      },
-      {
-        "reason": "Token cost varies by the task",
-        "source": "https://www.leonardo.ai/pricing"
-      }
-    ],
+    "verdict_reason_key": "unsettled",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://www.leonardo.ai/pricing"
@@ -896,26 +528,8 @@
     ],
     "pricing": "Indie $15/mo, Pro $35/mo, Studio $300/mo, all billed annually.",
     "verdict": "wait",
-    "verdict_reason": "Indie, Pro, and Studio are billed annually.",
-    "verdict_short": "Paid plans are billed annually",
-    "verdict_reasons": [
-      {
-        "reason": "Paid plans are billed annually",
-        "source": "https://ludo.ai/pricing"
-      },
-      {
-        "reason": "Indie credits are paid upfront",
-        "source": "https://ludo.ai/pricing"
-      },
-      {
-        "reason": "API calls always spend credits",
-        "source": "https://ludo.ai/pricing"
-      },
-      {
-        "reason": "Indie refunds stop after 250 credits",
-        "source": "https://ludo.ai/pricing"
-      }
-    ],
+    "verdict_reason": "Niche; the paid plans are billed annually.",
+    "verdict_reason_key": "unsettled",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://ludo.ai/pricing"

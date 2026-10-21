@@ -25,18 +25,30 @@ for t in tools:
     t["slug"] = slug(t["name"])
     t.setdefault("date_added", "2026-10-21")
 tools.sort(key=lambda t: (t["date_added"], t["name"]), reverse=True)
+# Site-wide reasons. Short label sits beside the pill; the full line is the legend.
+# (short, full). Order is the order shown on /verdicts/.
+WAIT_REASONS = {
+    "pricing": ("Pricing unclear", "Pricing unclear or changing"),
+    "access": ("Limited access", "Waitlist or limited access"),
+    "new": ("Too new", "Too new, little track record"),
+    "reliability": ("Reliability issues", "Known bugs or reliability issues"),
+    "value": ("Better value elsewhere", "Better value elsewhere for now"),
+}
+SKIP_REASONS = {
+    "shutdown": ("Shutting down", "Shutting down or abandoned"),
+    "security": ("Security or privacy", "Security or privacy concerns"),
+    "overpriced": ("Overpriced", "Overpriced for what it does"),
+    "replaced": ("Replaced by a better tool", "Replaced by a better tool"),
+    "claims": ("Doesn't work as claimed", "Doesn't work as claimed"),
+}
+UNSETTLED = "Evidence not settled yet"
+REASON_SET = {"wait": WAIT_REASONS, "skip": SKIP_REASONS}
 for t in tools:
-    if t["verdict"] in ("wait", "skip"):
-        reasons = t.get("verdict_reasons")
-        if not isinstance(reasons, list) or not 1 <= len(reasons) <= 5:
-            raise SystemExit(f"{t['name']} needs 1 to 5 verdict_reasons")
-        for i, reason in enumerate(reasons, 1):
-            text = str(reason.get("reason") or "").strip()
-            src = str(reason.get("source") or "").strip()
-            if not text or not src.startswith("https://"):
-                raise SystemExit(f"{t['name']} reason {i} needs text and an https source")
-        if len(reasons[0]["reason"].split()) > 8:
-            raise SystemExit(f"{t['name']} reason 1 is too long to sit beside the pill")
+    if t["verdict"] in REASON_SET:
+        key = t.get("verdict_reason_key")
+        allowed = REASON_SET[t["verdict"]]
+        if key != "unsettled" and key not in allowed:
+            raise SystemExit(f"{t['name']} needs a {t['verdict']} verdict_reason_key")
 TODAY = datetime.date.today()
 NEW_CUTOFF = TODAY - datetime.timedelta(days=7)
 LAUNCH = datetime.date(2026, 10, 20)  # initial batch; do not badge these
@@ -319,17 +331,12 @@ a.metric:hover{background:rgba(255,138,61,.06)}
 .why{margin:14px 0 0;font-size:1.02rem;line-height:1.5}
 .why .label{display:block;margin:0 0 4px;font-family:var(--mono);font-size:.75rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ac)}
 .card .why{margin:0}
-.reasons{margin:18px 0 0;max-width:40rem}
-.reasons h2,.reasons summary{margin:0;font-family:var(--mono);font-size:.75rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ac);line-height:1.4}
-.reasons summary{cursor:pointer}
-.reasons summary::-webkit-details-marker{display:none}
-.reasons summary::before{content:"▸ ";letter-spacing:0}
-.reasons[open] summary::before{content:"▾ "}
-.reasons ol{margin:10px 0 0;padding:0 0 0 1.25rem}
-.reasons li{margin:0 0 8px;color:var(--tx);font-size:1.02rem;line-height:1.45}
-.reasons li a{margin-left:6px;color:var(--mu);font-family:var(--mono);font-size:.8rem}
-.card .reasons{margin:0}
-.card .reasons li{font-size:.92rem}
+.legend{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:8px 0 40px}
+.legend h2.legend-title{grid-column:1 / -1;margin:0 4px;font-size:1.35rem}
+.legend h2{margin:0;font-size:1.15rem;letter-spacing:-.02em}
+.legend ol{margin:12px 0 0;padding:0 0 0 1.25rem}
+.legend li{margin:0 0 8px;line-height:1.45}
+.legend .note{grid-column:1 / -1;margin:4px 0 0}
 .pick,.catcard,.card{transition:border-color .2s ease,background .2s ease,transform .2s ease}
 .pick:hover,a.catcard:hover,.card:hover{border-color:var(--bd-h);background:#141c3b;transform:translateY(-2px)}
 .pick h3{margin:0;color:var(--tx);font-size:1.05rem}
@@ -438,7 +445,7 @@ header nav a.btn{display:flex;margin-top:8px;text-align:center}
 .metric{padding:14px}
 .metric b{font-size:.9rem}
 .metric span{font-size:.65rem}
-.bento,.vkey{grid-template-columns:1fr}
+.bento,.vkey,.legend{grid-template-columns:1fr}
 .bento .featured{grid-row:auto}
 .actions{flex-direction:column;align-items:stretch}
 .hero .btn{width:100%}
@@ -467,27 +474,28 @@ def verdict_stamp(t):
     iso = checked_iso(t)
     return f'<span class="checked">Last checked <time datetime="{e(iso)}">{e(fmt_date(iso))}</time></span>'
 def inline_reason(t):
-    reasons = t.get("verdict_reasons") or []
-    if reasons:
-        return reasons[0].get("reason")
+    # Wait and Skip use the site-wide reason. Use and Try keep their own short line.
+    key = t.get("verdict_reason_key")
+    if key == "unsettled":
+        return UNSETTLED
+    table = REASON_SET.get(t["verdict"])
+    if key and table and key in table:
+        return table[key][0]
     return t.get("verdict_short")
 def pill_html(t):
-    # The top reason sits outside the pill so the pill stays as wide as its label.
+    # The standard reason sits outside the pill so the pill stays as wide as its label.
     short = inline_reason(t)
     extra = f'<span class="vshort">· {e(short)}</span>' if short else ""
     return f'<span class="vtag"><span class="v v-{e(t["verdict"])}">{e(vlabel(t))}</span>{extra}</span>'
 def why_html(t):
     label = WHY_LABEL.get(t["verdict"], "Why")
     return f'<p class="why"><span class="label">{e(label)}</span>{e(t["verdict_reason"])}</p>'
-def reasons_html(t, details=False):
-    # Ranked reasons for Wait and Skip. Use and Try keep the single Why line.
-    label = "Top reasons to skip" if t["verdict"] == "skip" else "Top reasons to wait"
-    items = "".join(
-        f'<li>{e(r["reason"])} <a href="{e(r["source"])}" rel="noopener">{e(r["source"].split("/")[2])}</a></li>'
-        for r in t["verdict_reasons"])
-    if details:
-        return f'<details class="reasons"><summary>{e(label)}</summary><ol>{items}</ol></details>'
-    return f'<section class="reasons"><h2>{e(label)}</h2><ol>{items}</ol></section>'
+def legend_html():
+    def col(title, table):
+        items = "".join(f"<li>{e(full)}</li>" for _short, full in table.values())
+        return f'<article class="panel"><h2>{e(title)}</h2><ol>{items}</ol></article>'
+    note = f'<p class="note mu">When the sources do not match one of these, the card says {e(UNSETTLED)}.</p>'
+    return f'<section class="legend"><h2 class="legend-title">What Wait and Skip mean</h2>{col("Wait", WAIT_REASONS)}{col("Skip", SKIP_REASONS)}{note}</section>'
 NAV = [
     ("index.html", "Home", "home"),
     ("tools/", "Tool Directory", "tools"),
@@ -602,14 +610,8 @@ def badge_html(t):
     return '<span class="badge-new">New this week</span>' if is_new(t) else ""
 def card(t, prefix, level="h2", why=False):
     badge = badge_html(t)
-    ranked = " ".join(r.get("reason", "") for r in t.get("verdict_reasons") or [])
-    if why and t.get("verdict_reasons"):
-        body = reasons_html(t, details=True)
-    elif why:
-        body = why_html(t)
-    else:
-        body = f'<p class="clamp">{e(t["verdict_reason"])}</p>'
-    return f"""<article class="card" data-cat="{e(t['category'])}" data-date="{t['date_added']}" data-checked="{e(checked_iso(t))}" data-text="{e((t['name']+' '+t['description']+' '+' '.join(t['use_cases'])+' '+t['category']+' '+ranked+' '+(inline_reason(t) or '')).lower())}">
+    body = why_html(t) if why else f'<p class="clamp">{e(t["verdict_reason"])}</p>'
+    return f"""<article class="card" data-cat="{e(t['category'])}" data-date="{t['date_added']}" data-checked="{e(checked_iso(t))}" data-text="{e((t['name']+' '+t['description']+' '+' '.join(t['use_cases'])+' '+t['category']+' '+(inline_reason(t) or '')).lower())}">
 <div class="vrow">{badge}{pill_html(t)}</div><{level} class="name"><a href="{prefix}{t['slug']}.html">{e(t['name'])}</a></{level}>
 {body}<p class="checked">{e(cat_label(t['category']))} · {verdict_stamp(t)}</p></article>"""
 def pick_card(t, featured=False):
@@ -722,7 +724,7 @@ for key, label, blurb in VERDICTS:
 (OUT / "verdicts" / "index.html").write_text(page(
     f"Current verdicts — {N}",
     "Tools grouped under Use it, Try it, Wait, and Skip, with the date each verdict was checked.",
-    f'<header class="pagehead"><p class="kicker">Use, try, wait, or skip</p><h1>Current verdicts</h1><p class="lede">Grouped by the latest check. Each card shows the day that verdict was last reviewed.</p></header>{"".join(buckets)}',
+    f'<header class="pagehead"><p class="kicker">Use, try, wait, or skip</p><h1>Current verdicts</h1><p class="lede">Grouped by the latest check. Each card shows the day that verdict was last reviewed.</p></header>{legend_html()}{"".join(buckets)}',
     "verdicts/", 1, nodes=[item_list("Current verdicts", tools)]))
 week_grid = f"<div class='grid'>{''.join(card(t, 'tools/') for t in wk)}</div>" if wk else "<p class='mu'>Nothing new in the last seven days.</p>"
 if launch_only:
@@ -739,7 +741,7 @@ else:
     f'<header class="pagehead"><p class="kicker">{e(week_kicker)}</p><h1>{e(week_name)}</h1><p class="lede">{e(week_lede)}</p></header>{week_grid}<div class="sec">{SIGNUP}</div>',
     "this-week.html"))
 for t in tools:
-    b = f"""<div class="tool-hero"><div class="tool-copy"><p class="back"><a href="index.html">Tool directory</a> · {e(cat_label(t['category']))}</p><h1>{e(t['name'])}</h1><p class="vrow">{badge_html(t)}{pill_html(t)} {verdict_stamp(t)}</p><p class="sum">{e(t['description'])}</p>{reasons_html(t) if t.get("verdict_reasons") else why_html(t)}
+    b = f"""<div class="tool-hero"><div class="tool-copy"><p class="back"><a href="index.html">Tool directory</a> · {e(cat_label(t['category']))}</p><h1>{e(t['name'])}</h1><p class="vrow">{badge_html(t)}{pill_html(t)} {verdict_stamp(t)}</p><p class="sum">{e(t['description'])}</p>{why_html(t)}
 <p><a href="../verdicts/#{e(t['verdict'])}">More {e(vlabel(t))} verdicts</a></p>
 <script type="application/ld+json">{json.dumps({"@context":"https://schema.org","@type":"SoftwareApplication","name":t["name"],"url":t["url"],"applicationCategory":t["category"],"description":t["description"],"dateModified":checked_iso(t)})}</script></div>
 <aside class="facts" aria-label="Facts"><dl><dt>Use cases</dt><dd><ul>{''.join(f'<li>{e(u)}</li>' for u in t['use_cases'])}</ul></dd><dt>Pricing</dt><dd>{e(t['pricing'])}</dd><dt>Website</dt><dd><a href="{e(t['url'])}" rel="noopener">{e(t['url'])}</a></dd>
