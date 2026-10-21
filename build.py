@@ -15,8 +15,8 @@ CONFIG["base_url"] = CONFIG["base_url"].rstrip("/")
 N = CONFIG["site_name"]; R = pathlib.Path(__file__).parent; OUT = R / "dist"
 BASE = CONFIG["base_url"]
 VALUE = CONFIG["tagline"]
-# Verdicts cite public reports. The site does not claim a hands-on check of its own.
-METHOD = "Verdicts based on public reports and official pricing pages, re-checked twice a week."
+# Facts cite public reports. The site does not claim a hands-on check of its own.
+METHOD = "Facts from public reports and official pricing pages, re-checked twice a week."
 AI_NOTE = "Researched and drafted with AI tools and reviewed by a human; every fact links to a public source."
 e = lambda s: html.escape(str(s), quote=True)
 slug = lambda s: re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
@@ -25,32 +25,6 @@ for t in tools:
     t["slug"] = slug(t["name"])
     t.setdefault("date_added", "2026-10-21")
 tools.sort(key=lambda t: (t["date_added"], t["name"]), reverse=True)
-# Site-wide reasons. Short label sits beside the pill; the full line is the legend.
-# (short, full). Order is the order shown on /verdicts/.
-WAIT_REASONS = {
-    "pricing": ("Pricing unclear", "Pricing unclear or changing"),
-    "access": ("Waitlist only", "Waitlist or limited access"),
-    "new": ("Too new", "Too new, little track record"),
-    "reliability": ("Known bugs", "Known bugs or reliability issues"),
-    "value": ("Better value elsewhere", "Better value elsewhere for now"),
-}
-SKIP_REASONS = {
-    "shutdown": ("Shutting down", "Shutting down or abandoned"),
-    "security": ("Security or privacy concerns", "Security or privacy concerns"),
-    "overpriced": ("Overpriced", "Overpriced for what it does"),
-    "replaced": ("Replaced by a better tool", "Replaced by a better tool"),
-    "claims": ("Doesn't work as claimed", "Doesn't work as claimed"),
-}
-UNSETTLED = "Evidence not settled yet"
-REASON_SET = {"wait": WAIT_REASONS, "skip": SKIP_REASONS}
-for t in tools:
-    if t["verdict"] in REASON_SET:
-        key = t.get("verdict_reason_key")
-        allowed = REASON_SET[t["verdict"]]
-        if key != "unsettled" and key not in allowed:
-            raise SystemExit(f"{t['name']} needs a {t['verdict']} verdict_reason_key")
-        if t["verdict"] == "wait" and key == "unsettled":
-            raise SystemExit(f"{t['name']} still says Evidence not settled yet")
 TODAY = datetime.date.today()
 NEW_CUTOFF = TODAY - datetime.timedelta(days=7)
 LAUNCH = datetime.date(2026, 10, 20)  # initial batch; do not badge these
@@ -72,14 +46,13 @@ CAT_LABEL = {
     "gaming/game dev": "Gaming",
 }
 CAT_ORDER = list(CAT_LABEL)
-VERDICTS = [
-    ("use", "Use it", "Worth using now for the job it claims."),
-    ("try", "Try it", "Worth a short trial before you rely on it."),
-    ("wait", "Wait", "Price, access, or the evidence is not settled."),
-    ("skip", "Skip", "Closed, shutting down, or a poor fit."),
-]
-VERDICT_LABEL = {key: label for key, label, _ in VERDICTS}
-WHY_LABEL = {"use": "Why use", "try": "Why try", "wait": "Why wait", "skip": "Why skip"}
+# Neutral guidance kept inside a collapsed section on each tool page. Not shown as a label.
+GUIDE = {
+    "use": "Worth using now for the job it claims.",
+    "try": "Worth a short trial before you rely on it.",
+    "wait": "Price, access, or the evidence is not settled.",
+    "skip": "Closed, shutting down, or a poor fit.",
+}
 suggest_href = "mailto:" + CONFIG["suggest_email"] + "?" + "&".join([
     "subject=" + quote("Tool suggestion for Toolsmith Weekly"),
     "body=" + quote("I'm an indie developer.\n\nTool name:\nWebsite:\nWhat it does:\nWhy it belongs in Toolsmith Weekly:\n")])
@@ -325,22 +298,10 @@ a.metric:hover{background:rgba(255,138,61,.06)}
 .sec-head p,.intro{color:var(--mu);margin:8px 0 0;max-width:40rem}
 .bento{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:12px;align-items:stretch}
 .bento .featured{grid-row:span 3}
-.pick,.catcard,.card,.vk,.panel,.issue{background:linear-gradient(180deg,#0f1630,rgba(15,22,48,.6));border:1px solid var(--bd);border-radius:12px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 8px 24px -12px rgba(0,0,0,.6);padding:20px}
+.pick,.catcard,.panel,.issue{background:linear-gradient(180deg,#0f1630,rgba(15,22,48,.6));border:1px solid var(--bd);border-radius:12px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 8px 24px -12px rgba(0,0,0,.6);padding:20px}
 .pick,a.catcard{text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:10px}
-.pick > .v,.pick > .vtag{display:inline-flex;width:auto;align-self:flex-start}
-.vtag{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;max-width:100%}
-.vshort{color:var(--mu);font-size:.92rem;font-weight:550}
-.why{margin:14px 0 0;font-size:1.02rem;line-height:1.5}
-.why .label{display:block;margin:0 0 4px;font-family:var(--mono);font-size:.75rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ac)}
-.card .why{margin:0}
-.legend{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:8px 0 40px}
-.legend h2.legend-title{grid-column:1 / -1;margin:0 4px;font-size:1.35rem}
-.legend h2{margin:0;font-size:1.15rem;letter-spacing:-.02em}
-.legend ol{margin:12px 0 0;padding:0 0 0 1.25rem}
-.legend li{margin:0 0 8px;line-height:1.45}
-.legend .note{grid-column:1 / -1;margin:4px 0 0}
-.pick,.catcard,.card{transition:border-color .2s ease,background .2s ease,transform .2s ease}
-.pick:hover,a.catcard:hover,.card:hover{border-color:var(--bd-h);background:#141c3b;transform:translateY(-2px)}
+.pick,.catcard{transition:border-color .2s ease,background .2s ease,transform .2s ease}
+.pick:hover,a.catcard:hover{border-color:var(--bd-h);background:#141c3b;transform:translateY(-2px)}
 .pick h3{margin:0;color:var(--tx);font-size:1.05rem}
 .pick h3 a{color:var(--tx);text-decoration:none}
 .pick h3 a:hover{color:var(--ac)}
@@ -358,42 +319,41 @@ a.metric:hover{background:rgba(255,138,61,.06)}
 a.catcard{min-height:0;justify-content:space-between}
 a.catcard strong{color:var(--tx);font-size:1rem;font-weight:600}
 a.catcard .num{color:var(--ac2);font-family:var(--mono);font-size:2.25rem;font-weight:500;letter-spacing:-.04em;font-variant-numeric:tabular-nums;line-height:1}
-.vkey{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.vk p{margin:10px 0 0;color:var(--mu);font-size:.95rem}
 .split{display:grid;grid-template-columns:1.15fr .85fr;gap:16px}
 #signup{position:relative;overflow:hidden}
 .panel h2,.panel h3{margin:0 0 8px}
 .mu{color:var(--mu)}
-.ctl{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:0 0 10px}
-.ctl #cnt{margin:0;font-family:var(--mono);font-size:.85rem}
 input,select{background:var(--bg2);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:12px 14px;min-height:48px;font:inherit}
 input::placeholder{color:var(--mu);opacity:1}
 input:hover,select:hover{border-color:var(--bd-h)}
-#q{flex:1;min-width:220px}
+.dirsearch{display:block;width:100%;font-size:1.15rem;padding:16px 18px;border-radius:12px;background:var(--card);margin:4px 0 0}
+.dirsearch:focus{outline:2px solid var(--ac);border-color:var(--ac)}
+.letters{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 16px}
+.letters a{font-family:var(--mono);font-size:.85rem;color:var(--mu);text-decoration:none;min-width:36px;min-height:36px;display:inline-flex;align-items:center;justify-content:center;border-radius:8px;border:1px solid var(--bd)}
+.letters a.on,.letters a:hover{color:var(--ink);background:var(--ac);border-color:var(--ac);text-decoration:none}
+.dirbar{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center;justify-content:space-between;margin:0 0 16px}
+.dirtools{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.dirtools #cnt{margin:0;font-family:var(--mono);font-size:.85rem}
+.toggle{display:inline-flex;align-items:center;gap:8px;min-height:44px;cursor:pointer;color:var(--tx)}
+.toggle input{width:18px;height:18px;min-height:18px;padding:0;accent-color:var(--ac)}
 .chips{display:flex;gap:8px;flex-wrap:wrap}
 .chip{background:transparent;border:1px solid var(--bd);color:var(--tx);border-radius:999px;padding:8px 14px;min-height:44px;cursor:pointer;font:inherit}
 .chip:hover{border-color:var(--ac)}
 .chip.on{background:#eef2ff;color:#070b1a;border-color:#eef2ff;font-weight:650}
-.appbar{position:sticky;top:60px;z-index:8;background:rgba(7,11,26,.92);backdrop-filter:saturate(160%) blur(12px);-webkit-backdrop-filter:saturate(160%) blur(12px);border-bottom:1px solid var(--bd);padding:12px 0 10px}
-.dirhead{padding:8px 0 4px}
-.dirgrid{padding:18px 0 72px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin:0}
-.card{display:flex;flex-direction:column;gap:8px}
-.card .name{margin:0;font-size:1.02rem}.card .name a{color:var(--tx);text-decoration:none}
-.card .name a:hover{color:var(--ac)}
-.card .clamp{margin:0;color:var(--mu);font-size:.92rem}
-.v{display:inline-flex;align-items:center;gap:7px;font-weight:650;font-size:.7rem;line-height:1;padding:4px 9px 4px 7px;border-radius:999px;letter-spacing:.04em;text-transform:uppercase;border:1px solid color-mix(in srgb,currentColor 30%,transparent)}
-.v:before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;flex:none}
-.v-use{background:rgba(34,197,94,.12);color:#6ee7a0}
-.v-try{background:rgba(56,189,248,.12);color:#7dd3fc}
-.v-wait{background:rgba(250,204,21,.12);color:#fcd34d}
-.v-skip{background:rgba(244,63,94,.12);color:#fda4af}
+.rows{display:flex;flex-direction:column;gap:8px}
+.row{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1.7fr) minmax(0,1.05fr);gap:4px 20px;align-items:center;padding:14px 16px;border:1px solid var(--bd);border-radius:12px;background:linear-gradient(180deg,#0f1630,rgba(15,22,48,.6));box-shadow:0 1px 0 rgba(255,255,255,.04) inset;transition:border-color .2s ease,background .2s ease}
+.row:hover{border-color:var(--bd-h);background:#141c3b}
+.row .name{margin:0;font-size:1.05rem;letter-spacing:-.02em;line-height:1.3}
+.row .name a{color:var(--tx);text-decoration:none}
+.row .name a:hover{color:var(--ac)}
+.row .desc,.row .meta{margin:0;color:var(--mu);font-size:.92rem}
+.row .desc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .meta{display:flex;flex-direction:column;align-items:flex-start;gap:2px}
+.row .badge-new{margin-left:8px;vertical-align:2px}
 .badge-new{display:inline-block;font-weight:650;font-size:.7rem;padding:4px 8px;border-radius:999px;background:rgba(255,138,61,.12);color:var(--ac2);letter-spacing:.04em;text-transform:uppercase}
 .cat,.checked,.price{font-size:.92rem;color:var(--mu)}
 time,.num,.count,.metric b{font-family:var(--mono)}
-.bucket{margin:36px 0 8px}
-.bucket .count{color:var(--mu);font-weight:500;font-size:1rem}
-.quiet{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin:22px 0 0}
+.quiet{margin:22px 0 0;color:var(--mu)}
 .issue{position:relative;margin:16px 0}
 .issue h2{margin:0 0 6px;font-family:var(--mono);font-weight:500;color:var(--ac2);font-size:1.35rem}
 .issue .when{margin:0;font-family:var(--mono);color:var(--mu)}
@@ -411,7 +371,11 @@ dl dt{margin-top:16px}dl dd{margin:4px 0 0}
 .tool-hero{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:48px;align-items:start}
 .tool-hero h1{max-width:none;font-size:clamp(2.25rem,4vw,3.5rem);line-height:1.05}
 .sum{margin:18px 0 0;max-width:40rem;font-size:1.25rem;line-height:1.5;color:var(--tx)}
-.tool-copy .reason{margin:14px 0 0;color:var(--mu)}
+.approach{margin:28px 0 0;border:1px solid var(--bd);border-radius:12px;padding:4px 18px 8px;background:linear-gradient(180deg,#0f1630,rgba(15,22,48,.6))}
+.approach summary{cursor:pointer;padding:14px 0;font-weight:650;color:var(--tx)}
+.approach summary:hover{color:var(--ac)}
+.approach p{margin:0 0 12px;color:var(--mu)}
+.approach p.guide{color:var(--tx)}
 .facts{position:sticky;top:84px;padding:20px;border-radius:16px;border:1px solid var(--bd);background:linear-gradient(180deg,#0f1630,rgba(15,22,48,.6));box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 8px 24px -12px rgba(0,0,0,.6)}
 .facts dt:first-child{margin-top:0}
 .facts .btn{width:100%;margin-top:18px}
@@ -436,7 +400,6 @@ header nav a.btn{display:flex;margin-top:8px;text-align:center}
 .anvil{width:220px}
 .anvil-glow{width:200px;height:120px}
 .orb-a{width:280px;height:220px;right:-80px;top:-100px}
-.vkey{grid-template-columns:1fr 1fr}
 .cats{grid-template-columns:1fr 1fr}
 .bento{grid-template-columns:1fr 1fr}
 }
@@ -447,7 +410,9 @@ header nav a.btn{display:flex;margin-top:8px;text-align:center}
 .metric{padding:14px}
 .metric b{font-size:.9rem}
 .metric span{font-size:.65rem}
-.bento,.vkey,.legend{grid-template-columns:1fr}
+.bento{grid-template-columns:1fr}
+.row{grid-template-columns:1fr;gap:4px}
+.row .desc{white-space:normal}
 .bento .featured{grid-row:auto}
 .actions{flex-direction:column;align-items:stretch}
 .hero .btn{width:100%}
@@ -457,8 +422,8 @@ header nav a.btn{display:flex;margin-top:8px;text-align:center}
 }
 @media(prefers-reduced-motion:reduce){
 .rise,.orb,.anvil,.spark{animation:none}
-.pick,a.catcard,.card,a.btn{transition:none}
-.pick:hover,a.catcard:hover,.card:hover,a.btn:hover{transform:none}
+.pick,a.catcard,.row,a.btn{transition:none}
+.pick:hover,a.catcard:hover,.row:hover,a.btn:hover{transform:none}
 }
 """
 _MONTHS = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
@@ -468,40 +433,23 @@ def checked_iso(t):
 def fmt_date(iso):
     d = datetime.date.fromisoformat(iso)
     return f"{_MONTHS[d.month - 1]} {d.day}, {d.year}"
-def vlabel(t):
-    return VERDICT_LABEL.get(t["verdict"], t["verdict"])
 def cat_label(name):
     return CAT_LABEL.get(name, name)
 def verdict_stamp(t):
     iso = checked_iso(t)
     return f'<span class="checked">Last checked <time datetime="{e(iso)}">{e(fmt_date(iso))}</time></span>'
-def inline_reason(t):
-    # Wait and Skip use the site-wide reason. Use and Try keep their own short line.
-    key = t.get("verdict_reason_key")
-    if key == "unsettled":
-        return UNSETTLED
-    table = REASON_SET.get(t["verdict"])
-    if key and table and key in table:
-        return table[key][0]
-    return t.get("verdict_short")
-def pill_html(t):
-    # The standard reason sits outside the pill so the pill stays as wide as its label.
-    short = inline_reason(t)
-    extra = f'<span class="vshort">· {e(short)}</span>' if short else ""
-    return f'<span class="vtag"><span class="v v-{e(t["verdict"])}">{e(vlabel(t))}</span>{extra}</span>'
-def why_html(t):
-    label = WHY_LABEL.get(t["verdict"], "Why")
-    return f'<p class="why"><span class="label">{e(label)}</span>{e(t["verdict_reason"])}</p>'
-def legend_html():
-    def col(title, table):
-        items = "".join(f"<li>{e(full)}</li>" for _short, full in table.values())
-        return f'<article class="panel"><h2>{e(title)}</h2><ol>{items}</ol></article>'
-    note = f'<p class="note mu">When the sources do not match one of these, the card says {e(UNSETTLED)}.</p>'
-    return f'<section class="legend"><h2 class="legend-title">What Wait and Skip mean</h2>{col("Wait", WAIT_REASONS)}{col("Skip", SKIP_REASONS)}{note}</section>'
+def has_free_tier(t):
+    # "No free plan" must not count. A word "free" in the pricing line does.
+    pricing = t["pricing"]
+    if re.search(r"\bno free\b", pricing, re.I):
+        return False
+    return bool(re.search(r"\bfree\b", pricing, re.I))
+def letter_of(name):
+    first = name[:1].upper()
+    return first if first.isalpha() else "#"
 NAV = [
     ("index.html", "Home", "home"),
     ("tools/", "Tool Directory", "tools"),
-    ("verdicts/", "Current Verdicts", "verdicts"),
     ("this-week.html", "This Week", "week"),
     ("newsletter/", "Newsletter Archive", "news"),
     ("suggest/", "Suggest a Tool", "suggest"),
@@ -511,8 +459,6 @@ def section_of(path):
         return "home"
     if path.startswith("tools/"):
         return "tools"
-    if path.startswith("verdicts/"):
-        return "verdicts"
     if path.startswith("this-week"):
         return "week"
     if path.startswith("newsletter/"):
@@ -557,7 +503,7 @@ def schema_graph(extra=None):
                 "@id": f"{BASE}/#website",
                 "name": N,
                 "url": f"{BASE}/",
-                "description": VALUE + " Straight verdicts: use it, try it, wait, or skip.",
+                "description": VALUE,
                 "publisher": {"@id": f"{BASE}/#organization"},
                 "potentialAction": {
                     "@type": "SearchAction",
@@ -610,26 +556,36 @@ def page(title, desc, body, path, depth=0, nodes=None, bleed=False):
 def badge_html(t):
     # Website cards only. Callers on the newsletter archive must not use this.
     return '<span class="badge-new">New this week</span>' if is_new(t) else ""
-def card(t, prefix, level="h2", why=False):
+def row(t, prefix):
+    # Every tool is in the HTML. Filters only hide rows; they do not inject them.
+    letter = letter_of(t["name"])
+    text = " ".join([t["name"], t["description"], t["pricing"], t["category"], *t["use_cases"]]).lower()
     badge = badge_html(t)
-    body = why_html(t) if why else f'<p class="clamp">{e(t["verdict_reason"])}</p>'
-    return f"""<article class="card" data-cat="{e(t['category'])}" data-date="{t['date_added']}" data-checked="{e(checked_iso(t))}" data-text="{e((t['name']+' '+t['description']+' '+' '.join(t['use_cases'])+' '+t['category']+' '+(inline_reason(t) or '')).lower())}">
-<div class="vrow">{badge}{pill_html(t)}</div><{level} class="name"><a href="{prefix}{t['slug']}.html">{e(t['name'])}</a></{level}>
-{body}<p class="checked">{e(cat_label(t['category']))} · {verdict_stamp(t)}</p></article>"""
+    free = "1" if has_free_tier(t) else "0"
+    return (
+        f'<article class="row" id="{e(t["slug"])}" data-cat="{e(t["category"])}" '
+        f'data-date="{e(t["date_added"])}" data-name="{e(t["name"].lower())}" data-free="{free}" '
+        f'data-letter="{e(letter)}" data-text="{e(text)}">'
+        f'<h2 class="name"><a href="{prefix}{t["slug"]}.html">{e(t["name"])}</a>{badge}</h2>'
+        f'<p class="desc">{e(t["description"])}</p>'
+        f'<p class="meta"><span class="price">{e(t["pricing"])}</span>'
+        f'<span class="cat">{e(cat_label(t["category"]))}</span></p></article>'
+    )
 def pick_card(t, featured=False):
-    head = f'{pill_html(t)}<h3>{e(t["name"])}</h3>'
+    href = f'tools/{t["slug"]}.html'
     if featured:
-        href = f'tools/{t["slug"]}.html'
-        return (f'<article class="pick featured">{pill_html(t)}'
+        return (f'<article class="pick featured">'
                 f'<h3><a href="{href}">{e(t["name"])}</a></h3>'
                 f'<p class="clamp">{e(t["description"])}</p>'
                 f'<p class="meta"><span class="cat">{e(cat_label(t["category"]))}</span> · '
-                f'<span class="price">{e(t["pricing"])}</span></p>{verdict_stamp(t)}'
-                f'<a class="more" href="{href}">Read the verdict →</a></article>')
-    return (f'<a class="pick" href="tools/{t["slug"]}.html">{head}'
-            f'<p class="clamp">{e(t["verdict_reason"])}</p>'
-            f'<span class="cat">{e(cat_label(t["category"]))}</span>{verdict_stamp(t)}</a>')
-SIGNUP = f"""<div class="panel" id="signup"><p class="kicker">Free</p><h2>Get the Friday letter</h2><p class="mu">One email a week: the newest tools, with a verdict.</p>
+                f'<span class="price">{e(t["pricing"])}</span></p>'
+                f'<a class="more" href="{href}">See the listing →</a></article>')
+    return (f'<a class="pick" href="{href}">'
+            f'<h3>{e(t["name"])}</h3>'
+            f'<p class="clamp">{e(t["description"])}</p>'
+            f'<span class="cat">{e(cat_label(t["category"]))}</span>'
+            f'<span class="price">{e(t["pricing"])}</span></a>')
+SIGNUP = f"""<div class="panel" id="signup"><p class="kicker">Free</p><h2>Get the Friday letter</h2><p class="mu">One email a week: the newest tools, with the facts.</p>
 <p><a class="btn" href="{e(CONFIG['subscribe_url'])}">Subscribe free</a></p>
 <p class="mu">Opens the Toolsmith Weekly letter on beehiiv.</p></div>"""
 by_name = {t["name"]: t for t in tools}
@@ -655,18 +611,8 @@ def cat_href(name):
 cat_cards = "".join(
     f'<a class="catcard" href="{cat_href(c)}">{cat_icon(c)}<span class="num">{counts[c]}</span><strong>{e(cat_label(c))}</strong></a>'
     for c in categories)
-verdict_key = "".join(
-    f'<article class="vk"><span class="v v-{key}">{e(label)}</span><p>{e(blurb)}</p></article>'
-    for key, label, blurb in VERDICTS)
 latest_issue = ISSUES[0]
 checked_dates = sorted({checked_iso(t) for t in tools})
-if len(checked_dates) == 1:
-    checked_html = f'Verdicts checked <time datetime="{e(checked_dates[0])}">{e(fmt_date(checked_dates[0]))}</time>'
-else:
-    checked_html = (
-        f'Verdicts checked <time datetime="{e(checked_dates[0])}">{e(fmt_date(checked_dates[0]))}</time>'
-        f' to <time datetime="{e(checked_dates[-1])}">{e(fmt_date(checked_dates[-1]))}</time>'
-    )
 pick_html = "".join(pick_card(t, i == 0) for i, t in enumerate(picks))
 latest = max(datetime.date.fromisoformat(t["date_added"]) for t in tools)
 cut = latest - datetime.timedelta(days=7)
@@ -676,7 +622,7 @@ week_link = "See launch week" if launch_only else "See this week"
 home = f"""<section class="hero"><div class="orb orb-a" aria-hidden="true"></div>
 <div class="w hero-grid"><div class="hero-copy">
 <h1 class="rise">{e(VALUE)}</h1>
-<p class="lede rise d2">Use, try, wait, or skip. {e(METHOD)}</p>
+<p class="lede rise d2">{e(METHOD)}</p>
 <p class="actions rise d3"><a class="btn" href="{e(CONFIG['subscribe_url'])}">Subscribe free</a><a class="btn secondary" href="tools/">Browse the directory</a></p>
 </div><div class="hero-art" aria-hidden="true"><div class="anvil-glow"></div>{anvil_svg()}</div></div>
 <div class="w"><div class="metrics rise d4"><div class="metric"><b>{len(tools)}</b><span>Tools</span></div><div class="metric"><b><time datetime="{e(checked_dates[-1])}">{e(fmt_date(checked_dates[-1]))}</time></b><span>Last checked</span></div><a class="metric" href="#how"><b>Public sources</b><span>Re-checked twice a week</span></a></div></div></section>
@@ -684,51 +630,106 @@ home = f"""<section class="hero"><div class="orb orb-a" aria-hidden="true"></div
 <div class="bento">{pick_html}</div></div></section>
 <section class="band band-alt" id="categories"><div class="w"><div class="band-head"><h2>Browse by category</h2><a href="tools/">Full directory</a></div>
 <div class="cats">{cat_cards}</div></div></section>
-<section class="band" id="how"><div class="w"><div class="band-head"><h2>How we verdict</h2><a href="verdicts/">See current verdicts</a></div>
-<p class="lede">{e(METHOD)} Last checked {e(fmt_date(checked_dates[-1]))}. Each verdict links the report it came from. {e(AI_NOTE)}</p>
-<div class="vkey">{verdict_key}</div></div></section>
+<section class="band" id="how"><div class="w"><div class="band-head"><h2>How we check</h2><a href="tools/">Browse the directory</a></div>
+<p class="lede">{e(METHOD)} Last checked {e(fmt_date(checked_dates[-1]))}. Each listing links the report it came from. {e(AI_NOTE)}</p></div></section>
 <section class="band band-alt" id="letter"><div class="w"><div class="split"><article class="panel"><p class="kicker">Newsletter</p><h2>{e(latest_issue['title'])}</h2><p>{e(latest_issue['when'])}</p><p class="mu">{e(latest_issue['note'])}</p><p><a href="newsletter/">Newsletter archive</a></p></article>{SIGNUP}</div></div></section>"""
 (OUT / "index.html").write_text(page(
     f"{N} — the newest AI tools, sorted every Friday",
-    f"{VALUE} Straight verdicts: use it, try it, wait, or skip.",
+    VALUE,
     home, "index.html", nodes=[item_list("This week's picks", picks)], bleed=True))
 cats = sorted(counts)
 chips = '<button class="chip on" data-c="">All</button>' + "".join(
     f'<button class="chip" data-c="{e(c)}">{e(cat_label(c))}</button>' for c in cats)
-JS = """<script>const q=document.getElementById('q'),s=document.getElementById('sort'),g=document.getElementById('grid'),cs=[...document.querySelectorAll('.chip')];let cat='';
-const cards=[...g.children],cnt=document.getElementById('cnt');function sync(){const u=new URL(location.href);const v=q.value.trim();if(v)u.searchParams.set('q',v);else u.searchParams.delete('q');if(cat)u.searchParams.set('cat',cat);else u.searchParams.delete('cat');history.replaceState(null,'',u);}
-function run(){const v=q.value.toLowerCase().trim();let n=0;
-const o=[...cards].sort((a,b)=>s.value==='newest'?b.dataset.date.localeCompare(a.dataset.date):s.value==='oldest'?a.dataset.date.localeCompare(b.dataset.date):a.querySelector('.name').textContent.localeCompare(b.querySelector('h3').textContent));
-o.forEach(c=>{const ok=(!cat||c.dataset.cat===cat)&&(!v||c.dataset.text.includes(v));c.hidden=!ok;n+=ok;g.appendChild(c)});cnt.textContent=n+(n===1?' tool':' tools');}
-q.oninput=()=>{sync();run()};s.onchange=run;cs.forEach(b=>b.onclick=()=>{cs.forEach(x=>x.classList.remove('on'));b.classList.add('on');cat=b.dataset.c;sync();run()});
-const params=new URLSearchParams(location.search);const want=params.get('cat')||'';const hit=cs.find(b=>b.dataset.c===want);if(hit){cs.forEach(x=>x.classList.remove('on'));hit.classList.add('on');cat=want;}
-const initialQ=params.get('q')||'';if(initialQ)q.value=initialQ;run();</script>"""
-directory = f"""<div class="w dirhead"><h1>Tool directory</h1></div>
-<div class="appbar"><div class="w"><div class="ctl"><label class="sr" for="q">Search</label><input id="q" type="search" placeholder="Search tools, use cases" autocomplete="off"><label class="sr" for="sort">Sort</label><select id="sort"><option value="newest">Newest</option><option value="oldest">Oldest</option><option value="az">A–Z</option></select><p class="mu" id="cnt">{len(tools)} tools</p></div>
-<div class="chips" role="group" aria-label="Filter by category">{chips}</div></div></div>
-<div class="w dirgrid"><div class="grid" id="grid">{''.join(card(t, "") for t in tools)}</div></div>{JS}"""
+first_slug = {}
+for t in sorted(tools, key=lambda t: t["name"].lower()):
+    first_slug.setdefault(letter_of(t["name"]), t["slug"])
+letters = "".join(
+    f'<a href="#{e(slug_id)}" data-l="{e(letter)}">{e(letter)}</a>'
+    for letter, slug_id in first_slug.items())
+JS = """<script>
+const q=document.getElementById('q'),s=document.getElementById('sort'),g=document.getElementById('grid'),
+free=document.getElementById('free'),empty=document.getElementById('empty'),cnt=document.getElementById('cnt');
+const cs=[...document.querySelectorAll('.chip')],ls=[...document.querySelectorAll('.letters a')];
+const rows=[...g.children];
+let cat='',letter='';
+function sync(){
+  const u=new URL(location.href);
+  const v=q.value.trim();
+  if(v)u.searchParams.set('q',v);else u.searchParams.delete('q');
+  if(cat)u.searchParams.set('cat',cat);else u.searchParams.delete('cat');
+  if(s.value&&s.value!=='newest')u.searchParams.set('sort',s.value);else u.searchParams.delete('sort');
+  if(free.checked)u.searchParams.set('free','1');else u.searchParams.delete('free');
+  if(letter)u.searchParams.set('letter',letter);else u.searchParams.delete('letter');
+  history.replaceState(null,'',u);
+}
+function run(){
+  const v=q.value.toLowerCase().trim();
+  const o=[...rows].sort((a,b)=>{
+    if(s.value==='az')return a.dataset.name.localeCompare(b.dataset.name);
+    return b.dataset.date.localeCompare(a.dataset.date)||b.dataset.name.localeCompare(a.dataset.name);
+  });
+  let n=0;
+  o.forEach(c=>{
+    const ok=(!cat||c.dataset.cat===cat)&&(!v||c.dataset.text.includes(v))&&(!free.checked||c.dataset.free==='1')&&(!letter||c.dataset.letter===letter);
+    c.hidden=!ok;if(ok)n++;g.appendChild(c);
+  });
+  cnt.textContent=n+(n===1?' tool':' tools');
+  empty.hidden=n!==0;
+}
+q.oninput=()=>{sync();run()};
+s.onchange=()=>{sync();run()};
+free.onchange=()=>{sync();run()};
+cs.forEach(b=>b.onclick=()=>{cs.forEach(x=>x.classList.remove('on'));b.classList.add('on');cat=b.dataset.c;sync();run()});
+ls.forEach(a=>a.addEventListener('click',ev=>{
+  ev.preventDefault();
+  letter=letter===a.dataset.l?'':a.dataset.l;
+  ls.forEach(x=>x.classList.toggle('on',x.dataset.l===letter));
+  sync();run();
+}));
+const params=new URLSearchParams(location.search);
+const want=params.get('cat')||'';
+const hit=cs.find(b=>b.dataset.c===want);
+if(hit){cs.forEach(x=>x.classList.remove('on'));hit.classList.add('on');cat=want;}
+const initialQ=params.get('q')||'';
+if(initialQ)q.value=initialQ;
+if(params.get('sort')==='az')s.value='az';
+if(params.get('free')==='1')free.checked=true;
+const L=(params.get('letter')||'').toUpperCase();
+if(ls.some(a=>a.dataset.l===L)){letter=L;ls.forEach(x=>x.classList.toggle('on',x.dataset.l===letter));}
+run();
+</script>"""
+directory = f"""<header class="pagehead"><h1>Tool directory</h1>
+<p class="lede">{len(tools)} tools. Search by name, or narrow by category, letter, and free tier.</p></header>
+<label class="sr" for="q">Search tools</label>
+<input class="dirsearch" id="q" type="search" placeholder="Search by name, job, or price" autocomplete="off">
+<nav class="letters" aria-label="Jump to letter">{letters}</nav>
+<div class="dirbar">
+<div class="chips" role="group" aria-label="Filter by category">{chips}</div>
+<div class="dirtools">
+<label class="toggle" for="free"><input id="free" type="checkbox"> Free tier</label>
+<label class="sr" for="sort">Sort</label>
+<select id="sort" aria-label="Sort"><option value="newest" selected>Newest</option><option value="az">A to Z</option></select>
+<p class="mu" id="cnt">{len(tools)} tools</p>
+</div></div>
+<div class="rows" id="grid">{''.join(row(t, '') for t in tools)}</div>
+<p class="quiet" id="empty" hidden>No tools match that search.</p>
+{JS}"""
 (OUT / "tools" / "index.html").write_text(page(
     f"Tool directory — {N}",
-    f"Searchable directory of {len(tools)} AI tools, with a use, try, wait, or skip verdict on each.",
-    directory, "tools/", 1, nodes=[item_list("Tool directory", tools)], bleed=True))
-buckets = []
-for key, label, blurb in VERDICTS:
-    group = [t for t in tools if t["verdict"] == key]
-    if not group:
-        buckets.append(
-            f'<p class="quiet" id="{key}"><span class="v v-{key}">{e(label)}</span>'
-            f'<span class="mu">Nothing in this bucket right now.</span></p>')
-        continue
-    inner = f'<div class="grid">{"".join(card(t, "../tools/", "h3", why=True) for t in group)}</div>'
-    buckets.append(
-        f'<section class="bucket" id="{key}"><h2><span class="v v-{key}">{e(label)}</span> <span class="count">{len(group)}</span></h2>'
-        f'<p class="mu">{e(blurb)}</p>{inner}</section>')
-(OUT / "verdicts" / "index.html").write_text(page(
-    f"Current verdicts — {N}",
-    "Tools grouped under Use it, Try it, Wait, and Skip, with the date each verdict was checked.",
-    f'<header class="pagehead"><p class="kicker">Use, try, wait, or skip</p><h1>Current verdicts</h1><p class="lede">Grouped by the latest check. Each card shows the day that verdict was last reviewed.</p></header>{legend_html()}{"".join(buckets)}',
-    "verdicts/", 1, nodes=[item_list("Current verdicts", tools)]))
-week_grid = f"<div class='grid'>{''.join(card(t, 'tools/') for t in wk)}</div>" if wk else "<p class='mu'>Nothing new in the last seven days.</p>"
+    f"Searchable directory of {len(tools)} AI tools for coding, vibe coding, automation, and games.",
+    directory, "tools/", 1, nodes=[item_list("Tool directory", tools)]))
+# Old verdicts URL. Noindex redirect, kept out of the sitemap.
+(OUT / "verdicts" / "index.html").write_text(f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tool directory — {e(N)}</title>
+<meta name="robots" content="noindex">
+<meta http-equiv="refresh" content="0; url=../tools/">
+<link rel="canonical" href="{BASE}/tools/">
+<meta name="description" content="The tool directory lists every tool.">
+<link rel="stylesheet" href="../style.css"></head><body>
+<main class="w" style="padding:48px 0"><h1>Tool directory</h1>
+<p>This page has moved.</p>
+<p><a href="../tools/">Go to the tool directory</a></p></main></body></html>""")
+week_grid = f'<div class="rows">{"".join(row(t, "tools/") for t in wk)}</div>' if wk else "<p class='mu'>Nothing new in the last seven days.</p>"
 if launch_only:
     week_name = "Launch week"
     week_kicker = "First batch"
@@ -743,15 +744,17 @@ else:
     f'<header class="pagehead"><p class="kicker">{e(week_kicker)}</p><h1>{e(week_name)}</h1><p class="lede">{e(week_lede)}</p></header>{week_grid}<div class="sec">{SIGNUP}</div>',
     "this-week.html"))
 for t in tools:
-    b = f"""<div class="tool-hero"><div class="tool-copy"><p class="back"><a href="index.html">Tool directory</a> · {e(cat_label(t['category']))}</p><h1>{e(t['name'])}</h1><p class="vrow">{badge_html(t)}{pill_html(t)} {verdict_stamp(t)}</p><p class="sum">{e(t['description'])}</p>{why_html(t)}
-<p><a href="../verdicts/#{e(t['verdict'])}">More {e(vlabel(t))} verdicts</a></p>
+    guide = GUIDE.get(t["verdict"], "")
+    guide_html = f'<p class="guide">{e(guide)}</p>' if guide else ""
+    b = f"""<div class="tool-hero"><div class="tool-copy"><p class="back"><a href="index.html">Tool directory</a> · {e(cat_label(t['category']))}</p><h1>{e(t['name'])}</h1><p class="vrow">{badge_html(t)}{verdict_stamp(t)}</p><p class="sum">{e(t['description'])}</p>
 <script type="application/ld+json">{json.dumps({"@context":"https://schema.org","@type":"SoftwareApplication","name":t["name"],"url":t["url"],"applicationCategory":t["category"],"description":t["description"],"dateModified":checked_iso(t)})}</script></div>
 <aside class="facts" aria-label="Facts"><dl><dt>Use cases</dt><dd><ul>{''.join(f'<li>{e(u)}</li>' for u in t['use_cases'])}</ul></dd><dt>Pricing</dt><dd>{e(t['pricing'])}</dd><dt>Website</dt><dd><a href="{e(t['url'])}" rel="noopener">{e(t['url'])}</a></dd>
 <dt>Source</dt><dd><a href="{e(t['source'])}" rel="noopener">{e(t['source'])}</a></dd><dt>Added</dt><dd><time datetime="{e(t['date_added'])}">{e(fmt_date(t['date_added']))}</time></dd></dl>
-<a class="btn" href="{e(t['url'])}" rel="nofollow noopener">Visit website</a></aside></div>"""
+<a class="btn" href="{e(t['url'])}" rel="nofollow noopener">Visit website</a></aside></div>
+<details class="approach"><summary>How to approach this tool</summary>{guide_html}<p>{e(t['verdict_reason'])}</p></details>"""
     (OUT / "tools" / f"{t['slug']}.html").write_text(page(
-        f"{t['name']} verdict: {vlabel(t)} — {N}",
-        f"{t['name']}: {t['description']} Verdict: {vlabel(t)} — {t['verdict_reason']}"[:300],
+        f"{t['name']} — {N}",
+        f"{t['name']}: {t['description']}"[:300],
         b, f"tools/{t['slug']}.html", 1))
 issue_cards = "".join(
     f'<article class="issue"><h2>{e(i["title"])}</h2><p class="when">{e(i["when"])}</p><p class="mu">{e(i["note"])}</p></article>'
@@ -776,14 +779,14 @@ def alias_page(folder):
 <p><a href="../newsletter/">Go to the newsletter archive</a></p></main></body></html>""")
 for alias in ("issues", "archive", "newsletters"):
     alias_page(alias)
-suggest_body = f"""<header class="pagehead"><p class="kicker">For builders</p><h1>Suggest a tool</h1><p class="lede">Indie developers: send a tool you built, or one you want a straight verdict on.</p></header>
+suggest_body = f"""<header class="pagehead"><p class="kicker">For builders</p><h1>Suggest a tool</h1><p class="lede">Indie developers: send a tool you built, or one you want listed.</p></header>
 <p><a class="btn" href="{e(suggest_href)}">Suggest a tool by email</a></p>
 <p class="mu">Opens your mail app to {e(CONFIG['suggest_email'])} with the subject filled in. No account and no third-party form.</p><div class="sec">{SIGNUP}</div>"""
 (OUT / "suggest" / "index.html").write_text(page(
     f"Suggest a tool — {N}",
     "Indie developers can email a tool suggestion to Toolsmith Weekly.",
     suggest_body, "suggest/", 1))
-urls = ["index.html", "tools/", "verdicts/", "this-week.html", "newsletter/", "suggest/"] + [f"tools/{t['slug']}.html" for t in tools]
+urls = ["index.html", "tools/", "this-week.html", "newsletter/", "suggest/"] + [f"tools/{t['slug']}.html" for t in tools]
 (OUT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + "".join(f"<url><loc>{BASE}/{u}</loc></url>" for u in urls) + "</urlset>")
 (OUT / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {BASE}/sitemap.xml\n")
 new_count = sum(is_new(t) for t in tools)
@@ -792,13 +795,12 @@ llms = [
     "",
     f"> {VALUE}",
     "",
-    f"{N} sorts new AI tools for coding, vibe coding, automation, and games. {METHOD} {AI_NOTE} Each tool has a use, try, wait, or skip verdict, and the date on a verdict is the day it was last checked. The directory currently lists {len(tools)} tools. Tools added after 2026-10-20 and within the last 7 days are marked New this week on the website only. That badge is not used in the newsletter. The first batch is labeled Launch week.",
+    f"{N} lists new AI tools for coding, vibe coding, automation, and games. {METHOD} {AI_NOTE} The directory currently lists {len(tools)} tools. Tools added after 2026-10-20 and within the last 7 days are marked New this week on the website only. That badge is not used in the newsletter. The first batch is labeled Launch week. /verdicts/ redirects to the tool directory.",
     "",
     "## Pages",
     "",
-    f"- [Home]({BASE}/): Landing page with this week's picks, categories, how verdicts work, and the latest letter.",
-    f"- [Tool directory]({BASE}/tools/): Search, filter by category, and sort the full list. Newest is the default sort. Category links use a ?cat= query. A text search uses ?q=.",
-    f"- [Current verdicts]({BASE}/verdicts/): Tools grouped under Use it, Try it, Wait, and Skip, with the date each verdict was checked.",
+    f"- [Home]({BASE}/): Landing page with this week's picks, categories, how listings are checked, and the latest letter.",
+    f"- [Tool directory]({BASE}/tools/): Search, filter by category, free tier, and letter, and sort the full list. Newest is the default sort. Category links use a ?cat= query. A text search uses ?q=.",
     f"- [This week]({BASE}/this-week.html): Tools added in the seven days up to the newest date in the directory.",
     f"- [Newsletter archive]({BASE}/newsletter/): The weekly letter. Issue 1 is coming Oct 23, 2026. /issues/, /archive/, and /newsletters/ redirect here.",
     f"- [Suggest a tool]({BASE}/suggest/): Indie developers can email {CONFIG['suggest_email']} with a tool suggestion.",
@@ -809,6 +811,6 @@ llms = [
 ]
 for t in tools:
     mark = " New this week." if is_new(t) else ""
-    llms.append(f"- [{t['name']}]({BASE}/tools/{t['slug']}.html): {vlabel(t)} — {t['description']}{mark}")
+    llms.append(f"- [{t['name']}]({BASE}/tools/{t['slug']}.html): {t['description']}{mark}")
 (OUT / "llms.txt").write_text("\n".join(llms) + "\n")
 print(f"Built {len(tools)} tool pages into {OUT} ({new_count} new this week as of {TODAY})")
