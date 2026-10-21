@@ -23,7 +23,7 @@ cd dist && python3 -m http.server 8765
 Output:
 
 - `dist/index.html` — product homepage: full-width hero, bento picks, category tiles, letter and signup
-- `dist/tools/` — directory with a search box, A–Z jump links, category chips, a free-tier toggle, and compact rows. Each row shows a one-line price summary, such as `Free tier, from $20/mo` or `Pricing unverified`. The tool page keeps the full pricing sentence. `?cat=` opens a category. `?q=` fills the search box. Newest is the default sort.
+- `dist/tools/` — directory with a search box, A–Z jump links, category chips, a free-tier toggle, and compact rows. Each row shows a one-line price summary, such as `Free tier, from $20/mo` or `Pricing unverified`. The tool page keeps the full pricing sentence. `?cat=` opens a category. `?q=` fills the search box. A to Z is the default sort, including in the static HTML. Newest stays available.
 - `dist/tools/<slug>.html` — one page per tool, with Open Graph and JSON-LD. Facts come first. Our Take follows as a short paragraph with its source link.
 - `dist/verdicts/` — meta refresh to `/tools/` (not listed in the sitemap)
 - `dist/this-week.html` — tools added in the last seven days. The initial batch is labeled Launch week.

@@ -701,7 +701,7 @@ function sync(){
   const v=q.value.trim();
   if(v)u.searchParams.set('q',v);else u.searchParams.delete('q');
   if(cat)u.searchParams.set('cat',cat);else u.searchParams.delete('cat');
-  if(s.value&&s.value!=='newest')u.searchParams.set('sort',s.value);else u.searchParams.delete('sort');
+  if(s.value&&s.value!=='az')u.searchParams.set('sort',s.value);else u.searchParams.delete('sort');
   if(free.checked)u.searchParams.set('free','1');else u.searchParams.delete('free');
   if(letter)u.searchParams.set('letter',letter);else u.searchParams.delete('letter');
   history.replaceState(null,'',u);
@@ -756,7 +756,7 @@ const hit=cs.find(b=>b.dataset.c===want);
 if(hit){cs.forEach(x=>x.classList.remove('on'));hit.classList.add('on');cat=want;}
 const initialQ=params.get('q')||'';
 if(initialQ)q.value=initialQ;
-if(params.get('sort')==='az')s.value='az';
+if(params.get('sort')==='newest')s.value='newest';
 if(params.get('free')==='1')free.checked=true;
 const L=(params.get('letter')||'').toUpperCase();
 if(ls.some(a=>a.dataset.l===L)){letter=L;ls.forEach(x=>x.classList.toggle('on',x.dataset.l===letter));}
@@ -772,16 +772,16 @@ directory = f"""<header class="pagehead"><h1>Tool directory</h1>
 <div class="dirtools">
 <label class="toggle" for="free"><input id="free" type="checkbox"> Free tier</label>
 <label class="sr" for="sort">Sort</label>
-<select id="sort" aria-label="Sort"><option value="newest" selected>Newest</option><option value="az">A to Z</option></select>
+<select id="sort" aria-label="Sort"><option value="az" selected>A to Z</option><option value="newest">Newest</option></select>
 <p class="mu" id="cnt">{len(tools)} tools</p>
 </div></div>
-<div class="rows" id="grid">{''.join(row(t, '') for t in tools)}</div>
+<div class="rows" id="grid">{''.join(row(t, '') for t in sorted(tools, key=lambda t: t['name'].lower()))}</div>
 <p class="quiet" id="empty" hidden>No tools match that search.</p>
 {JS}"""
 (OUT / "tools" / "index.html").write_text(page(
     f"Tool directory — {N}",
     f"Searchable directory of {len(tools)} AI tools for coding, vibe coding, automation, and games.",
-    directory, "tools/", 1, nodes=[item_list("Tool directory", tools)]))
+    directory, "tools/", 1, nodes=[item_list("Tool directory", sorted(tools, key=lambda t: t["name"].lower()))]))
 # Old verdicts URL. Noindex redirect, kept out of the sitemap.
 (OUT / "verdicts" / "index.html").write_text(f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Tool directory — {e(N)}</title>
@@ -868,7 +868,7 @@ llms = [
     "## Pages",
     "",
     f"- [Home]({BASE}/): Landing page with this week's picks, categories, and the latest letter.",
-    f"- [Tool directory]({BASE}/tools/): Search, filter by category, free tier, and letter, and sort the full list. Newest is the default sort. Category links use a ?cat= query. A text search uses ?q=.",
+    f"- [Tool directory]({BASE}/tools/): Search, filter by category, free tier, and letter, and sort the full list. A to Z is the default sort. Newest is available from the sort control and from ?sort=newest. Category links use a ?cat= query. A text search uses ?q=.",
     f"- [This week]({BASE}/this-week.html): Tools added in the seven days up to the newest date in the directory.",
     f"- [Newsletter archive]({BASE}/newsletter/): The weekly letter. Issue 1 is coming Oct 23, 2026. /issues/, /archive/, and /newsletters/ redirect here.",
     f"- [Suggest a tool]({BASE}/suggest/): Indie developers can email {CONFIG['suggest_email']} with a tool suggestion.",
