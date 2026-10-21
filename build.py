@@ -298,7 +298,7 @@ a.metric:hover{background:rgba(255,138,61,.06)}
 .pick,a.catcard{text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:10px}
 .pick,.catcard{transition:border-color .2s ease,background .2s ease,transform .2s ease}
 .pick:hover,a.catcard:hover{border-color:var(--bd-h);background:#141c3b;transform:translateY(-2px)}
-.pick h3{margin:0;color:var(--tx);font-size:1.05rem}
+.pick h3{margin:0;color:var(--tx);font-size:1.05rem;font-weight:650}
 .pick h3 a{color:var(--tx);text-decoration:none}
 .pick h3 a:hover{color:var(--ac)}
 .pick p{margin:0;color:var(--mu);font-size:.95rem}
@@ -310,10 +310,9 @@ a.metric:hover{background:rgba(255,138,61,.06)}
 .featured h3{font-size:1.75rem;letter-spacing:-.03em}
 .featured .clamp{-webkit-line-clamp:5}
 .clamp{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.pick .reason{color:var(--tx);font-weight:650;font-size:1.12rem;line-height:1.35;letter-spacing:-.015em}
-.featured .reason{font-size:1.35rem;line-height:1.3}
-.pick .reason a{margin-left:.35em;color:var(--ac);font-weight:600;font-size:.82rem;letter-spacing:0;text-decoration:none;white-space:nowrap}
-.pick .reason a:hover{text-decoration:underline}
+.pick .reason{margin:6px 0 10px;font-size:.95rem;line-height:1.35;font-weight:600;letter-spacing:-.01em;color:var(--tx);text-wrap:balance;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;padding-left:10px;box-shadow:inset 2px 0 0 var(--ac)}
+.pick .reason + p{color:var(--mu);font-size:.875rem}
+.bento .featured .reason{font-size:clamp(1.15rem,1.6vw,1.35rem);line-height:1.3;letter-spacing:-.02em;margin:10px 0 14px;padding-left:12px;-webkit-line-clamp:3;color:#fff}
 .cats{display:grid;grid-template-columns:repeat(__CATN__,1fr);gap:12px}
 .caticon{width:24px;height:24px;display:block;image-rendering:pixelated}
 a.catcard{min-height:0;justify-content:space-between}
@@ -420,6 +419,8 @@ header nav a.btn{display:flex;margin-top:8px;text-align:center}
 .row{grid-template-columns:1fr;gap:2px;min-height:0;padding:10px 12px}
 .row .name{min-height:0}
 .bento .featured{grid-row:auto}
+.pick .reason{font-size:.95rem;-webkit-line-clamp:3;margin:4px 0 8px}
+.bento .featured .reason{font-size:1.1rem;-webkit-line-clamp:3}
 .actions{flex-direction:column;align-items:stretch}
 .hero .btn{width:100%}
 .band{padding:56px 0}
@@ -626,9 +627,11 @@ def row(t, prefix):
         f'<span class="cat">{e(cat_label(t["category"]))}</span></p></article>'
     )
 def pick_reason_html(t):
-    # Headline under the name. The description stays underneath. Source stays a real link.
-    return (f'<p class="reason">{e(t["pick_reason"])} '
-            f'<a href="{e(t["pick_source"])}" rel="noopener">Source</a></p>')
+    # Headline under the name. Omit the element when there is no reason.
+    reason = str(t.get("pick_reason") or "").strip()
+    if not reason:
+        return ""
+    return f'<p class="reason">{e(reason)}</p>'
 def pick_card(t, featured=False):
     href = f'tools/{t["slug"]}.html'
     why = pick_reason_html(t)
