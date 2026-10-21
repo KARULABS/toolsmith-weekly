@@ -15,6 +15,8 @@ CONFIG["base_url"] = CONFIG["base_url"].rstrip("/")
 N = CONFIG["site_name"]; R = pathlib.Path(__file__).parent; OUT = R / "dist"
 BASE = CONFIG["base_url"]
 VALUE = CONFIG["tagline"]
+# Verdicts cite public reports. The site does not claim a hands-on check of its own.
+METHOD = "Verdicts based on public reports and benchmarks, re-checked twice a week."
 e = lambda s: html.escape(str(s), quote=True)
 slug = lambda s: re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
 tools = json.load(open(R / "tools.json"))
@@ -317,7 +319,7 @@ def foot_html(depth):
     links = "".join(f'<a href="{p}{href}">{label}</a>' for href, label, _ in NAV)
     links += f'<a href="{e(CONFIG["subscribe_url"])}">Subscribe</a>'
     return (f'<nav aria-label="Footer">{links}</nav>'
-            f'<p>{e(N)}. {e(VALUE)} Tested, not hyped: every verdict links a public source.</p>')
+            f'<p>{e(N)}. {e(VALUE)} {e(METHOD)}</p>')
 def schema_graph(extra=None):
     # Organization and WebSite on every page. SearchAction matches the directory ?q= filter.
     graph = {
@@ -438,17 +440,17 @@ else:
 pick_html = "".join(pick_card(t, i == 0) for i, t in enumerate(picks))
 home = f"""<section class="hero"><div class="orb orb-a" aria-hidden="true"></div><div class="orb orb-b" aria-hidden="true"></div>
 <div class="w hero-grid"><div class="hero-copy">
-<p class="eyebrow rise">Tested, not hyped</p>
-<h1 class="rise d2">{e(VALUE)}</h1>
-<p class="lede rise d3">Use, try, wait, or skip. Each verdict links a public source.</p>
-<p class="actions rise d4"><a class="btn" href="{e(CONFIG['subscribe_url'])}">Subscribe free</a><a href="tools/">Open the directory</a></p>
+<h1 class="rise">{e(VALUE)}</h1>
+<p class="lede rise d2">Use, try, wait, or skip. {e(METHOD)}</p>
+<p class="actions rise d3"><a class="btn" href="{e(CONFIG['subscribe_url'])}">Subscribe free</a><a href="tools/">Open the directory</a></p>
 </div><div class="hero-art" aria-hidden="true"><div class="anvil-glow"></div>{anvil_svg()}</div></div>
-<div class="w"><div class="metrics rise d5"><div class="metric"><b>{len(tools)}</b><span>Tools</span></div><div class="metric"><b><time datetime="{e(checked_dates[-1])}">{e(fmt_date(checked_dates[-1]))}</time></b><span>Verdicts checked</span></div><a class="metric" href="#how"><b>Tested, not hyped</b><span>How we verdict</span></a></div></div></section>
+<div class="w"><div class="metrics rise d4"><div class="metric"><b>{len(tools)}</b><span>Tools</span></div><div class="metric"><b><time datetime="{e(checked_dates[-1])}">{e(fmt_date(checked_dates[-1]))}</time></b><span>Verdicts checked</span></div><a class="metric" href="#how"><b>Public sources</b><span>Re-checked twice a week</span></a></div></div></section>
 <section class="band" id="picks"><div class="w"><div class="band-head"><h2>This week's picks</h2><a href="this-week.html">See this week</a></div>
 <div class="bento">{pick_html}</div></div></section>
 <section class="band band-alt" id="categories"><div class="w"><div class="band-head"><h2>Browse by category</h2><a href="tools/">Full directory</a></div>
 <div class="cats">{cat_cards}</div></div></section>
 <section class="band" id="how"><div class="w"><div class="band-head"><h2>How we verdict</h2><a href="verdicts/">See current verdicts</a></div>
+<p class="lede">{e(METHOD)} Each verdict links the report it came from.</p>
 <div class="vkey">{verdict_key}</div></div></section>
 <section class="band band-alt" id="letter"><div class="w"><div class="split"><article class="panel"><p class="kicker">Newsletter</p><h2>{e(latest_issue['title'])}</h2><p>{e(latest_issue['when'])}</p><p class="mu">{e(latest_issue['note'])}</p><p><a href="newsletter/">Newsletter archive</a></p></article>{SIGNUP}</div></div></section>"""
 (OUT / "index.html").write_text(page(
@@ -543,7 +545,7 @@ llms = [
     "",
     f"> {VALUE}",
     "",
-    f"{N} sorts new AI tools for coding, vibe coding, automation, games, and creative work. The method is tested, not hyped: each tool has a use, try, wait, or skip verdict based on a linked public source. The date on a verdict is the day it was last checked. The directory currently lists {len(tools)} tools. Tools added after 2026-10-20 and within the last 7 days are marked New this week on the website only. That badge is not used in the newsletter.",
+    f"{N} sorts new AI tools for coding, vibe coding, automation, games, and creative work. {METHOD} Each tool has a use, try, wait, or skip verdict, and the date on a verdict is the day it was last checked. The directory currently lists {len(tools)} tools. Tools added after 2026-10-20 and within the last 7 days are marked New this week on the website only. That badge is not used in the newsletter.",
     "",
     "## Pages",
     "",

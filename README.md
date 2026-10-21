@@ -11,7 +11,7 @@ Append an object to `tools.json`:
  "use_cases":["..."],"pricing":"Free; Pro $X/mo","verdict":"use|try|wait|skip",
  "verdict_reason":"One line.","verdict_checked":"YYYY-MM-DD","date_added":"YYYY-MM-DD","source":"https://source-link"}
 ```
-Categories: `coding agents`, `vibe-coding app builders`, `AI agents/automation`, `gaming/game dev`, `general` (new ones get a filter chip and a category tile automatically). Reader-facing labels live in `CAT_LABEL` in `build.py`. Every fact needs a source link. `verdict_checked` is the date that verdict was last re-reviewed. It is optional: if you omit it, the site shows `date_added`. Cards, tool pages, and the Current verdicts page all read it through `checked_iso()` / `verdict_stamp()`.
+Categories: `coding agents`, `vibe-coding app builders`, `AI agents/automation`, `gaming/game dev`, `general` (new ones get a filter chip and a category tile automatically). Reader-facing labels live in `CAT_LABEL` in `build.py`. Every fact needs a source link. Verdicts are based on public reports and benchmarks and are re-checked twice a week. Do not write that the site tested a tool, and do not add an aside that the source does not support. `verdict_checked` is the date that verdict was last re-reviewed. It is optional: if you omit it, the site shows `date_added`. Cards, tool pages, and the Current verdicts page all read it through `checked_iso()` / `verdict_stamp()`.
 
 Homepage "This week's picks" are the four names in `PICKS` at the top of `build.py`. Swap that list each Friday. The build stops if a name is missing from `tools.json`.
 

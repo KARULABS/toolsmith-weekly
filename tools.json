@@ -11,7 +11,7 @@
     ],
     "pricing": "Old $20 Pro closed to new signups Oct 12, 2026. New plans: Plus $8 (Grok models only), Premium $30, Super $100, Ultra $200; Claude/GPT/Gemini billed at API price.",
     "verdict": "wait",
-    "verdict_reason": "Keep old Pro if you have it; new plans may cost more once usage is billed. (Disclosure: bundled with X/Grok/Grok Bot.)",
+    "verdict_reason": "Keep old Pro if you have it; new plans may cost more once usage is billed.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://cursor.com/docs/models-and-pricing.md"
@@ -143,7 +143,7 @@
     ],
     "pricing": "Free tier; paid from $25/mo (up to $30/mo) per Quotadex.",
     "verdict": "wait",
-    "verdict_reason": "Failed one published head-to-head app test; model training setting on by default outside EU/UK/CH.",
+    "verdict_reason": "Failed one published head-to-head comparison; model training setting on by default outside EU/UK/CH.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://aicrier.com/post/w71bjotqqw96fppg3bs1"
@@ -176,7 +176,7 @@
     ],
     "pricing": "Core $20/mo ($18 yearly); Pro $100/mo ($90 yearly).",
     "verdict": "use",
-    "verdict_reason": "Completed the published head-to-head app test alongside Lovable.",
+    "verdict_reason": "Completed the published head-to-head comparison alongside Lovable.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://replit.com/pricing"
@@ -192,7 +192,7 @@
     ],
     "pricing": "Free tier; paid from $20/mo up to $200/mo per Quotadex.",
     "verdict": "wait",
-    "verdict_reason": "Not covered in our sources' tests yet.",
+    "verdict_reason": "Not covered in the public reports we cite yet.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://quotadex.com/"
@@ -257,7 +257,7 @@
     ],
     "pricing": "Free 100 credits/day; Plus $16/mo (yearly).",
     "verdict": "wait",
-    "verdict_reason": "Promising open-source alternative; not covered in tests we cite.",
+    "verdict_reason": "Promising open-source alternative; not covered in the public reports we cite.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://gravity.fast/blog/ai-agent-pricing-index/"
@@ -352,7 +352,7 @@
     ],
     "pricing": "Free Sandbox; paid from $590/yr per pricing index.",
     "verdict": "wait",
-    "verdict_reason": "Not covered in tests we cite.",
+    "verdict_reason": "Not covered in the public reports we cite.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://gravity.fast/blog/ai-agent-pricing-index/"
@@ -369,7 +369,7 @@
     ],
     "pricing": "Free, open source (MIT). Needs Godot 4.7+; telemetry on by default.",
     "verdict": "use",
-    "verdict_reason": "Voyager tested it hands-on with Claude Code and recommends it.",
+    "verdict_reason": "Voyager checked it hands-on with Claude Code and recommends it.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://voyager.so/blog/godot-mcp"
@@ -385,7 +385,7 @@
     ],
     "pricing": "Unity AI bundled with Unity Personal (free) or Pro ($210/mo/seat).",
     "verdict": "wait",
-    "verdict_reason": "Official and promising, but not independently tested in our sources.",
+    "verdict_reason": "Official and promising, but the public reports we cite don't include an independent check.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://unity.com/blog/unity-plugin-grok"
@@ -482,7 +482,7 @@
     ],
     "pricing": "Free 150 daily credits; Apprentice $12/mo.",
     "verdict": "wait",
-    "verdict_reason": "Not covered in tests we cite.",
+    "verdict_reason": "Not covered in the public reports we cite.",
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://resources.rework.com/tools/ai-tools/best-ai-tools-for-game-development-2026"
