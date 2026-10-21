@@ -320,6 +320,12 @@ a.catcard strong{color:var(--tx);font-size:1rem;font-weight:600}
 a.catcard .num{color:var(--ac2);font-family:var(--mono);font-size:2.25rem;font-weight:500;letter-spacing:-.04em;font-variant-numeric:tabular-nums;line-height:1}
 .split{display:grid;grid-template-columns:1.15fr .85fr;gap:16px}
 #signup{position:relative;overflow:hidden}
+#signup h2{font-size:clamp(1.35rem,2vw,1.7rem);line-height:1.2}
+#signup .sub{margin:0;color:var(--tx);line-height:1.5}
+#signup .points{margin:14px 0 18px;padding:0;list-style:none}
+#signup .points li{position:relative;margin:0 0 10px;padding-left:16px;line-height:1.45}
+#signup .points li:last-child{margin-bottom:0}
+#signup .points li:before{content:"";position:absolute;left:0;top:.55em;width:6px;height:6px;border-radius:50%;background:var(--ac)}
 .panel h2,.panel h3{margin:0 0 8px}
 .mu{color:var(--mu)}
 input,select{background:var(--bg2);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:12px 14px;min-height:48px;font:inherit}
@@ -632,7 +638,11 @@ def pick_card(t, featured=False):
             f'<p class="clamp">{e(t["description"])}</p>'
             f'<span class="cat">{e(cat_label(t["category"]))}</span>'
             f'<span class="price">{e(t["pricing"])}</span></a>')
-SIGNUP = f"""<div class="panel" id="signup"><p class="kicker">Free</p><h2>Get the Friday letter</h2><p class="mu">One email a week: the newest tools, with the facts.</p>
+SIGNUP = f"""<div class="panel" id="signup"><p class="kicker">Free</p><h2>{e("The week's new AI tools, every Friday")}</h2>
+<p class="sub">{e("One short, free email with the newest AI tool drops, from big launches to indie projects. Each one comes with a plain-English summary, what it costs, and a direct link.")}</p>
+<ul class="points"><li>{e("Catch new AI tools the week they ship, including small indie projects")}</li>
+<li>{e("Get what each tool does and what it costs, explained in plain language")}</li>
+<li>{e("Go straight to each tool with a direct link, or browse the full directory at ")}<a href="{e(BASE)}/tools/">toolsmithweekly.com</a></li></ul>
 <p><a class="btn" href="{e(CONFIG['subscribe_url'])}">Subscribe free</a></p>
 <p class="mu">Opens the Toolsmith Weekly letter on beehiiv.</p></div>"""
 by_name = {t["name"]: t for t in tools}
