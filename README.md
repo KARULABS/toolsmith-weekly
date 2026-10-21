@@ -22,15 +22,15 @@ cd dist && python3 -m http.server 8765
 ```
 Output:
 
-- `dist/index.html` — landing page: hero, this week's picks, category grid, how verdicts work, latest letter, signup
-- `dist/tools/` — searchable directory (category filter, Newest/Oldest/A–Z sort). `?cat=` opens a category.
+- `dist/index.html` — product homepage: full-width hero, bento picks, category tiles, verdict band, letter and signup
+- `dist/tools/` — directory with a sticky search bar, category chips, and a dense card grid. `?cat=` opens a category. `?q=` fills the search box.
 - `dist/tools/<slug>.html` — one page per tool, with Open Graph and JSON-LD
 - `dist/verdicts/` — tools grouped under Use it, Try it, Wait, and Skip
 - `dist/this-week.html` — tools added in the last seven days
 - `dist/newsletter/` — newsletter archive
 - `dist/issues/` — meta refresh to `/newsletter/` (not listed in the sitemap)
 - `dist/suggest/` — mailto for indie devs
-- `dist/anvil.jpg` and `dist/og.jpg` — brand header and 1200×630 share image
+- `dist/og.jpg` — 1200×630 share image. The homepage anvil is an inline pixel drawing, not a photo.
 - `dist/sitemap.xml`, `dist/robots.txt`, `dist/llms.txt`, `dist/CNAME`
 
 "New this week" badges are website-only (directory, this week, and tool pages). They stay off the newsletter archive. Tools dated 2026-10-20 are the launch batch and are not badged.
