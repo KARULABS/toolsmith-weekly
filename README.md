@@ -9,9 +9,9 @@ Append an object to `tools.json`:
 ```json
 {"name":"Tool","url":"https://...","category":"coding agents","description":"One line.",
  "use_cases":["..."],"pricing":"Free; Pro $X/mo","verdict":"use|skip|wait",
- "verdict_reason":"One line.","date_added":"YYYY-MM-DD","source":"https://source-link"}
+ "verdict_reason":"One line.","verdict_checked":"YYYY-MM-DD","date_added":"YYYY-MM-DD","source":"https://source-link"}
 ```
-Categories: `coding agents`, `vibe-coding app builders`, `AI agents/automation`, `gaming/game dev`, `general` (new ones get a filter chip automatically). Every fact needs a source link.
+Categories: `coding agents`, `vibe-coding app builders`, `AI agents/automation`, `gaming/game dev`, `general` (new ones get a filter chip automatically). Every fact needs a source link. `verdict_checked` is the date that verdict was last re-reviewed. It is optional: if you omit it, the site shows `date_added`. Cards, tool pages, and a future Current verdicts page all read it through `checked_iso()` / `verdict_stamp()` in `build.py`.
 
 ## Build & preview
 ```
