@@ -29,14 +29,14 @@ tools.sort(key=lambda t: (t["date_added"], t["name"]), reverse=True)
 # (short, full). Order is the order shown on /verdicts/.
 WAIT_REASONS = {
     "pricing": ("Pricing unclear", "Pricing unclear or changing"),
-    "access": ("Limited access", "Waitlist or limited access"),
+    "access": ("Waitlist only", "Waitlist or limited access"),
     "new": ("Too new", "Too new, little track record"),
-    "reliability": ("Reliability issues", "Known bugs or reliability issues"),
+    "reliability": ("Known bugs", "Known bugs or reliability issues"),
     "value": ("Better value elsewhere", "Better value elsewhere for now"),
 }
 SKIP_REASONS = {
     "shutdown": ("Shutting down", "Shutting down or abandoned"),
-    "security": ("Security or privacy", "Security or privacy concerns"),
+    "security": ("Security or privacy concerns", "Security or privacy concerns"),
     "overpriced": ("Overpriced", "Overpriced for what it does"),
     "replaced": ("Replaced by a better tool", "Replaced by a better tool"),
     "claims": ("Doesn't work as claimed", "Doesn't work as claimed"),
