@@ -340,15 +340,16 @@ input:hover,select:hover{border-color:var(--bd-h)}
 .chip{background:transparent;border:1px solid var(--bd);color:var(--tx);border-radius:999px;padding:8px 14px;min-height:44px;cursor:pointer;font:inherit}
 .chip:hover{border-color:var(--ac)}
 .chip.on{background:#eef2ff;color:#070b1a;border-color:#eef2ff;font-weight:650}
-.rows{display:flex;flex-direction:column;gap:8px}
-.row{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1.7fr) minmax(0,1.05fr);gap:4px 20px;align-items:center;padding:14px 16px;border:1px solid var(--bd);border-radius:12px;background:linear-gradient(180deg,#0f1630,rgba(15,22,48,.6));box-shadow:0 1px 0 rgba(255,255,255,.04) inset;transition:border-color .2s ease,background .2s ease}
+.rows{display:flex;flex-direction:column;gap:6px}
+.row{display:grid;grid-template-columns:minmax(10.5rem,.95fr) minmax(0,1.7fr) 15rem;gap:2px 18px;align-items:center;min-height:58px;padding:8px 14px;border:1px solid var(--bd);border-radius:12px;background:linear-gradient(180deg,#0f1630,rgba(15,22,48,.6));box-shadow:0 1px 0 rgba(255,255,255,.04) inset;transition:border-color .2s ease,background .2s ease}
 .row:hover{border-color:var(--bd-h);background:#141c3b}
-.row .name{margin:0;font-size:1.05rem;letter-spacing:-.02em;line-height:1.3}
-.row .name a{color:var(--tx);text-decoration:none}
+.row .name{margin:0;min-width:0;font-size:1rem;letter-spacing:-.02em;line-height:1.25;min-height:2.5em;display:flex;align-items:center;flex-wrap:wrap}
+.row .name a{min-width:0;max-width:100%;color:var(--tx);text-decoration:none}
 .row .name a:hover{color:var(--ac)}
 .row .desc,.row .meta{margin:0;color:var(--mu);font-size:.92rem}
-.row .desc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.row .meta{display:flex;flex-direction:column;align-items:flex-start;gap:2px}
+.row .desc{line-height:1.35;max-height:1.35em;overflow:hidden}
+.row .meta{display:flex;flex-direction:column;align-items:flex-start;gap:1px}
+.row .price{color:var(--tx);white-space:nowrap}
 .row .badge-new{margin-left:8px;vertical-align:2px}
 .badge-new{display:inline-block;font-weight:650;font-size:.7rem;padding:4px 8px;border-radius:999px;background:rgba(255,138,61,.12);color:var(--ac2);letter-spacing:.04em;text-transform:uppercase}
 .cat,.checked,.price{font-size:.92rem;color:var(--mu)}
@@ -409,8 +410,8 @@ header nav a.btn{display:flex;margin-top:8px;text-align:center}
 .metric b{font-size:.9rem}
 .metric span{font-size:.65rem}
 .bento{grid-template-columns:1fr}
-.row{grid-template-columns:1fr;gap:4px}
-.row .desc{white-space:normal}
+.row{grid-template-columns:1fr;gap:2px;min-height:0;padding:10px 12px}
+.row .name{min-height:0}
 .bento .featured{grid-row:auto}
 .actions{flex-direction:column;align-items:stretch}
 .hero .btn{width:100%}
@@ -442,6 +443,53 @@ def has_free_tier(t):
     if re.search(r"\bno free\b", pricing, re.I):
         return False
     return bool(re.search(r"\bfree\b", pricing, re.I))
+_PRICE_RE = re.compile(
+    r"(?P<cur>[$€])\s*(?P<num>\d+(?:\.\d+)?)"
+    r"(?:/\s*(?:user|seat|member))?"
+    r"(?:/\s*(?P<unit>mo|month|yr|year)|\s+per\s+(?:[\w]+\s+){0,3}(?P<per>year|yr))?",
+    re.I,
+)
+def price_line(t):
+    # One short line for the directory. The tool page keeps the full pricing sentence.
+    pricing = " ".join(t["pricing"].split())
+    low = pricing.lower()
+    if "pricing unverified" in low:
+        return "Pricing unverified"
+    if "signups stopped" in low or "stopped new signups" in low:
+        return "Signups closed"
+    if "shutting down" in low:
+        when = re.search(r"(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{1,2},\s+\d{4}", pricing)
+        return f"Shuts down {when.group(0)}" if when else "Shutting down"
+    if re.search(r"free,\s*open source", low):
+        return "Free, open source"
+    free = has_free_tier(t)
+    scope = pricing
+    if re.search(r"new plans\s*:", pricing, re.I):
+        scope = re.split(r"new plans\s*:\s*", pricing, flags=re.I, maxsplit=1)[-1]
+    def pick(text):
+        for match in _PRICE_RE.finditer(text):
+            if match.group("num") in ("0", "0.0", "0.00"):
+                continue
+            unit = (match.group("unit") or match.group("per") or "").lower()
+            suffix = "/mo" if unit in ("mo", "month") else "/yr" if unit in ("yr", "year") else ""
+            num = match.group("num")
+            if num.endswith(".00"):
+                num = num[:-3]
+            return f"{match.group('cur')}{num}{suffix}"
+        return None
+    outside = re.sub(r"\([^)]*\)", " ", scope)
+    amount = pick(outside) or pick(scope)
+    if amount and not re.search(r"/(?:mo|yr)$", amount) and re.search(r"\ba month\b", scope, re.I):
+        amount += "/mo"
+    if not amount:
+        if free and re.search(r"\bpaid\b", low):
+            return "Free tier"
+        if free:
+            return "Free"
+        return "Paid only"
+    if free:
+        return f"Free tier, from {amount}"
+    return f"From {amount}"
 def letter_of(name):
     first = name[:1].upper()
     return first if first.isalpha() else "#"
@@ -565,8 +613,8 @@ def row(t, prefix):
         f'data-date="{e(t["date_added"])}" data-name="{e(t["name"].lower())}" data-free="{free}" '
         f'data-letter="{e(letter)}" data-text="{e(text)}">'
         f'<h2 class="name"><a href="{prefix}{t["slug"]}.html">{e(t["name"])}</a>{badge}</h2>'
-        f'<p class="desc">{e(t["description"])}</p>'
-        f'<p class="meta"><span class="price">{e(t["pricing"])}</span>'
+        f'<p class="desc" data-full="{e(t["description"])}">{e(t["description"])}</p>'
+        f'<p class="meta"><span class="price">{e(price_line(t))}</span>'
         f'<span class="cat">{e(cat_label(t["category"]))}</span></p></article>'
     )
 def pick_card(t, featured=False):
@@ -673,7 +721,27 @@ function run(){
   });
   cnt.textContent=n+(n===1?' tool':' tools');
   empty.hidden=n!==0;
+  fitDesc();
 }
+function fitDesc(){
+  document.querySelectorAll('.row .desc').forEach(el=>{
+    if(el.closest('.row').hidden||el.clientWidth===0) return;
+    const full=(el.dataset.full||el.textContent).trim();
+    el.dataset.full=full;
+    el.textContent=full;
+    if(el.scrollHeight<=el.clientHeight+1) return;
+    const words=full.split(/\\s+/);
+    let lo=1, hi=words.length, best=words[0];
+    while(lo<=hi){
+      const mid=(lo+hi)>>1;
+      el.textContent=words.slice(0,mid).join(' ')+'\u2026';
+      if(el.scrollHeight<=el.clientHeight+1){best=el.textContent; lo=mid+1;}
+      else hi=mid-1;
+    }
+    el.textContent=best;
+  });
+}
+window.addEventListener('resize', fitDesc);
 q.oninput=()=>{sync();run()};
 s.onchange=()=>{sync();run()};
 free.onchange=()=>{sync();run()};
