@@ -16,7 +16,7 @@ N = CONFIG["site_name"]; R = pathlib.Path(__file__).parent; OUT = R / "dist"
 BASE = CONFIG["base_url"]
 VALUE = CONFIG["tagline"]
 # Verdicts cite public reports. The site does not claim a hands-on check of its own.
-METHOD = "Verdicts based on public reports and benchmarks, re-checked twice a week."
+METHOD = "Verdicts based on public reports and official pricing pages, re-checked twice a week."
 AI_NOTE = "Researched and drafted with AI tools and reviewed by a human; every fact links to a public source."
 e = lambda s: html.escape(str(s), quote=True)
 slug = lambda s: re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
@@ -269,7 +269,7 @@ def cat_label(name):
     return CAT_LABEL.get(name, name)
 def verdict_stamp(t):
     iso = checked_iso(t)
-    return f'<span class="checked">Verdict checked <time datetime="{e(iso)}">{e(fmt_date(iso))}</time></span>'
+    return f'<span class="checked">Last checked <time datetime="{e(iso)}">{e(fmt_date(iso))}</time></span>'
 NAV = [
     ("index.html", "Home", "home"),
     ("tools/", "Tool Directory", "tools"),
@@ -439,13 +439,13 @@ home = f"""<section class="hero"><div class="orb orb-a" aria-hidden="true"></div
 <p class="lede rise d2">Use, try, wait, or skip. {e(METHOD)}</p>
 <p class="actions rise d3"><a class="btn" href="{e(CONFIG['subscribe_url'])}">Subscribe free</a><a href="tools/">Open the directory</a></p>
 </div><div class="hero-art" aria-hidden="true"><div class="anvil-glow"></div>{anvil_svg()}</div></div>
-<div class="w"><div class="metrics rise d4"><div class="metric"><b>{len(tools)}</b><span>Tools</span></div><div class="metric"><b><time datetime="{e(checked_dates[-1])}">{e(fmt_date(checked_dates[-1]))}</time></b><span>Verdicts checked</span></div><a class="metric" href="#how"><b>Public sources</b><span>Re-checked twice a week</span></a></div></div></section>
+<div class="w"><div class="metrics rise d4"><div class="metric"><b>{len(tools)}</b><span>Tools</span></div><div class="metric"><b><time datetime="{e(checked_dates[-1])}">{e(fmt_date(checked_dates[-1]))}</time></b><span>Last checked</span></div><a class="metric" href="#how"><b>Public sources</b><span>Re-checked twice a week</span></a></div></div></section>
 <section class="band" id="picks"><div class="w"><div class="band-head"><h2>This week's picks</h2><a href="this-week.html">{week_link}</a></div>
 <div class="bento">{pick_html}</div></div></section>
 <section class="band band-alt" id="categories"><div class="w"><div class="band-head"><h2>Browse by category</h2><a href="tools/">Full directory</a></div>
 <div class="cats">{cat_cards}</div></div></section>
 <section class="band" id="how"><div class="w"><div class="band-head"><h2>How we verdict</h2><a href="verdicts/">See current verdicts</a></div>
-<p class="lede">{e(METHOD)} Each verdict links the report it came from. {e(AI_NOTE)}</p>
+<p class="lede">{e(METHOD)} Last checked {e(fmt_date(checked_dates[-1]))}. Each verdict links the report it came from. {e(AI_NOTE)}</p>
 <div class="vkey">{verdict_key}</div></div></section>
 <section class="band band-alt" id="letter"><div class="w"><div class="split"><article class="panel"><p class="kicker">Newsletter</p><h2>{e(latest_issue['title'])}</h2><p>{e(latest_issue['when'])}</p><p class="mu">{e(latest_issue['note'])}</p><p><a href="newsletter/">Newsletter archive</a></p></article>{SIGNUP}</div></div></section>"""
 (OUT / "index.html").write_text(page(
