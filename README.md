@@ -45,3 +45,6 @@ Every signup box links to the public beehiiv page `https://toolsmithweekly.beehi
 
 ## Suggest a tool
 `/suggest/` is a `mailto:hello@toolsmithweekly.com` link with a subject and a short body for indie developers. No third-party form.
+
+## Mobile
+Each tool in `tools.json` has `mobile` (`full`, `partial`, `none`, or `unverified`), plus `mobile_note`, `mobile_source`, and `mobile_description`. A tool page shows `Mobile: Fully supported`, `Mobile: Partial`, or `Mobile: Not supported`, then the note and a source link. `unverified` shows `Mobile: not confirmed` and no note. The description under that line is one or two plain sentences from the note and source. Directory rows show a Full, Partial, None, or Not confirmed badge.

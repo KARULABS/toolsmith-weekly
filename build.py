@@ -430,6 +430,23 @@ input:hover,select:hover{border-color:var(--bd-h)}
 .row .price{color:var(--tx);white-space:nowrap}
 .row .badge-new{margin-left:8px;vertical-align:2px}
 .badge-new{display:inline-block;font-weight:650;font-size:.7rem;padding:4px 8px;border-radius:999px;background:rgba(255,138,61,.12);color:var(--ac2);letter-spacing:.04em;text-transform:uppercase}
+.mbadge{display:inline-flex;align-items:center;gap:5px;margin-left:8px;padding:3px 7px 3px 4px;border:1px solid;border-radius:2px;background:#0b1124;font-family:var(--mono);font-size:.72rem;font-weight:650;letter-spacing:.02em;line-height:1.2;white-space:nowrap}
+.mbadge .phone{width:12px;height:18px;flex:none;display:block;image-rendering:pixelated}
+.mbadge.m-full{color:#ffc94a;border-color:#ffc94a}
+.mbadge.m-partial{color:#ff9a52;border-color:#ff8a3d}
+.mbadge.m-none{color:#eef2ff;border-color:#8d98c4}
+.mbadge.m-unverified{color:#d7deef;border-color:#9aa6c7;border-style:dashed}
+.mobile-fact{margin:0 0 4px;padding-bottom:14px;border-bottom:1px solid var(--bd)}
+.facts .mobile-fact + dl{margin-top:14px}
+.mobile-line{margin:0;font-size:.95rem;line-height:1.45}
+.mobile-k{font-weight:650}
+.mobile-k.m-full{color:#ffc94a}
+.mobile-k.m-partial{color:#ff9a52}
+.mobile-k.m-none{color:#eef2ff}
+.mobile-k.m-unverified{color:#d7deef}
+.mobile-note{color:var(--mu)}
+.mobile-src{font-family:var(--mono);font-size:.75rem;letter-spacing:.03em;white-space:nowrap}
+.mobile-desc{margin:8px 0 0;color:#d6dcf0;font-size:.95rem;line-height:1.5}
 .cat,.checked,.price{font-size:.92rem;color:var(--mu)}
 time,.num,.count,.metric b{font-family:var(--mono)}
 .quiet{margin:22px 0 0;color:var(--mu)}
@@ -723,6 +740,52 @@ def page(title, desc, body, path, depth=0, nodes=None, bleed=False):
 def badge_html(t):
     # Website cards only. Callers on the newsletter archive must not use this.
     return '<span class="badge-new">New this week</span>' if is_new(t) else ""
+PHONE_ROWS = (
+    "####",
+    "#..#",
+    "#..#",
+    "#..#",
+    "#..#",
+    ".##.",
+)
+def phone_svg():
+    # Pixel handset for the directory badge. currentColor matches the badge text.
+    return ('<svg class="phone" viewBox="0 0 4 6" aria-hidden="true" focusable="false" '
+            f'shape-rendering="crispEdges">{pix(PHONE_ROWS, "currentColor")}</svg>')
+MOBILE_LABEL = {
+    "full": "Fully supported",
+    "partial": "Partial",
+    "none": "Not supported",
+    "unverified": "not confirmed",
+}
+MOBILE_BADGE = {
+    "full": "Full",
+    "partial": "Partial",
+    "none": "None",
+    "unverified": "Not confirmed",
+}
+def mobile_status(t):
+    status = t.get("mobile")
+    if status not in MOBILE_LABEL:
+        raise SystemExit(f"{t['name']} has mobile {status!r}; expected full, partial, none, or unverified")
+    for key in ("mobile_note", "mobile_source", "mobile_description"):
+        if not str(t.get(key) or "").strip():
+            raise SystemExit(f"{t['name']} is missing {key}")
+    return status
+def mobile_badge(t):
+    # Directory rows. Full, Partial, None, or Not confirmed.
+    status = mobile_status(t)
+    return (f'<span class="mbadge m-{status}">'
+            f'{phone_svg()}<span class="sr">Mobile: </span>{e(MOBILE_BADGE[status])}</span>')
+def mobile_fact(t):
+    # Tool page. The note and source stay off when mobile support is not confirmed.
+    status = mobile_status(t)
+    line = f'<span class="mobile-k m-{status}">Mobile: {e(MOBILE_LABEL[status])}</span>'
+    if status != "unverified":
+        line += (f' <span class="mobile-note">{e(t["mobile_note"])}</span>'
+                 f' <a class="mobile-src" href="{e(t["mobile_source"])}" rel="noopener">source</a>')
+    return (f'<div class="mobile-fact"><p class="mobile-line">{line}</p>'
+            f'<p class="mobile-desc">{e(t["mobile_description"])}</p></div>')
 def row(t, prefix):
     # Every tool is in the HTML. Filters only hide rows; they do not inject them.
     letter = letter_of(t["name"])
@@ -733,7 +796,7 @@ def row(t, prefix):
         f'<article class="row" id="{e(t["slug"])}" data-cat="{e(t["category"])}" '
         f'data-date="{e(t["date_added"])}" data-name="{e(t["name"].lower())}" data-free="{free}" '
         f'data-letter="{e(letter)}" data-text="{e(text)}">'
-        f'<h2 class="name"><a href="{prefix}{t["slug"]}.html">{e(t["name"])}</a>{badge}</h2>'
+        f'<h2 class="name"><a href="{prefix}{t["slug"]}.html">{e(t["name"])}</a>{badge}{mobile_badge(t)}</h2>'
         f'<p class="desc" data-full="{e(t["description"])}">{e(t["description"])}</p>'
         f'<p class="meta"><span class="price">{e(price_line(t))}</span>'
         f'<span class="cat">{e(cat_label(t["category"]))}</span></p></article>'
@@ -1155,7 +1218,7 @@ for t in tools:
     rule = '<hr class="rule">' if ov else ""
     b = f"""<div class="tool-hero"><div class="tool-copy"><p class="back"><a href="index.html">Tool directory</a> · {e(cat_label(t['category']))}</p><h1>{e(t['name'])}</h1><p class="vrow">{badge_html(t)}{verdict_stamp(t)}</p><p class="sum">{e(t['description'])}</p>
 {software_ld(t)}</div>
-<aside class="facts" aria-label="Facts"><dl><dt>Use cases</dt><dd><ul>{''.join(f'<li>{e(u)}</li>' for u in t['use_cases'])}</ul></dd><dt>Pricing</dt><dd>{e(t['pricing'])}</dd><dt>Website</dt><dd><a href="{e(t['url'])}" rel="noopener">{e(t['url'])}</a></dd>
+<aside class="facts" aria-label="Facts">{mobile_fact(t)}<dl><dt>Use cases</dt><dd><ul>{''.join(f'<li>{e(u)}</li>' for u in t['use_cases'])}</ul></dd><dt>Pricing</dt><dd>{e(t['pricing'])}</dd><dt>Website</dt><dd><a href="{e(t['url'])}" rel="noopener">{e(t['url'])}</a></dd>
 <dt>Source</dt><dd><a href="{e(t['source'])}" rel="noopener">{e(t['source'])}</a></dd><dt>Added</dt><dd><time datetime="{e(t['date_added'])}">{e(fmt_date(t['date_added']))}</time></dd></dl>
 <a class="btn" href="{e(t['url'])}" rel="nofollow noopener">Visit website</a></aside>
 {ov}</div>
