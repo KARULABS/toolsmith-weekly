@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Build static site from tools.json into dist/. Usage: python3 build.py"""
-import json, html, re, shutil, datetime, pathlib
+import json, html, math, re, shutil, datetime, pathlib
 from collections import Counter
 from urllib.parse import quote
 CONFIG = {"site_name": "Toolsmith Weekly",  # <- swap the brand name here
@@ -225,34 +225,101 @@ def cat_icon(name):
     rows = CAT_ICON.get(name, CAT_ICON["coding agents"])
     return ('<svg class="caticon" viewBox="0 0 12 12" aria-hidden="true" focusable="false" '
             f'shape-rendering="crispEdges">{pix(rows)}</svg>')
+def star_grid(w=65):
+    # Regular five-point star on an odd grid so the tips can sit on a center column.
+    # Inner radius is the pentagram ratio, which keeps the points sharp.
+    assert w % 2 == 1
+    cx = (w - 1) / 2
+    R = cx / math.cos(math.radians(18))
+    inner = 0.382
+    pts = []
+    for i in range(5):
+        for ang, rad in ((-90 + i * 72, R), (-90 + i * 72 + 36, R * inner)):
+            a = math.radians(ang)
+            x = cx + rad * math.cos(a)
+            dx = abs(x - cx)
+            pts.append((cx + (dx if x >= cx else -dx), R + rad * math.sin(a)))
+    h = int(math.ceil(max(p[1] for p in pts) + 0.5))
+    samples = 8
+    offs = [(i + 0.5) / samples for i in range(samples)]
+    need = samples * samples * 0.45
+    def inside(x, y):
+        c = False
+        j = len(pts) - 1
+        for i, (xi, yi) in enumerate(pts):
+            xj, yj = pts[j]
+            if ((yi > y) != (yj > y)) and (x < (xj - xi) * (y - yi) / ((yj - yi) or 1e-12) + xi):
+                c = not c
+            j = i
+        return c
+    mask = []
+    for y in range(h):
+        row = []
+        for x in range(w):
+            hits = sum(1 for oy in offs for ox in offs if inside(x + ox, y + oy))
+            row.append(hits >= need)
+        for x in range(w // 2):
+            row[w - 1 - x] = row[x]
+        mask.append(row)
+    while mask and not any(mask[0]):
+        mask.pop(0)
+    while mask and not any(mask[-1]):
+        mask.pop()
+    def span(row):
+        xs = [i for i, v in enumerate(row) if v]
+        return 0 if not xs else xs[-1] - xs[0] + 1
+    if mask and span(mask[0]) > 1:
+        tip = [False] * w
+        tip[w // 2] = True
+        mask.insert(0, tip)
+    h = len(mask)
+    grid = [["."] * w for _ in range(h)]
+    for y in range(h):
+        for x in range(w):
+            if not mask[y][x]:
+                continue
+            edge = any(
+                not (0 <= x + dx < w and 0 <= y + dy < h and mask[y + dy][x + dx])
+                for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))
+            )
+            grid[y][x] = "o" if edge else "#"
+    # A light from above: the pixel just under the upper outline, mirrored.
+    for y in range(h):
+        for x in range(w):
+            if grid[y][x] == "#" and y and grid[y - 1][x] == "o" and y < h * 0.72:
+                grid[y][x] = "+"
+    for y in range(h):
+        for x in range(w // 2):
+            a, b = grid[y][x], grid[y][w - 1 - x]
+            if "o" in (a, b):
+                grid[y][x] = grid[y][w - 1 - x] = "o"
+            elif "+" in (a, b):
+                grid[y][x] = grid[y][w - 1 - x] = "+"
+            elif "#" in (a, b):
+                grid[y][x] = grid[y][w - 1 - x] = "#"
+    return ["".join(row) for row in grid]
+def star_rects(rows):
+    # o is the darker gold edge, # the body, + the inner highlight.
+    fills = {"o": "#c98420", "#": "#ffc94a", "+": "#ffe7a8"}
+    parts = []
+    for y, row in enumerate(rows):
+        x = 0
+        while x < len(row):
+            fill = fills.get(row[x])
+            if not fill:
+                x += 1
+                continue
+            x2 = x + 1
+            while x2 < len(row) and row[x2] == row[x]:
+                x2 += 1
+            parts.append(f'<rect x="{x}" y="{y}" width="{x2 - x}" height="1" fill="{fill}"/>')
+            x = x2
+    return "".join(parts)
 def star_svg():
-    # Pixel star for the homepage heading. About twice the first 11×9 grid,
-    # so the steps are smaller, and still drawn as crisp rects in the same gold.
-    rows = (
-        "...........#...........",
-        "..........###..........",
-        ".........#####.........",
-        "........#######........",
-        ".......#########.......",
-        "......###########......",
-        ".....#############.....",
-        ".#####################.",
-        "#######################",
-        "#######################",
-        ".#####################.",
-        "..###################..",
-        "...#################...",
-        "....###############....",
-        ".....#############.....",
-        "......###########......",
-        ".....######.######.....",
-        "....######...######....",
-        "....####.......####....",
-        "....###.........###....",
-        "....#.............#....",
-    )
-    return ('<svg class="star-mark" viewBox="0 0 23 21" aria-hidden="true" focusable="false" '
-            f'shape-rendering="crispEdges">{pix(rows, "#ffc94a")}</svg>')
+    rows = star_grid()
+    w, h = len(rows[0]), len(rows)
+    return (f'<svg class="star-mark" viewBox="0 0 {w} {h}" aria-hidden="true" focusable="false" '
+            f'shape-rendering="crispEdges">{star_rects(rows)}</svg>')
 CSS = """:root{--bg:#070b1a;--bg2:#0b1124;--card:#0f1630;--card-h:#141c3b;--bd:rgba(148,163,214,.14);--bd-h:rgba(148,163,214,.32);--tx:#eef2ff;--mu:#9aa6c7;--ac:#ff8a3d;--ac2:#ffc94a;--ink:#140a02;--sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;--mono:ui-monospace,"JetBrains Mono",Menlo,monospace}
 *{box-sizing:border-box}[hidden]{display:none!important}
 html{color-scheme:dark;scroll-behavior:smooth}
