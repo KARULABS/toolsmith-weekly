@@ -16,6 +16,10 @@
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://cursor.com/docs/models-and-pricing.md",
+    "mobile": "partial",
+    "mobile_note": "iOS app remote-controls agents; editor is desktop",
+    "mobile_source": "https://cursor.com/changelog/remote-control-local-agents",
+    "mobile_description": "The iOS app remote-controls agents. The editor is desktop-only.",
     "overview": {
       "what_it_is": "Cursor is an AI coding product built around agents. It includes Agent (in the editor and the command line), Chat, Cloud Agents, Automations, Bugbot code review and Origin code hosting. It's sold as part of \"The X Subscription,\" one subscription that covers Grok, Cursor and X ([models and pricing](https://cursor.com/docs/models-and-pricing.md)).",
       "whats_new": {
@@ -95,7 +99,11 @@
     "verdict_short": "Included in paid Claude plans",
     "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://code.claude.com/docs/en/overview"
+    "source": "https://code.claude.com/docs/en/overview",
+    "mobile": "partial",
+    "mobile_note": "Claude mobile apps steer cloud/remote sessions; code doesn't run on-phone",
+    "mobile_source": "https://code.claude.com/docs/en/mobile",
+    "mobile_description": "Claude's mobile apps steer cloud and remote sessions. Code does not run on the phone."
   },
   {
     "name": "OpenAI Codex",
@@ -113,7 +121,11 @@
     "verdict_short": "Runs in CLI, IDE, and web",
     "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://developers.openai.com/codex/changelog"
+    "source": "https://developers.openai.com/codex/changelog",
+    "mobile": "partial",
+    "mobile_note": "ChatGPT mobile app steers Codex on your machines; preview",
+    "mobile_source": "https://openai.com/index/work-with-codex-from-anywhere/",
+    "mobile_description": "The ChatGPT mobile app steers Codex on your machines, and that control is in preview. The coding runs on your machines, not on the phone."
   },
   {
     "name": "GitHub Copilot Pro",
@@ -131,7 +143,11 @@
     "verdict_short": "Pro is $10 a month",
     "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://github.blog/changelog/label/copilot/"
+    "source": "https://github.blog/changelog/label/copilot/",
+    "mobile": "partial",
+    "mobile_note": "Chat and cloud agent in GitHub Mobile; completions IDE-only",
+    "mobile_source": "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/use-cloud-agent-on-mobile",
+    "mobile_description": "GitHub Mobile includes chat and the cloud agent. Completions are IDE-only."
   },
   {
     "name": "Devin Desktop (formerly Windsurf)",
@@ -149,7 +165,11 @@
     "verdict_reason_key": "pricing",
     "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://docs.devin.ai/release-notes/overview"
+    "source": "https://docs.devin.ai/release-notes/overview",
+    "mobile": "unverified",
+    "mobile_note": "Devin Mobile iOS app via waitlist only",
+    "mobile_source": "https://devin.ai/mobile",
+    "mobile_description": "A Devin Mobile iOS app is listed as waitlist-only. The official site doesn't confirm general mobile use, so check before relying on it."
   },
   {
     "name": "Amazon Q Developer",
@@ -165,7 +185,11 @@
     "verdict_reason_key": "shutdown",
     "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://aws.amazon.com/blogs/devops/amazon-q-developer-end-of-support-announcement/"
+    "source": "https://aws.amazon.com/blogs/devops/amazon-q-developer-end-of-support-announcement/",
+    "mobile": "partial",
+    "mobile_note": "Q chat in AWS Console Mobile App; coding in IDE",
+    "mobile_source": "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/q-on-aws.html",
+    "mobile_description": "Q chat is in the AWS Console Mobile App. Coding stays in the IDE."
   },
   {
     "name": "Tabnine",
@@ -181,7 +205,11 @@
     "verdict_reason_key": "pricing",
     "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://www.tabnine.com"
+    "source": "https://www.tabnine.com",
+    "mobile": "none",
+    "mobile_note": "IDE plugin only (VS Code, JetBrains, Eclipse, Visual Studio)",
+    "mobile_source": "https://docs.tabnine.com/main/welcome/readme/supported-ides",
+    "mobile_description": "Tabnine is an IDE plugin for VS Code, JetBrains, Eclipse, and Visual Studio. It is not offered on mobile."
   },
   {
     "name": "Lovable",
@@ -200,6 +228,10 @@
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://docs.lovable.dev/introduction/welcome",
+    "mobile": "full",
+    "mobile_note": "Official iOS and Android apps to create and continue projects",
+    "mobile_source": "https://docs.lovable.dev/integrations/lovable-mobile-app",
+    "mobile_description": "Official iOS and Android apps let you create and continue projects.",
     "overview": {
       "what_it_is": "Lovable describes itself as \"an AI software engineer, which enables anyone to build for the web.\" In practice, you chat to build websites and web apps, with no technical knowledge needed. Workspaces allow unlimited members, so it suits individuals, teams, classrooms and communities. ([Lovable pricing](https://lovable.dev/pricing))",
       "whats_new": {
@@ -248,7 +280,11 @@
     "verdict_reason_key": "pricing",
     "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://bolt.new"
+    "source": "https://bolt.new",
+    "mobile": "partial",
+    "mobile_note": "Mobile browser works; code view, visual edits, database desktop-only",
+    "mobile_source": "https://support.bolt.new/release-notes",
+    "mobile_description": "The mobile browser works. Code view, visual edits, and the database are desktop-only."
   },
   {
     "name": "v0",
@@ -265,7 +301,11 @@
     "verdict_reason_key": "pricing",
     "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://v0.app/changelog"
+    "source": "https://v0.app/changelog",
+    "mobile": "full",
+    "mobile_note": "Official v0 iOS app",
+    "mobile_source": "https://v0.app/ios",
+    "mobile_description": "There is an official v0 app for iOS."
   },
   {
     "name": "Replit",
@@ -283,7 +323,11 @@
     "verdict_short": "Builds the app, then you publish",
     "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://docs.replit.com/updates"
+    "source": "https://docs.replit.com/updates",
+    "mobile": "full",
+    "mobile_note": "iOS and Android apps with Agent",
+    "mobile_source": "https://docs.replit.com/features/platforms/mobile-app",
+    "mobile_description": "The iOS and Android apps include Agent."
   },
   {
     "name": "Base44",
@@ -299,7 +343,11 @@
     "verdict_reason": "Base44 is for non-coders who want to build apps, websites and AI agents in their own words without setting up servers, databases or payments, because backend, storage, auth, hosting and payments are already built in. What stands out is that it doesn't stop at launch: there are built-in marketing tools such as an SEO/GEO dashboard, plus design controls that set colors and fonts across the whole app at once. You can also create agents that connect to your tools and run around the clock.",
     "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://base44.com/"
+    "source": "https://base44.com/",
+    "mobile": "full",
+    "mobile_note": "iOS app plus full building in mobile browser",
+    "mobile_source": "https://docs.base44.com/Building-your-app/Mobile-experience",
+    "mobile_description": "An iOS app is available, and the mobile browser supports full building."
   },
   {
     "name": "n8n",
@@ -317,7 +365,11 @@
     "verdict_short": "Bills per workflow execution",
     "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://n8n.io/"
+    "source": "https://n8n.io/",
+    "mobile": "partial",
+    "mobile_note": "Web editor has touch support; no official mobile app",
+    "mobile_source": "https://github.com/n8n-io/n8n/pull/12372",
+    "mobile_description": "The web editor has touch support. There is no official mobile app."
   },
   {
     "name": "AI by Zapier",
@@ -335,7 +387,11 @@
     "verdict_short": "Agent acts in connected apps",
     "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://zapier.com/blog/zapier-agents-is-now-ai-by-zapier/"
+    "source": "https://zapier.com/blog/zapier-agents-is-now-ai-by-zapier/",
+    "mobile": "unverified",
+    "mobile_note": "Web app; no official mobile statement found",
+    "mobile_source": "https://help.zapier.com/hc/en-us/articles/8496229845517-Browsers-supported-by-Zapier",
+    "mobile_description": "This is a web app, and the official site doesn't say whether it works on mobile, so check before relying on it."
   },
   {
     "name": "Make",
@@ -352,7 +408,11 @@
     "verdict_reason_key": "pricing",
     "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://www.make.com/en"
+    "source": "https://www.make.com/en",
+    "mobile": "partial",
+    "mobile_note": "iOS/Android companion apps for device triggers only",
+    "mobile_source": "https://help.make.com/devices",
+    "mobile_description": "The iOS and Android companion apps are for device triggers only."
   },
   {
     "name": "Activepieces",
@@ -368,7 +428,11 @@
     "verdict_reason": "Activepieces is for teams that want chat, AI agents, flows and tables in one open-source workspace, connected to 760+ apps. It runs in the cloud or self-hosted. It also offers an MCP server, so your pieces are usable from the AI tools people already work in, and it pitches enterprise control for teams rolling AI out beyond a single power user.",
     "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://www.activepieces.com/"
+    "source": "https://www.activepieces.com/",
+    "mobile": "unverified",
+    "mobile_note": "No official mobile info found",
+    "mobile_source": "https://www.activepieces.com/docs/overview/welcome",
+    "mobile_description": "The official site doesn't say whether it works on mobile, so check before relying on it."
   },
   {
     "name": "Gumloop",
@@ -385,7 +449,11 @@
     "verdict_reason_key": "pricing",
     "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://www.gumloop.com/"
+    "source": "https://www.gumloop.com/",
+    "mobile": "unverified",
+    "mobile_note": "No official mobile app info; texting Gumball documented",
+    "mobile_source": "https://docs.gumloop.com/core-concepts/text_gumball",
+    "mobile_description": "The official docs don't describe a mobile app, though texting Gumball is documented. The official site doesn't say whether the product works on a phone, so check before relying on it."
   },
   {
     "name": "Lindy",
@@ -403,6 +471,10 @@
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://www.lindy.ai/pricing",
+    "mobile": "unverified",
+    "mobile_note": "Vendor site lists iOS/Android; no current store listing found",
+    "mobile_source": "https://www.lindy.ai/",
+    "mobile_description": "The vendor site lists iOS and Android, but no current store listing was found. The official site doesn't confirm mobile support, so check before relying on it.",
     "overview": {
       "what_it_is": "[Lindy](https://www.lindy.ai/) is an AI assistant built to work like a teammate. It works inside Slack, Gmail (through a Chrome extension), email, chat, text and phone, and handles inbox management, meetings, scheduling, briefs and routines. It connects to more than 1,500 integrations and supports MCP.",
       "whats_new": {
@@ -458,7 +530,11 @@
     "verdict_reason_key": "pricing",
     "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://manus.im/blog"
+    "source": "https://manus.im/blog",
+    "mobile": "full",
+    "mobile_note": "iOS and Android apps",
+    "mobile_source": "https://manus.im/download",
+    "mobile_description": "Manus has official iOS and Android apps."
   },
   {
     "name": "Microsoft Copilot Studio",
@@ -475,7 +551,11 @@
     "verdict_reason_key": "pricing",
     "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/whats-new"
+    "source": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/whats-new",
+    "mobile": "unverified",
+    "mobile_note": "Web maker; no official mobile support statement found",
+    "mobile_source": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/requirements-licensing-subscriptions",
+    "mobile_description": "This is a web maker, and the official site doesn't say whether it works on mobile, so check before relying on it."
   },
   {
     "name": "OpenAI Agent Builder",
@@ -491,7 +571,11 @@
     "verdict_reason_key": "shutdown",
     "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://developers.openai.com/api/docs/deprecations"
+    "source": "https://developers.openai.com/api/docs/deprecations",
+    "mobile": "unverified",
+    "mobile_note": "Web platform tool; no mobile statement found",
+    "mobile_source": "https://developers.openai.com/api/docs/guides/agent-builder",
+    "mobile_description": "This is a web tool, and the official site doesn't say whether it works on mobile, so check before relying on it."
   },
   {
     "name": "Dify",
@@ -507,7 +591,11 @@
     "verdict_reason": "Dify is for teams building LLM apps, agentic workflows and RAG chatbots who want a visual builder plus the option to self-host. There's an open-source Community Edition for Docker, a hosted cloud and a private Enterprise deployment. Its newest piece, announced Aug 27, 2026, is a New Agent you build by chatting. Dify turns the conversation into reusable skills and keeps the context, and you can run the finished agent as its own app or drop it into a larger workflow.",
     "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://dify.ai/blog"
+    "source": "https://dify.ai/blog",
+    "mobile": "unverified",
+    "mobile_note": "Published web apps responsive; builder mobile support unstated",
+    "mobile_source": "https://docs.dify.ai/en/cloud/use-dify/publish/webapp/web-app-settings",
+    "mobile_description": "Published web apps are described as responsive. The official site doesn't say whether the builder works on mobile, so check before relying on it."
   },
   {
     "name": "Godot AI",
@@ -525,7 +613,11 @@
     "verdict_short": "Checked hands-on and recommended",
     "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://github.com/hi-godot/godot-ai"
+    "source": "https://github.com/hi-godot/godot-ai",
+    "mobile": "none",
+    "mobile_note": "MCP server and Godot editor tools only",
+    "mobile_source": "https://github.com/hi-godot/godot-ai/",
+    "mobile_description": "Godot AI is an MCP server and a set of Godot editor tools. It does not run as a mobile app."
   },
   {
     "name": "Unity AI agent plugin",
@@ -542,7 +634,11 @@
     "verdict_reason_key": "new",
     "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://unity.com/blog/unity-plugin-grok"
+    "source": "https://unity.com/blog/unity-plugin-grok",
+    "mobile": "none",
+    "mobile_note": "CLI coding-agent plugin for Unity editor",
+    "mobile_source": "https://unity.com/blog/unity-plugin-grok",
+    "mobile_description": "This is a command-line coding-agent plugin for the Unity editor. It does not run as a mobile app."
   },
   {
     "name": "Scenario",
@@ -559,7 +655,11 @@
     "verdict_short": "Train a model on your art",
     "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://www.scenario.com/"
+    "source": "https://www.scenario.com/",
+    "mobile": "unverified",
+    "mobile_note": "Browser platform; only third-party mention of mobile app",
+    "mobile_source": "https://www.scenario.com/",
+    "mobile_description": "A mobile app is mentioned only by a third party. The official site doesn't say whether it works on mobile, so check before relying on it."
   },
   {
     "name": "Meshy",
@@ -576,7 +676,11 @@
     "verdict_reason_key": "pricing",
     "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://www.meshy.ai/"
+    "source": "https://www.meshy.ai/",
+    "mobile": "full",
+    "mobile_note": "Official iOS and Android apps",
+    "mobile_source": "https://www.meshy.ai/app",
+    "mobile_description": "Meshy has official iOS and Android apps."
   },
   {
     "name": "Layer AI",
@@ -593,7 +697,11 @@
     "verdict_reason_key": "pricing",
     "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://www.layer.ai/"
+    "source": "https://www.layer.ai/",
+    "mobile": "unverified",
+    "mobile_note": "No official mobile info found",
+    "mobile_source": "https://help.layer.ai/en/articles/15511102-what-is-layer",
+    "mobile_description": "The official site doesn't say whether it works on mobile, so check before relying on it."
   },
   {
     "name": "Rosebud AI",
@@ -611,7 +719,11 @@
     "verdict_short": "Free way to try a game",
     "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://rosebud.ai/"
+    "source": "https://rosebud.ai/",
+    "mobile": "full",
+    "mobile_note": "Vendor says browser maker works on phones and tablets",
+    "mobile_source": "https://rosebud.ai/online-game-maker",
+    "mobile_description": "The vendor says the browser maker works on phones and tablets."
   },
   {
     "name": "Inworld",
@@ -628,6 +740,10 @@
     "verdict_checked": "2026-10-21",
     "date_added": "2026-10-20",
     "source": "https://inworld.ai/pricing",
+    "mobile": "unverified",
+    "mobile_note": "Browser Studio; only on-device TTS SDK for mobile",
+    "mobile_source": "https://inworld.ai/on-device",
+    "mobile_description": "The official site documents an on-device text-to-speech SDK for mobile. It doesn't say whether Browser Studio works on a phone, so check before relying on it.",
     "overview": {
       "what_it_is": "[Inworld](https://inworld.ai/pricing) is a voice and LLM platform for developers. It offers text-to-speech (TTS-2 and TTS-2 Flash), speech-to-text, speech-to-speech and LLM inference, all paid from one credit balance. Its new Inworld Inference is, in Inworld's words, \"an LLM inference API for consumer apps,\" serving open models such as Gemma 4, GLM, DeepSeek and MiMo.",
       "whats_new": {
@@ -700,7 +816,11 @@
     "verdict_reason": "Leonardo is for artists, designers and marketing teams who want images and video from prompts or custom models, then refine them without starting over. It brings in-house models such as Lucid Origin and Lucid Realism together with third-party models such as Nano Banana Pro, Seedream 4.5, FLUX.2 Pro and Ideogram 3.0. Editing tools are built to keep characters, composition and style intact, and upscaling prepares assets for print. For game work, that means concept and key art, with a developer API when you need it in a pipeline.",
     "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://leonardo.ai/"
+    "source": "https://leonardo.ai/",
+    "mobile": "full",
+    "mobile_note": "iOS and Android apps",
+    "mobile_source": "https://apps.apple.com/us/app/leonardo-ai-image-generator/id1662773014",
+    "mobile_description": "Leonardo AI has iOS and Android apps."
   },
   {
     "name": "Ludo.ai",
@@ -717,7 +837,11 @@
     "verdict_reason_key": "pricing",
     "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://ludo.ai/"
+    "source": "https://ludo.ai/",
+    "mobile": "unverified",
+    "mobile_note": "Mobile-web claim only in press release, not vendor docs",
+    "mobile_source": "https://www.gamespress.com/Game-inspiration-at-your-fingertips-Ludoai-goes-mobile",
+    "mobile_description": "A mobile-web claim appears in a press release, not in the vendor docs. The official site doesn't confirm mobile support, so check before relying on it."
   },
   {
     "name": "ElevenLabs",
@@ -734,7 +858,11 @@
     "verdict_short": "Includes a commercial license",
     "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://elevenlabs.io/docs/changelog"
+    "source": "https://elevenlabs.io/docs/changelog",
+    "mobile": "full",
+    "mobile_note": "iOS and Android apps",
+    "mobile_source": "https://elevenlabs.io/docs/help-center/product/mobile-apps/eleven-labs-for-ios-and-android/what-is-the-eleven-labs-app.md",
+    "mobile_description": "ElevenLabs has iOS and Android apps."
   },
   {
     "name": "Recursive Flint",
@@ -776,9 +904,9 @@
     "date_added": "2026-10-22",
     "source": "https://www.inceptionlabs.ai/blog/introducing-mercury-3",
     "mobile": "unverified",
-    "mobile_note": "the official site doesn't mention mobile",
+    "mobile_note": "No official mobile info found",
     "mobile_source": "https://www.inceptionlabs.ai/blog/introducing-mercury-3",
-    "mobile_description": "The official site doesn't mention mobile.",
+    "mobile_description": "The official site doesn't say whether it works on mobile, so check before relying on it.",
     "covered_in": "2",
     "pick_rank": 2,
     "pick_reason": "Diffusion LLM that Inception says runs at more than 1,000 tokens per second",
@@ -800,9 +928,9 @@
     "date_added": "2026-10-22",
     "source": "https://mistral.ai/news/voxtral-3/",
     "mobile": "unverified",
-    "mobile_note": "the official site doesn't mention mobile",
+    "mobile_note": "Agents work over phone or web; no mobile app stated",
     "mobile_source": "https://mistral.ai/news/voxtral-3/",
-    "mobile_description": "The official site doesn't mention mobile. Mistral says the agents work over phone or web, meaning phone calls, not a mobile app.",
+    "mobile_description": "Mistral says the agents work over phone or web, meaning phone calls, not a mobile app. The official site doesn't say whether it works on mobile, so check before relying on it.",
     "covered_in": "2",
     "pick_rank": 3,
     "pick_reason": "Speech models and a voice agent SDK that listen, reason, call tools and speak",
@@ -824,9 +952,9 @@
     "date_added": "2026-10-22",
     "source": "https://github.com/Leonxlnx/earshot",
     "mobile": "unverified",
-    "mobile_note": "the official site doesn't mention mobile",
+    "mobile_note": "Local CLI, Python API, and MCP server; no mobile app stated",
     "mobile_source": "https://github.com/Leonxlnx/earshot",
-    "mobile_description": "The official site doesn't mention mobile.",
+    "mobile_description": "The official site doesn't say whether it works on mobile, so check before relying on it.",
     "covered_in": "2",
     "pick_rank": 4,
     "pick_reason": "Gives coding agents ears for sound files, long recordings and whole videos",
@@ -847,9 +975,9 @@
     "date_added": "2026-10-22",
     "source": "https://github.com/vercel-labs/fx0",
     "mobile": "unverified",
-    "mobile_note": "the official site doesn't mention mobile",
+    "mobile_note": "No official mobile info found",
     "mobile_source": "https://fx0.vercel.dev",
-    "mobile_description": "The official site doesn't mention mobile.",
+    "mobile_description": "The official site doesn't say whether it works on mobile, so check before relying on it.",
     "covered_in": "2",
     "pick_rank": 5,
     "pick_reason": "Describe a page and it writes the whole thing as one HTML file",
@@ -865,14 +993,14 @@
       "Pulling remote Mac windows onto your Mac"
     ],
     "pricing": "Free ($0, 20 minutes a day). Yearly is $7/month, billed $84 a year. Lifetime is $199. Team pricing is shown per seat.",
-    "verdict_reason": "Beam is for anyone running agents on a headless Mac who is tired of Screen Sharing. Windows arrive as real windows, each with a Dock icon, and traffic goes directly between your Macs, encrypted. It needs Apple silicon Macs on macOS Sonoma or later. The free tier gives you 20 minutes a day. The yearly plan is $84 ($7 a month), and lifetime is $199.",
+    "verdict_reason": "Beam is for anyone running agents on a headless Mac who is tired of Screen Sharing. Windows arrive as real windows, each with a Dock icon, and traffic goes directly between your Macs, encrypted. It needs two Macs on macOS Sonoma or later, Apple silicon or Intel. The free tier gives you 20 minutes a day. The yearly plan is $84 ($7 a month), and lifetime is $199.",
     "verdict_checked": "2026-10-22",
     "date_added": "2026-10-22",
     "source": "https://beam.win",
     "mobile": "partial",
     "mobile_note": "A share link opens one window in a phone browser; the app needs two Macs",
     "mobile_source": "https://beam.win",
-    "mobile_description": "Beam's FAQ says a share link opens one window in any browser, on any device, so you can view a window from a phone browser, but the app itself needs two Apple silicon Macs on macOS Sonoma or later.",
+    "mobile_description": "Beam's FAQ says a share link opens one window in any browser, on any device, so you can view a window from a phone browser, but the app itself needs two Macs on macOS Sonoma or later, Apple silicon or Intel.",
     "covered_in": "2",
     "pick_rank": 6,
     "pick_reason": "Pulls windows from another Mac onto yours as real windows with Dock icons",

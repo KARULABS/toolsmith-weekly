@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Build static site from tools.json into dist/. Usage: python3 build.py"""
-import json, html, re, shutil, datetime, pathlib
+import json, html, math, re, shutil, datetime, pathlib
 from collections import Counter
 from urllib.parse import quote
 CONFIG = {"site_name": "Toolsmith Weekly",  # <- swap the brand name here
@@ -242,6 +242,71 @@ def cat_icon(name):
     rows = CAT_ICON.get(name, CAT_ICON["coding agents"])
     return ('<svg class="caticon" viewBox="0 0 12 12" aria-hidden="true" focusable="false" '
             f'shape-rendering="crispEdges">{pix(rows)}</svg>')
+def star_grid():
+    # Regular five-point star on a 32×32 grid. Ten vertices of one pentagram:
+    # outer radius R, inner radius cos(72°)/cos(36°) ≈ 0.382R, top point up.
+    # Coverage-sampled, then mirrored so the left and right points match.
+    n = 32
+    cx = cy = (n - 1) / 2
+    R = 14.8
+    inner = math.cos(math.radians(72)) / math.cos(math.radians(36))
+    pts = []
+    for i in range(5):
+        ang = math.radians(-90 + i * 72)
+        pts.append((cx + R * math.cos(ang), cy + R * math.sin(ang)))
+        iang = ang + math.radians(36)
+        pts.append((cx + R * inner * math.cos(iang), cy + R * inner * math.sin(iang)))
+    def inside(x, y):
+        c = False
+        j = len(pts) - 1
+        for i, (xi, yi) in enumerate(pts):
+            xj, yj = pts[j]
+            if ((yi > y) != (yj > y)) and (x < (xj - xi) * (y - yi) / ((yj - yi) or 1e-12) + xi):
+                c = not c
+            j = i
+        return c
+    samples = 8
+    offs = [(i + 0.5) / samples for i in range(samples)]
+    need = samples * samples * 0.5
+    mask = [[False] * n for _ in range(n)]
+    for y in range(n):
+        for x in range(n):
+            hits = sum(1 for oy in offs for ox in offs if inside(x + ox, y + oy))
+            mask[y][x] = hits >= need
+    for y in range(n):
+        for x in range(n // 2):
+            mask[y][n - 1 - x] = mask[y][x]
+    grid = [["."] * n for _ in range(n)]
+    for y in range(n):
+        for x in range(n):
+            if not mask[y][x]:
+                continue
+            edge = any(
+                not (0 <= x + dx < n and 0 <= y + dy < n and mask[y + dy][x + dx])
+                for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))
+            )
+            grid[y][x] = "o" if edge else "#"
+    return ["".join(row) for row in grid]
+def star_rects(rows):
+    fills = {"o": "#B37800", "#": "#F5B301"}
+    parts = []
+    for y, row in enumerate(rows):
+        x = 0
+        while x < len(row):
+            fill = fills.get(row[x])
+            if not fill:
+                x += 1
+                continue
+            x2 = x + 1
+            while x2 < len(row) and row[x2] == row[x]:
+                x2 += 1
+            parts.append(f'<rect x="{x}" y="{y}" width="{x2 - x}" height="1" fill="{fill}"/>')
+            x = x2
+    return "".join(parts)
+def star_svg():
+    rows = star_grid()
+    return ('<svg class="star-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false" '
+            f'shape-rendering="crispEdges">{star_rects(rows)}</svg>')
 CSS = """:root{--bg:#070b1a;--bg2:#0b1124;--card:#0f1630;--card-h:#141c3b;--bd:rgba(148,163,214,.14);--bd-h:rgba(148,163,214,.32);--tx:#eef2ff;--mu:#9aa6c7;--ac:#ff8a3d;--ac2:#ffc94a;--ink:#140a02;--sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;--mono:ui-monospace,"JetBrains Mono",Menlo,monospace}
 *{box-sizing:border-box}[hidden]{display:none!important}
 html{color-scheme:dark;scroll-behavior:smooth}
@@ -309,6 +374,10 @@ a.metric:hover{background:rgba(255,138,61,.06)}
 .band-head a{font-size:.875rem;color:var(--mu);text-decoration:none}
 .band-head a:hover{color:var(--ac)}
 .band-head a::after{content:" →";color:var(--ac)}
+.band-stars{position:relative;background:radial-gradient(880px 380px at 0 0,rgba(255,138,61,.18),transparent 58%),linear-gradient(180deg,#121c3f,#0c1430);box-shadow:inset 0 1px 0 rgba(255,138,61,.55),inset 0 -1px 0 var(--bd)}
+.band-stars .band-head{flex-wrap:wrap;row-gap:8px}
+.band-stars h2{font-size:clamp(1.85rem,3.2vw,2.75rem)}
+.star-mark{display:inline-block;width:32px;height:32px;margin-right:10px;vertical-align:-0.08em;image-rendering:pixelated;flex:none}
 .sec{margin:48px 0}
 .sec-head{display:flex;justify-content:space-between;align-items:center;gap:16px 28px;flex-wrap:wrap;margin-bottom:18px}
 .sec-head p,.intro{color:var(--mu);margin:8px 0 0;max-width:40rem}
@@ -317,6 +386,8 @@ a.metric:hover{background:rgba(255,138,61,.06)}
 .pick,a.catcard{text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:10px}
 .pick,.catcard{transition:border-color .2s ease,background .2s ease,transform .2s ease}
 .pick:hover,a.catcard:hover{border-color:var(--bd-h);background:#141c3b;transform:translateY(-2px)}
+.band-stars .pick{border-color:#ff8a3d;box-shadow:0 0 0 1px rgba(255,138,61,.35),0 0 22px -4px rgba(255,138,61,.55),0 14px 28px -14px rgba(0,0,0,.75),inset 0 1px 0 rgba(255,255,255,.05)}
+.band-stars .pick:hover{border-color:#ffb07a;background:#141c3b;transform:translateY(-4px);box-shadow:0 0 0 1px rgba(255,138,61,.45),0 0 32px -4px rgba(255,138,61,.7),0 18px 34px -14px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.06)}
 .pick h3{margin:0;color:var(--tx);font-size:1.05rem;font-weight:650}
 .pick h3 a{color:var(--tx);text-decoration:none}
 .pick h3 a:hover{color:var(--ac)}
@@ -360,7 +431,7 @@ input:hover,select:hover{border-color:var(--bd-h)}
 .letters a.on,.letters a:hover{color:var(--ink);background:var(--ac);border-color:var(--ac);text-decoration:none}
 .dirbar{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center;justify-content:space-between;margin:0 0 16px}
 .dirtools{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-.dirtools #cnt{margin:0;font-family:var(--mono);font-size:.85rem}
+.dirtools #cnt{margin:0;font-family:var(--mono);font-size:.85rem;white-space:nowrap}
 .toggle{display:inline-flex;align-items:center;gap:8px;min-height:44px;cursor:pointer;color:var(--tx)}
 .toggle input{width:18px;height:18px;min-height:18px;padding:0;accent-color:var(--ac)}
 .chips{display:flex;gap:8px;flex-wrap:wrap}
@@ -379,12 +450,23 @@ input:hover,select:hover{border-color:var(--bd-h)}
 .row .price{color:var(--tx);white-space:nowrap}
 .row .badge-new{margin-left:8px;vertical-align:2px}
 .badge-new{display:inline-block;font-weight:650;font-size:.7rem;padding:4px 8px;border-radius:999px;background:rgba(255,138,61,.12);color:var(--ac2);letter-spacing:.04em;text-transform:uppercase}
-.mbadge{display:inline-flex;align-items:center;margin-left:8px;padding:3px 7px;border:1px solid;border-radius:2px;background:#0b1124;font-family:var(--mono);font-size:.72rem;font-weight:650;letter-spacing:.02em;line-height:1.2;white-space:nowrap}
+.mbadge{display:inline-flex;align-items:center;gap:5px;margin-left:8px;padding:3px 7px 3px 4px;border:1px solid;border-radius:2px;background:#0b1124;font-family:var(--mono);font-size:.72rem;font-weight:650;letter-spacing:.02em;line-height:1.2;white-space:nowrap}
+.mbadge .phone{width:12px;height:18px;flex:none;display:block;image-rendering:pixelated}
 .mbadge.m-full{color:#ffc94a;border-color:#ffc94a}
 .mbadge.m-partial{color:#ff9a52;border-color:#ff8a3d}
 .mbadge.m-none{color:#eef2ff;border-color:#8d98c4}
 .mbadge.m-unverified{color:#d7deef;border-color:#9aa6c7;border-style:dashed}
-.mobile-dd{line-height:1.5}
+.mobile-fact{margin:0 0 4px;padding-bottom:14px;border-bottom:1px solid var(--bd)}
+.facts .mobile-fact + dl{margin-top:14px}
+.mobile-line{margin:0;font-size:.95rem;line-height:1.45}
+.mobile-k{font-weight:650}
+.mobile-k.m-full{color:#ffc94a}
+.mobile-k.m-partial{color:#ff9a52}
+.mobile-k.m-none{color:#eef2ff}
+.mobile-k.m-unverified{color:#d7deef}
+.mobile-note{color:var(--mu)}
+.mobile-src{font-family:var(--mono);font-size:.75rem;letter-spacing:.03em;white-space:nowrap}
+.mobile-desc{margin:8px 0 0;color:#d6dcf0;font-size:.95rem;line-height:1.5}
 .cat,.checked,.price{font-size:.92rem;color:var(--mu)}
 time,.num,.count,.metric b{font-family:var(--mono)}
 .quiet{margin:22px 0 0;color:var(--mu)}
@@ -510,7 +592,7 @@ header nav a.btn{display:flex;margin-top:8px;text-align:center}
 html{scroll-behavior:auto}
 .rise,.orb,.anvil,.spark{animation:none}
 .pick,a.catcard,.row,a.btn{transition:none}
-.pick:hover,a.catcard:hover,.row:hover,a.btn:hover{transform:none}
+.pick:hover,a.catcard:hover,.row:hover,a.btn:hover,.band-stars .pick:hover{transform:none}
 }
 """
 _MONTHS = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
@@ -694,48 +776,52 @@ def page(title, desc, body, path, depth=0, nodes=None, bleed=False):
 def badge_html(t):
     # Website cards only. Callers on the newsletter archive must not use this.
     return '<span class="badge-new">New this week</span>' if is_new(t) else ""
-# Mobile is optional. Tools without it keep the previous page. Values match the
-# open mobile-listings work: full, partial, none, unverified.
+PHONE_ROWS = (
+    "####",
+    "#..#",
+    "#..#",
+    "#..#",
+    "#..#",
+    ".##.",
+)
+def phone_svg():
+    # Pixel handset for the directory badge. currentColor matches the badge text.
+    return ('<svg class="phone" viewBox="0 0 4 6" aria-hidden="true" focusable="false" '
+            f'shape-rendering="crispEdges">{pix(PHONE_ROWS, "currentColor")}</svg>')
 MOBILE_LABEL = {
-    "full": "Fully",
-    "partial": "Partially",
-    "none": "Not at all",
+    "full": "Fully supported",
+    "partial": "Partial",
+    "none": "Not supported",
     "unverified": "not confirmed",
 }
 MOBILE_BADGE = {
-    "full": "Fully",
-    "partial": "Partially",
-    "none": "Not at all",
+    "full": "Full",
+    "partial": "Partial",
+    "none": "None",
     "unverified": "Not confirmed",
 }
 def mobile_status(t):
     status = t.get("mobile")
-    if not status:
-        return None
     if status not in MOBILE_LABEL:
         raise SystemExit(f"{t['name']} has mobile {status!r}; expected full, partial, none, or unverified")
-    if not str(t.get("mobile_description") or "").strip():
-        raise SystemExit(f"{t['name']} is missing mobile_description")
-    if not str(t.get("mobile_source") or "").strip():
-        raise SystemExit(f"{t['name']} is missing mobile_source")
-    if status == "unverified" and "doesn't mention mobile" not in t["mobile_description"]:
-        raise SystemExit(f"{t['name']} is unverified but mobile_description does not say the official site doesn't mention mobile")
+    for key in ("mobile_note", "mobile_source", "mobile_description"):
+        if not str(t.get(key) or "").strip():
+            raise SystemExit(f"{t['name']} is missing {key}")
     return status
 def mobile_badge(t):
+    # Directory rows. Full, Partial, None, or Not confirmed.
     status = mobile_status(t)
-    if not status:
-        return ""
     return (f'<span class="mbadge m-{status}">'
-            f'<span class="sr">Mobile: </span>{e(MOBILE_BADGE[status])}</span>')
+            f'{phone_svg()}<span class="sr">Mobile: </span>{e(MOBILE_BADGE[status])}</span>')
 def mobile_fact(t):
-    # Tool page. Fully, Partially, or Not at all, plus the short description.
-    # Unverified reads "Mobile: not confirmed" and says the official site is silent.
+    # Tool page. The note and source stay off when mobile support is not confirmed.
     status = mobile_status(t)
-    if not status:
-        return ""
-    text = f'Mobile: {MOBILE_LABEL[status]}. {t["mobile_description"]}'
-    return (f'<dt>Mobile</dt><dd class="mobile-dd">{e(text)} '
-            f'<a href="{e(t["mobile_source"])}" rel="noopener">Source</a></dd>')
+    line = f'<span class="mobile-k m-{status}">Mobile: {e(MOBILE_LABEL[status])}</span>'
+    if status != "unverified":
+        line += (f' <span class="mobile-note">{e(t["mobile_note"])}</span>'
+                 f' <a class="mobile-src" href="{e(t["mobile_source"])}" rel="noopener">source</a>')
+    return (f'<div class="mobile-fact"><p class="mobile-line">{line}</p>'
+            f'<p class="mobile-desc">{e(t["mobile_description"])}</p></div>')
 def issue_for(t):
     cid = str(t.get("covered_in") or "")
     if not cid:
@@ -808,13 +894,12 @@ def weekly_picks(items):
             raise SystemExit(f"{t['name']} has pick_rank but no pick_source")
     picks.sort(key=lambda t: (t["pick_rank"], t["name"].lower()))
     return picks
-SIGNUP = f"""<div class="panel" id="signup"><p class="kicker">Free</p><h2>{e("The week's new AI tools, every Friday")}</h2>
+SIGNUP = f"""<div class="panel" id="signup"><p class="kicker">Get the Weekly Roundup</p><h2>{e("The week's new AI tools, every Friday")}</h2>
 <p class="sub">{e("One short, free email with the newest AI tool drops, from big launches to indie projects. Each one comes with a plain-English summary, what it costs, and a direct link.")}</p>
 <ul class="points"><li>{e("Catch new AI tools the week they ship, including small indie projects")}</li>
 <li>{e("Get what each tool does and what it costs, explained in plain language")}</li>
 <li>{e("Go straight to each tool with a direct link, or browse the full directory at ")}<a href="{e(BASE)}/tools/">toolsmithweekly.com</a></li></ul>
-<p><a class="btn" href="{e(CONFIG['subscribe_url'])}">Subscribe free</a></p>
-<p class="mu">Opens the Toolsmith Weekly letter on beehiiv.</p></div>"""
+<p><a class="btn" href="{e(CONFIG['subscribe_url'])}">Subscribe free</a></p></div>"""
 picks = weekly_picks(tools)
 counts = Counter(t["category"] for t in tools)
 known = [c for c in CAT_ORDER if c in counts]
@@ -859,7 +944,7 @@ home = f"""<section class="hero"><div class="orb orb-a" aria-hidden="true"></div
 <p class="actions rise d2"><a class="btn" href="{e(CONFIG['subscribe_url'])}">Subscribe free</a><a class="btn secondary" href="tools/">Browse the directory</a></p>
 </div><div class="hero-art" aria-hidden="true"><div class="anvil-glow"></div>{anvil_svg()}</div></div>
 <div class="w"><div class="metrics rise d3"><div class="metric"><b>{len(tools)}</b><span>Tools</span></div><div class="metric"><b><time datetime="{e(checked_dates[-1])}">{e(fmt_date(checked_dates[-1]))}</time></b><span>Last checked</span></div></div></div></section>
-<section class="band" id="picks"><div class="w"><div class="band-head"><h2>This week's picks</h2><a href="this-week.html">{week_link}</a></div>
+<section class="band band-stars" id="picks"><div class="w"><div class="band-head"><h2>{star_svg()}This Week's Stars</h2><a href="this-week.html">{week_link}</a></div>
 <div class="bento">{pick_html}</div></div></section>
 <section class="band band-alt" id="categories"><div class="w"><div class="band-head"><h2>Browse by category</h2><a href="tools/">Full directory</a></div>
 <div class="cats">{cat_cards}</div></div></section>
@@ -867,7 +952,7 @@ home = f"""<section class="hero"><div class="orb orb-a" aria-hidden="true"></div
 (OUT / "index.html").write_text(page(
     f"{N} — the newest AI tools, sorted every Friday",
     VALUE,
-    home, "index.html", nodes=[item_list("This week's picks", picks)], bleed=True))
+    home, "index.html", nodes=[item_list("This Week's Stars", picks)], bleed=True))
 cats = sorted(counts)
 chips = '<button class="chip on" data-c="">All</button>' + "".join(
     f'<button class="chip" data-c="{e(c)}">{e(cat_label(c))}</button>' for c in cats)
@@ -904,7 +989,7 @@ function run(){
     const ok=(!cat||c.dataset.cat===cat)&&(!v||c.dataset.text.includes(v))&&(!free.checked||c.dataset.free==='1')&&(!letter||c.dataset.letter===letter);
     c.hidden=!ok;if(ok)n++;g.appendChild(c);
   });
-  cnt.textContent=n+(n===1?' tool':' tools');
+  cnt.textContent='Showing '+n+(n===1?' tool':' tools');
   empty.hidden=n!==0;
   fitDesc();
 }
@@ -960,7 +1045,7 @@ directory = f"""<header class="pagehead"><h1>Tool directory</h1>
 <label class="toggle" for="free"><input id="free" type="checkbox"> Free tier</label>
 <label class="sr" for="sort">Sort</label>
 <select id="sort" aria-label="Sort"><option value="az" selected>A to Z</option><option value="newest">Newest</option></select>
-<p class="mu" id="cnt">{len(tools)} tools</p>
+<p class="mu" id="cnt" aria-live="polite">Showing {len(tools)} tools</p>
 </div></div>
 <div class="rows" id="grid">{''.join(row(t, '') for t in sorted(tools, key=lambda t: t['name'].lower()))}</div>
 <p class="quiet" id="empty" hidden>No tools match that search.</p>
@@ -1214,7 +1299,7 @@ for t in tools:
         signup = f'<div class="sec">{SIGNUP}</div>'
     b = f"""<div class="tool-hero"><div class="tool-copy"><p class="back"><a href="index.html">Tool directory</a> · {e(cat_label(t['category']))}{issue_crumb}</p><h1>{e(t['name'])}</h1><p class="vrow">{badge_html(t)}{verdict_stamp(t)}</p><p class="sum">{e(t['description'])}</p>
 {software_ld(t)}</div>
-<aside class="facts" aria-label="Facts"><dl><dt>Use cases</dt><dd><ul>{''.join(f'<li>{e(u)}</li>' for u in t['use_cases'])}</ul></dd><dt>Pricing</dt><dd>{e(t['pricing'])}</dd>{mobile_fact(t)}<dt>Website</dt><dd><a href="{e(t['url'])}" rel="noopener">{e(t['url'])}</a></dd>
+<aside class="facts" aria-label="Facts">{mobile_fact(t)}<dl><dt>Use cases</dt><dd><ul>{''.join(f'<li>{e(u)}</li>' for u in t['use_cases'])}</ul></dd><dt>Pricing</dt><dd>{e(t['pricing'])}</dd><dt>Website</dt><dd><a href="{e(t['url'])}" rel="noopener">{e(t['url'])}</a></dd>
 <dt>Source</dt><dd><a href="{e(t['source'])}" rel="noopener">{e(t['source'])}</a></dd><dt>Added</dt><dd><time datetime="{e(t['date_added'])}">{e(fmt_date(t['date_added']))}</time></dd>{issue_fact}</dl>
 <a class="btn" href="{e(t['url'])}" rel="nofollow noopener">Visit website</a></aside>
 {ov}</div>
@@ -1309,7 +1394,7 @@ llms = [
     "",
     "## Pages",
     "",
-    f"- [Home]({BASE}/): Landing page with this week's picks, categories, and the latest letter.",
+    f"- [Home]({BASE}/): Landing page with This Week's Stars, categories, and the latest letter.",
     f"- [Tool directory]({BASE}/tools/): Search, filter by category, free tier, and letter, and sort the full list. A to Z is the default sort. Newest is available from the sort control and from ?sort=newest. Category links use a ?cat= query. A text search uses ?q=.",
     f"- [This week]({BASE}/this-week.html): This week's picks, each with a sourced reason, plus other tools added in the seven days up to the newest date in the directory.",
     f"- [Newsletter archive]({BASE}/newsletter/): The weekly letter. [Issue #2]({BASE}/newsletter/2/) (Friday, Oct 23, 2026) is published. Issue #1 is listed as coming Oct 23, 2026, with no link until it is sent. /issues/, /archive/, and /newsletters/ redirect here.",
