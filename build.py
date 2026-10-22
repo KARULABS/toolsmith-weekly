@@ -32,8 +32,25 @@ def is_new(t):
     # Hidden for the launch batch: date_added must be after 2026-10-20 and within 7 days.
     added = datetime.date.fromisoformat(t["date_added"])
     return added > LAUNCH and NEW_CUTOFF <= added <= TODAY
-ISSUES = [{"title": "Issue #1", "when": "Coming Oct 23, 2026",
-           "note": "The first letter goes out Oct 23, 2026. No link until it is sent."}]
+# Published letters have path + body. A letter with no path stays on the archive
+# as an upcoming card, with no link, until it is sent.
+ISSUES = [
+    {
+        "id": "2",
+        "title": "Issue #2",
+        "headline": "Patch PHP. Check LiteLLM. Then Fix Your TV.",
+        "when": "Friday, Oct 23, 2026",
+        "note": "AI found a decade-old hole in PHP, LiteLLM shipped a poisoned release, and people are using coding agents to strip the ads off their TVs.",
+        "path": "newsletter/2/",
+        "date": "2026-10-23",
+        "body": "content/issue-2.html",
+    },
+    {
+        "title": "Issue #1",
+        "when": "Coming Oct 23, 2026",
+        "note": "The first letter goes out Oct 23, 2026. No link until it is sent.",
+    },
+]
 # Reader-facing names for the categories stored in tools.json. Unknown categories
 # fall through to the raw name so a new one still appears in the grid and the filters.
 CAT_LABEL = {
@@ -314,6 +331,9 @@ a.metric:hover{background:rgba(255,138,61,.06)}
 .clamp{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .pick .reason{margin:6px 0 10px;font-size:.95rem;line-height:1.35;font-weight:600;letter-spacing:-.01em;color:var(--tx);text-wrap:balance;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;padding-left:10px;box-shadow:inset 2px 0 0 var(--ac)}
 .pick .reason + p{color:var(--mu);font-size:.875rem}
+.pick .pick-src{margin:0;font-family:var(--mono);font-size:.75rem;letter-spacing:.03em}
+.pick .pick-src a{color:var(--mu);text-decoration:none}
+.pick .pick-src a:hover{color:var(--ac)}
 .bento .featured .reason{font-size:clamp(1.15rem,1.6vw,1.35rem);line-height:1.3;letter-spacing:-.02em;margin:10px 0 14px;padding-left:12px;-webkit-line-clamp:3;color:#fff}
 .cats{display:grid;grid-template-columns:repeat(__CATN__,1fr);gap:12px}
 .caticon{width:24px;height:24px;display:block;image-rendering:pixelated}
@@ -359,13 +379,35 @@ input:hover,select:hover{border-color:var(--bd-h)}
 .row .price{color:var(--tx);white-space:nowrap}
 .row .badge-new{margin-left:8px;vertical-align:2px}
 .badge-new{display:inline-block;font-weight:650;font-size:.7rem;padding:4px 8px;border-radius:999px;background:rgba(255,138,61,.12);color:var(--ac2);letter-spacing:.04em;text-transform:uppercase}
+.mbadge{display:inline-flex;align-items:center;margin-left:8px;padding:3px 7px;border:1px solid;border-radius:2px;background:#0b1124;font-family:var(--mono);font-size:.72rem;font-weight:650;letter-spacing:.02em;line-height:1.2;white-space:nowrap}
+.mbadge.m-full{color:#ffc94a;border-color:#ffc94a}
+.mbadge.m-partial{color:#ff9a52;border-color:#ff8a3d}
+.mbadge.m-none{color:#eef2ff;border-color:#8d98c4}
+.mbadge.m-unverified{color:#d7deef;border-color:#9aa6c7;border-style:dashed}
+.mobile-dd{line-height:1.5}
 .cat,.checked,.price{font-size:.92rem;color:var(--mu)}
 time,.num,.count,.metric b{font-family:var(--mono)}
 .quiet{margin:22px 0 0;color:var(--mu)}
 .issue{position:relative;margin:16px 0}
 .issue h2{margin:0 0 6px;font-family:var(--mono);font-weight:500;color:var(--ac2);font-size:1.35rem}
+.issue h2 a{color:inherit;text-decoration:none}
+.issue h2 a:hover{color:var(--ac)}
+.issue .headline{margin:0 0 8px;color:var(--tx);font-size:1.05rem;font-weight:650;letter-spacing:-.02em}
 .issue .when{margin:0;font-family:var(--mono);color:var(--mu)}
 .issue{box-shadow:inset 0 1px 0 var(--ac),0 1px 0 rgba(255,255,255,.04) inset,0 8px 24px -12px rgba(0,0,0,.6)}
+.letter{max-width:68ch}
+.letter h1{max-width:none}
+.letter h2{margin:36px 0 12px;max-width:none}
+.letter h3{margin:22px 0 8px;font-size:1.15rem}
+.letter p,.letter li{font-size:1.0625rem;line-height:1.7;color:#d6dcf0}
+.letter li{margin:0 0 10px}
+.letter ul,.letter ol{margin:0 0 16px;padding-left:1.25rem}
+.letter li::marker{color:var(--ac)}
+.letter code{font-family:var(--mono);font-size:.92em}
+.letter .meta{margin:0 0 18px;font-family:var(--mono);color:var(--mu)}
+.letter-banner{display:block;width:min(100%,720px);height:auto;margin:0 0 24px;background:#000;image-rendering:pixelated}
+.dirlist{margin:0;padding-left:1.25rem}
+.dirlist li{margin:0 0 8px}
 footer{border-top:1px solid var(--bd);padding:48px 0 64px;color:var(--mu);font-size:.85rem}
 footer nav{display:flex;gap:4px 18px;flex-wrap:wrap}
 footer nav a{color:var(--mu);text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
@@ -506,7 +548,7 @@ def price_line(t):
     if "shutting down" in low:
         when = re.search(r"(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{1,2},\s+\d{4}", pricing)
         return f"Shuts down {when.group(0)}" if when else "Shutting down"
-    if re.search(r"free,\s*open source", low):
+    if re.search(r"free,\s*open source", low) or re.search(r"free and open source", low):
         return "Free, open source"
     free = has_free_tier(t)
     scope = pricing
@@ -652,6 +694,56 @@ def page(title, desc, body, path, depth=0, nodes=None, bleed=False):
 def badge_html(t):
     # Website cards only. Callers on the newsletter archive must not use this.
     return '<span class="badge-new">New this week</span>' if is_new(t) else ""
+# Mobile is optional. Tools without it keep the previous page. Values match the
+# open mobile-listings work: full, partial, none, unverified.
+MOBILE_LABEL = {
+    "full": "Fully",
+    "partial": "Partially",
+    "none": "Not at all",
+    "unverified": "not confirmed",
+}
+MOBILE_BADGE = {
+    "full": "Fully",
+    "partial": "Partially",
+    "none": "Not at all",
+    "unverified": "Not confirmed",
+}
+def mobile_status(t):
+    status = t.get("mobile")
+    if not status:
+        return None
+    if status not in MOBILE_LABEL:
+        raise SystemExit(f"{t['name']} has mobile {status!r}; expected full, partial, none, or unverified")
+    if not str(t.get("mobile_description") or "").strip():
+        raise SystemExit(f"{t['name']} is missing mobile_description")
+    if not str(t.get("mobile_source") or "").strip():
+        raise SystemExit(f"{t['name']} is missing mobile_source")
+    if status == "unverified" and "doesn't mention mobile" not in t["mobile_description"]:
+        raise SystemExit(f"{t['name']} is unverified but mobile_description does not say the official site doesn't mention mobile")
+    return status
+def mobile_badge(t):
+    status = mobile_status(t)
+    if not status:
+        return ""
+    return (f'<span class="mbadge m-{status}">'
+            f'<span class="sr">Mobile: </span>{e(MOBILE_BADGE[status])}</span>')
+def mobile_fact(t):
+    # Tool page. Fully, Partially, or Not at all, plus the short description.
+    # Unverified reads "Mobile: not confirmed" and says the official site is silent.
+    status = mobile_status(t)
+    if not status:
+        return ""
+    text = f'Mobile: {MOBILE_LABEL[status]}. {t["mobile_description"]}'
+    return (f'<dt>Mobile</dt><dd class="mobile-dd">{e(text)} '
+            f'<a href="{e(t["mobile_source"])}" rel="noopener">Source</a></dd>')
+def issue_for(t):
+    cid = str(t.get("covered_in") or "")
+    if not cid:
+        return None
+    for issue in ISSUES:
+        if issue.get("id") == cid and issue.get("path"):
+            return issue
+    raise SystemExit(f"{t['name']} covered_in {cid!r} does not match a published issue")
 def row(t, prefix):
     # Every tool is in the HTML. Filters only hide rows; they do not inject them.
     letter = letter_of(t["name"])
@@ -662,7 +754,7 @@ def row(t, prefix):
         f'<article class="row" id="{e(t["slug"])}" data-cat="{e(t["category"])}" '
         f'data-date="{e(t["date_added"])}" data-name="{e(t["name"].lower())}" data-free="{free}" '
         f'data-letter="{e(letter)}" data-text="{e(text)}">'
-        f'<h2 class="name"><a href="{prefix}{t["slug"]}.html">{e(t["name"])}</a>{badge}</h2>'
+        f'<h2 class="name"><a href="{prefix}{t["slug"]}.html">{e(t["name"])}</a>{badge}{mobile_badge(t)}</h2>'
         f'<p class="desc" data-full="{e(t["description"])}">{e(t["description"])}</p>'
         f'<p class="meta"><span class="price">{e(price_line(t))}</span>'
         f'<span class="cat">{e(cat_label(t["category"]))}</span></p></article>'
@@ -673,23 +765,30 @@ def pick_reason_html(t):
     if not reason:
         return ""
     return f'<p class="reason">{e(reason)}</p>'
+def pick_source_html(t):
+    src = str(t.get("pick_source") or "").strip()
+    if not src:
+        return ""
+    return f'<p class="pick-src"><a href="{e(src)}" rel="noopener">Source</a></p>'
 def pick_card(t, featured=False):
     href = f'tools/{t["slug"]}.html'
     why = pick_reason_html(t)
+    src = pick_source_html(t)
+    badge = badge_html(t)
     if featured:
         return (f'<article class="pick featured">'
                 f'<h3><a href="{href}">{e(t["name"])}</a></h3>'
-                f'{why}'
+                f'{badge}{why}{src}'
                 f'<p class="clamp">{e(t["description"])}</p>'
                 f'<p class="meta"><span class="cat">{e(cat_label(t["category"]))}</span> · '
-                f'<span class="price">{e(t["pricing"])}</span></p>'
+                f'<span class="price">{e(price_line(t))}</span></p>'
                 f'<a class="more" href="{href}">See the listing →</a></article>')
     return (f'<article class="pick">'
             f'<h3><a href="{href}">{e(t["name"])}</a></h3>'
-            f'{why}'
+            f'{badge}{why}{src}'
             f'<p class="clamp">{e(t["description"])}</p>'
             f'<span class="cat">{e(cat_label(t["category"]))}</span>'
-            f'<span class="price">{e(t["pricing"])}</span></article>')
+            f'<span class="price">{e(price_line(t))}</span></article>')
 def weekly_picks(items):
     # Optional pick_rank. A ranked pick with a blank reason stops the build.
     picks = [t for t in items if t.get("pick_rank") is not None]
@@ -729,8 +828,18 @@ shutil.rmtree(OUT, ignore_errors=True)
 (OUT / "suggest").mkdir(parents=True)
 (OUT / "style.css").write_text(CSS.replace("__CATN__", str(len(categories))))
 shutil.copyfile(R / "brand" / "og.jpg", OUT / "og.jpg")
+shutil.copyfile(R / "brand" / "header-anvil.jpg", OUT / "header-anvil.jpg")
 shutil.copyfile(R / "logo.png", OUT / "logo.png")
 shutil.copyfile(R / "CNAME", OUT / "CNAME")
+def letter_panel(issue):
+    # Homepage teaser. A published letter links to its page. The archive link stays.
+    title = issue.get("headline") or issue["title"]
+    bits = [f'<p class="kicker">Newsletter</p><h2>{e(title)}</h2>',
+            f'<p>{e(issue["when"])}</p><p class="mu">{e(issue["note"])}</p>']
+    if issue.get("path"):
+        bits.append(f'<p><a href="{e(issue["path"])}">Read {e(issue["title"])}</a></p>')
+    bits.append('<p><a href="newsletter/">Newsletter archive</a></p>')
+    return f'<article class="panel">{"".join(bits)}</article>'
 def cat_href(name):
     return "tools/?cat=" + quote(name, safe="")
 cat_cards = "".join(
@@ -754,7 +863,7 @@ home = f"""<section class="hero"><div class="orb orb-a" aria-hidden="true"></div
 <div class="bento">{pick_html}</div></div></section>
 <section class="band band-alt" id="categories"><div class="w"><div class="band-head"><h2>Browse by category</h2><a href="tools/">Full directory</a></div>
 <div class="cats">{cat_cards}</div></div></section>
-<section class="band" id="letter"><div class="w"><div class="split"><article class="panel"><p class="kicker">Newsletter</p><h2>{e(latest_issue['title'])}</h2><p>{e(latest_issue['when'])}</p><p class="mu">{e(latest_issue['note'])}</p><p><a href="newsletter/">Newsletter archive</a></p></article>{SIGNUP}</div></div></section>"""
+<section class="band" id="letter"><div class="w"><div class="split">{letter_panel(latest_issue)}{SIGNUP}</div></div></section>"""
 (OUT / "index.html").write_text(page(
     f"{N} — the newest AI tools, sorted every Friday",
     VALUE,
@@ -841,7 +950,7 @@ if(ls.some(a=>a.dataset.l===L)){letter=L;ls.forEach(x=>x.classList.toggle('on',x
 run();
 </script>"""
 directory = f"""<header class="pagehead"><h1>Tool directory</h1>
-<p class="lede">{len(tools)} tools. Search by name, or narrow by category, letter, and free tier.</p></header>
+<p class="lede">Search by name, or narrow by category, letter, and free tier.</p></header>
 <label class="sr" for="q">Search tools</label>
 <input class="dirsearch" id="q" type="search" placeholder="Search by name, job, or price" autocomplete="off">
 <nav class="letters" aria-label="Jump to letter">{letters}</nav>
@@ -871,20 +980,31 @@ directory = f"""<header class="pagehead"><h1>Tool directory</h1>
 <main class="w" style="padding:48px 0"><h1>Tool directory</h1>
 <p>This page has moved.</p>
 <p><a href="../tools/">Go to the tool directory</a></p></main></body></html>""")
-week_grid = f'<div class="rows">{"".join(row(t, "tools/") for t in wk)}</div>' if wk else "<p class='mu'>Nothing new in the last seven days.</p>"
-if launch_only:
+# This Week leads with the ranked picks and the sourced reason on each card.
+# Other tools still inside the seven-day window stay below that list.
+pick_block = f'<div class="bento">{"".join(pick_card(t, i == 0) for i, t in enumerate(picks))}</div>'
+others = [t for t in wk if t.get("pick_rank") is None]
+if others:
+    also = (f'<div class="sec"><h2>Also added in the last 7 days</h2>'
+            f'<p class="mu">{len(others)} other tools added in the 7 days up to {e(fmt_date(latest.isoformat()))}.</p>'
+            f'<div class="rows">{"".join(row(t, "tools/") for t in others)}</div></div>')
+elif not wk and not picks:
+    also = "<p class='mu'>Nothing new in the last seven days.</p>"
+else:
+    also = ""
+if launch_only and not picks:
     week_name = "Launch week"
     week_kicker = "First batch"
     week_lede = f"The first batch of tools, added {fmt_date(LAUNCH.isoformat())}."
 else:
     week_name = "This week"
-    week_kicker = f"Added through {fmt_date(latest.isoformat())}"
-    week_lede = f"{len(wk)} tools added in the 7 days up to {fmt_date(latest.isoformat())}."
+    week_kicker = latest_issue["title"] if latest_issue.get("path") else f"Added through {fmt_date(latest.isoformat())}"
+    week_lede = "This week's picks, each with a short reason and a source."
 (OUT / "this-week.html").write_text(page(
     f"{week_name} — {N}",
     week_lede,
-    f'<header class="pagehead"><p class="kicker">{e(week_kicker)}</p><h1>{e(week_name)}</h1><p class="lede">{e(week_lede)}</p></header>{week_grid}<div class="sec">{SIGNUP}</div>',
-    "this-week.html"))
+    f'<header class="pagehead"><p class="kicker">{e(week_kicker)}</p><h1>{e(week_name)}</h1><p class="lede">{e(week_lede)}</p></header>{pick_block}{also}<div class="sec">{SIGNUP}</div>',
+    "this-week.html", nodes=[item_list("This week's picks", picks)]))
 def take_paragraph(t):
     # The written take for this tool, with no verdict label or stock guide line.
     # No stock verdict sentence: every take is written per tool.
@@ -1083,26 +1203,76 @@ def software_ld(t):
 for t in tools:
     ov = overview_html(t)
     rule = '<hr class="rule">' if ov else ""
-    b = f"""<div class="tool-hero"><div class="tool-copy"><p class="back"><a href="index.html">Tool directory</a> · {e(cat_label(t['category']))}</p><h1>{e(t['name'])}</h1><p class="vrow">{badge_html(t)}{verdict_stamp(t)}</p><p class="sum">{e(t['description'])}</p>
+    covered = issue_for(t)
+    issue_crumb = ""
+    issue_fact = ""
+    signup = ""
+    if covered:
+        issue_href = f'../{covered["path"]}'
+        issue_crumb = f' · <a href="{e(issue_href)}">{e(covered["title"])}</a>'
+        issue_fact = f'<dt>Letter</dt><dd><a href="{e(issue_href)}">{e(covered["title"])}</a></dd>'
+        signup = f'<div class="sec">{SIGNUP}</div>'
+    b = f"""<div class="tool-hero"><div class="tool-copy"><p class="back"><a href="index.html">Tool directory</a> · {e(cat_label(t['category']))}{issue_crumb}</p><h1>{e(t['name'])}</h1><p class="vrow">{badge_html(t)}{verdict_stamp(t)}</p><p class="sum">{e(t['description'])}</p>
 {software_ld(t)}</div>
-<aside class="facts" aria-label="Facts"><dl><dt>Use cases</dt><dd><ul>{''.join(f'<li>{e(u)}</li>' for u in t['use_cases'])}</ul></dd><dt>Pricing</dt><dd>{e(t['pricing'])}</dd><dt>Website</dt><dd><a href="{e(t['url'])}" rel="noopener">{e(t['url'])}</a></dd>
-<dt>Source</dt><dd><a href="{e(t['source'])}" rel="noopener">{e(t['source'])}</a></dd><dt>Added</dt><dd><time datetime="{e(t['date_added'])}">{e(fmt_date(t['date_added']))}</time></dd></dl>
+<aside class="facts" aria-label="Facts"><dl><dt>Use cases</dt><dd><ul>{''.join(f'<li>{e(u)}</li>' for u in t['use_cases'])}</ul></dd><dt>Pricing</dt><dd>{e(t['pricing'])}</dd>{mobile_fact(t)}<dt>Website</dt><dd><a href="{e(t['url'])}" rel="noopener">{e(t['url'])}</a></dd>
+<dt>Source</dt><dd><a href="{e(t['source'])}" rel="noopener">{e(t['source'])}</a></dd><dt>Added</dt><dd><time datetime="{e(t['date_added'])}">{e(fmt_date(t['date_added']))}</time></dd>{issue_fact}</dl>
 <a class="btn" href="{e(t['url'])}" rel="nofollow noopener">Visit website</a></aside>
 {ov}</div>
 {rule}
-<section class="take" aria-labelledby="our-take"><h2 id="our-take">Our Take</h2><p>{e(take_paragraph(t))} <a href="{e(t['source'])}" rel="noopener">Source</a></p></section>"""
+<section class="take" aria-labelledby="our-take"><h2 id="our-take">Our Take</h2><p>{e(take_paragraph(t))} <a href="{e(t['source'])}" rel="noopener">Source</a></p></section>
+{signup}"""
     (OUT / "tools" / f"{t['slug']}.html").write_text(page(
         f"{t['name']} — {N}",
         f"{t['name']}: {t['description']}"[:300],
         b, f"tools/{t['slug']}.html", 1))
-issue_cards = "".join(
-    f'<article class="issue"><h2>{e(i["title"])}</h2><p class="when">{e(i["when"])}</p><p class="mu">{e(i["note"])}</p></article>'
-    for i in ISSUES)
+def issue_card(issue):
+    # Archive cards. A published letter links to its page. An upcoming letter does not.
+    href = issue["path"].removeprefix("newsletter/") if issue.get("path") else ""
+    title = f'<a href="{e(href)}">{e(issue["title"])}</a>' if href else e(issue["title"])
+    headline = f'<p class="headline">{e(issue["headline"])}</p>' if issue.get("headline") else ""
+    read = f'<p><a href="{e(href)}">Read the letter</a></p>' if href else ""
+    return (f'<article class="issue"><h2>{title}</h2>{headline}'
+            f'<p class="when">{e(issue["when"])}</p><p class="mu">{e(issue["note"])}</p>{read}</article>')
+issue_cards = "".join(issue_card(i) for i in ISSUES)
 (OUT / "newsletter" / "index.html").write_text(page(
     f"Newsletter Archive — {N}",
-    "Archive of Toolsmith Weekly letters. Issue 1 arrives Oct 23, 2026.",
-    f'<header class="pagehead"><p class="kicker">Letters</p><h1>Newsletter Archive</h1><p class="lede">The weekly letter. Upcoming letters are listed here, and a link is added only after the letter is sent.</p></header>{issue_cards}<div class="sec">{SIGNUP}</div>',
+    "Archive of Toolsmith Weekly letters. Issue #2 is the letter for Friday, Oct 23, 2026.",
+    f'<header class="pagehead"><p class="kicker">Letters</p><h1>Newsletter Archive</h1><p class="lede">The weekly letter. A link is added when the letter is published.</p></header>{issue_cards}<div class="sec">{SIGNUP}</div>',
     "newsletter/", 1))
+def write_issue(issue):
+    depth = issue["path"].strip("/").count("/") + 1
+    prefix = "../" * depth
+    letter = (R / issue["body"]).read_text().replace("__DIRECTORY__", f"{prefix}tools/")
+    listed = [t for t in tools if str(t.get("covered_in") or "") == issue.get("id")]
+    listed.sort(key=lambda t: (t.get("pick_rank") is None, t.get("pick_rank") or 0, t["name"].lower()))
+    items = "".join(f'<li><a href="{prefix}tools/{t["slug"]}.html">{e(t["name"])}</a></li>' for t in listed)
+    directory = ""
+    if items:
+        directory = (f'<section class="sec"><h2>In the directory</h2>'
+                     f'<p>These tools from the letter are listed at <a href="{prefix}tools/">toolsmithweekly.com</a>.</p>'
+                     f'<ul class="dirlist">{items}</ul></section>')
+    body = (f'<article class="letter"><img class="letter-banner" src="{prefix}header-anvil.jpg" alt="Toolsmith Weekly">'
+            f'<p class="kicker">{e(issue["title"])}</p><h1>{e(issue["headline"])}</h1>'
+            f'<p class="meta">{e(issue["when"])}</p><p class="lede">{e(issue["note"])}</p>{letter}</article>'
+            f'{directory}<div class="sec">{SIGNUP}</div>')
+    article = {
+        "@type": "Article",
+        "headline": issue["headline"],
+        "datePublished": issue["date"],
+        "description": issue["note"],
+        "url": f"{BASE}/{issue['path']}",
+        "publisher": {"@id": f"{BASE}/#organization"},
+        "mainEntityOfPage": f"{BASE}/{issue['path']}",
+    }
+    dest = OUT.joinpath(*issue["path"].strip("/").split("/"))
+    dest.mkdir(parents=True, exist_ok=True)
+    (dest / "index.html").write_text(page(
+        f"{issue['headline']} — {N}",
+        issue["note"],
+        body, issue["path"], depth, nodes=[article]))
+for issue in ISSUES:
+    if issue.get("path"):
+        write_issue(issue)
 # Alias paths. Meta refresh plus a plain link. Kept out of the sitemap.
 def alias_page(folder):
     (OUT / folder).mkdir(parents=True, exist_ok=True)
@@ -1125,7 +1295,8 @@ suggest_body = f"""<header class="pagehead"><p class="kicker">For builders</p><h
     f"Suggest a tool — {N}",
     "Indie developers can email a tool suggestion to Toolsmith Weekly.",
     suggest_body, "suggest/", 1))
-urls = ["index.html", "tools/", "this-week.html", "newsletter/", "suggest/"] + [f"tools/{t['slug']}.html" for t in tools]
+issue_urls = [i["path"] for i in ISSUES if i.get("path")]
+urls = ["index.html", "tools/", "this-week.html", "newsletter/"] + issue_urls + ["suggest/"] + [f"tools/{t['slug']}.html" for t in tools]
 (OUT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + "".join(f"<url><loc>{BASE}/{u}</loc></url>" for u in urls) + "</urlset>")
 (OUT / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {BASE}/sitemap.xml\n")
 new_count = sum(is_new(t) for t in tools)
@@ -1140,8 +1311,8 @@ llms = [
     "",
     f"- [Home]({BASE}/): Landing page with this week's picks, categories, and the latest letter.",
     f"- [Tool directory]({BASE}/tools/): Search, filter by category, free tier, and letter, and sort the full list. A to Z is the default sort. Newest is available from the sort control and from ?sort=newest. Category links use a ?cat= query. A text search uses ?q=.",
-    f"- [This week]({BASE}/this-week.html): Tools added in the seven days up to the newest date in the directory.",
-    f"- [Newsletter archive]({BASE}/newsletter/): The weekly letter. Issue 1 is coming Oct 23, 2026. /issues/, /archive/, and /newsletters/ redirect here.",
+    f"- [This week]({BASE}/this-week.html): This week's picks, each with a sourced reason, plus other tools added in the seven days up to the newest date in the directory.",
+    f"- [Newsletter archive]({BASE}/newsletter/): The weekly letter. [Issue #2]({BASE}/newsletter/2/) (Friday, Oct 23, 2026) is published. Issue #1 is listed as coming Oct 23, 2026, with no link until it is sent. /issues/, /archive/, and /newsletters/ redirect here.",
     f"- [Suggest a tool]({BASE}/suggest/): Indie developers can email {CONFIG['suggest_email']} with a tool suggestion.",
     f"- [Subscribe]({CONFIG['subscribe_url']}): Free weekly letter on beehiiv.",
     "",
