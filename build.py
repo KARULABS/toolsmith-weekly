@@ -32,23 +32,27 @@ def is_new(t):
     # Hidden for the launch batch: date_added must be after 2026-10-20 and within 7 days.
     added = datetime.date.fromisoformat(t["date_added"])
     return added > LAUNCH and NEW_CUTOFF <= added <= TODAY
-# Published letters have path + body. A letter with no path stays on the archive
-# as an upcoming card, with no link, until it is sent.
+# A letter with published false stays in the repo (path + body) but is not built.
+# The archive and homepage show it as coming, with no link. Flip published to
+# true to write the page, add it to the sitemap, and turn the links back on.
+def issue_is_live(issue):
+    return bool(issue.get("published")) and bool(issue.get("path")) and bool(issue.get("body"))
+def issue_when(issue):
+    if issue_is_live(issue):
+        return issue["when"]
+    return issue.get("coming") or issue["when"]
 ISSUES = [
     {
-        "id": "2",
-        "title": "Issue #2",
+        "id": "1",
+        "title": "Issue #1",
         "headline": "Patch PHP. Check LiteLLM. Then Fix Your TV.",
         "when": "Friday, Oct 23, 2026",
+        "coming": "Coming Oct 23",
         "note": "AI found a decade-old hole in PHP, LiteLLM shipped a poisoned release, and people are using coding agents to strip the ads off their TVs.",
-        "path": "newsletter/2/",
+        "path": "newsletter/1/",
         "date": "2026-10-23",
-        "body": "content/issue-2.html",
-    },
-    {
-        "title": "Issue #1",
-        "when": "Coming Oct 23, 2026",
-        "note": "The first letter goes out Oct 23, 2026. No link until it is sent.",
+        "body": "content/issue-1.html",
+        "published": False,
     },
 ]
 # Reader-facing names for the categories stored in tools.json. Unknown categories
@@ -838,13 +842,16 @@ def mobile_fact(t):
     return (f'<div class="mobile-fact"><p class="mobile-line">{line}</p>'
             f'<p class="mobile-desc">{e(t["mobile_description"])}</p></div>')
 def issue_for(t):
+    # Tool pages link a letter only while that issue is published.
     cid = str(t.get("covered_in") or "")
     if not cid:
         return None
-    for issue in ISSUES:
-        if issue.get("id") == cid and issue.get("path"):
-            return issue
-    raise SystemExit(f"{t['name']} covered_in {cid!r} does not match a published issue")
+    match = next((issue for issue in ISSUES if issue.get("id") == cid), None)
+    if match is None:
+        raise SystemExit(f"{t['name']} covered_in {cid!r} does not match an issue")
+    if not issue_is_live(match):
+        return None
+    return match
 def row(t, prefix):
     # Every tool is in the HTML. Filters only hide rows; they do not inject them.
     letter = letter_of(t["name"])
@@ -933,10 +940,11 @@ shutil.copyfile(R / "logo.png", OUT / "logo.png")
 shutil.copyfile(R / "CNAME", OUT / "CNAME")
 def letter_panel(issue):
     # Homepage teaser. A published letter links to its page. The archive link stays.
-    title = issue.get("headline") or issue["title"]
+    live = issue_is_live(issue)
+    title = (issue.get("headline") or issue["title"]) if live else issue["title"]
     bits = [f'<p class="kicker">Newsletter</p><h2>{e(title)}</h2>',
-            f'<p>{e(issue["when"])}</p><p class="mu">{e(issue["note"])}</p>']
-    if issue.get("path"):
+            f'<p>{e(issue_when(issue))}</p><p class="mu">{e(issue["note"])}</p>']
+    if live:
         bits.append(f'<p><a href="{e(issue["path"])}">Read {e(issue["title"])}</a></p>')
     bits.append('<p><a href="newsletter/">Newsletter archive</a></p>')
     return f'<article class="panel">{"".join(bits)}</article>'
@@ -1098,7 +1106,7 @@ if launch_only and not picks:
     week_lede = f"The first batch of tools, added {fmt_date(LAUNCH.isoformat())}."
 else:
     week_name = "This week"
-    week_kicker = latest_issue["title"] if latest_issue.get("path") else f"Added through {fmt_date(latest.isoformat())}"
+    week_kicker = latest_issue["title"] if issue_is_live(latest_issue) else f"Added through {fmt_date(latest.isoformat())}"
     week_lede = "This week's picks, each with a short reason and a source."
 (OUT / "this-week.html").write_text(page(
     f"{week_name} — {N}",
@@ -1309,8 +1317,9 @@ for t in tools:
     signup = ""
     if covered:
         issue_href = f'../{covered["path"]}'
-        issue_crumb = f' · <a href="{e(issue_href)}">{e(covered["title"])}</a>'
-        issue_fact = f'<dt>Letter</dt><dd><a href="{e(issue_href)}">{e(covered["title"])}</a></dd>'
+        featured = f'Featured in {covered["title"]}'
+        issue_crumb = f' · <a href="{e(issue_href)}">{e(featured)}</a>'
+        issue_fact = f'<dt>Letter</dt><dd><a href="{e(issue_href)}">{e(featured)}</a></dd>'
         signup = f'<div class="sec">{SIGNUP}</div>'
     b = f"""<div class="tool-hero"><div class="tool-copy"><p class="back"><a href="index.html">Tool directory</a> · {e(cat_label(t['category']))}{issue_crumb}</p><h1>{e(t['name'])}</h1><p class="vrow">{badge_html(t)}{verdict_stamp(t)}</p><p class="sum">{e(t['description'])}</p>
 {software_ld(t)}</div>
@@ -1327,16 +1336,17 @@ for t in tools:
         b, f"tools/{t['slug']}.html", 1))
 def issue_card(issue):
     # Archive cards. A published letter links to its page. An upcoming letter does not.
-    href = issue["path"].removeprefix("newsletter/") if issue.get("path") else ""
+    live = issue_is_live(issue)
+    href = issue["path"].removeprefix("newsletter/") if live else ""
     title = f'<a href="{e(href)}">{e(issue["title"])}</a>' if href else e(issue["title"])
-    headline = f'<p class="headline">{e(issue["headline"])}</p>' if issue.get("headline") else ""
+    headline = f'<p class="headline">{e(issue["headline"])}</p>' if live and issue.get("headline") else ""
     read = f'<p><a href="{e(href)}">Read the letter</a></p>' if href else ""
     return (f'<article class="issue"><h2>{title}</h2>{headline}'
-            f'<p class="when">{e(issue["when"])}</p><p class="mu">{e(issue["note"])}</p>{read}</article>')
+            f'<p class="when">{e(issue_when(issue))}</p><p class="mu">{e(issue["note"])}</p>{read}</article>')
 issue_cards = "".join(issue_card(i) for i in ISSUES)
 (OUT / "newsletter" / "index.html").write_text(page(
     f"Newsletter Archive — {N}",
-    "Archive of Toolsmith Weekly letters. Issue #2 is the letter for Friday, Oct 23, 2026.",
+    "Archive of Toolsmith Weekly letters. Upcoming letters are listed with no link until they are sent.",
     f'<header class="pagehead"><p class="kicker">Letters</p><h1>Newsletter Archive</h1><p class="lede">The weekly letter. A link is added when the letter is published.</p></header>{issue_cards}<div class="sec">{SIGNUP}</div>',
     "newsletter/", 1))
 def write_issue(issue):
@@ -1371,22 +1381,25 @@ def write_issue(issue):
         issue["note"],
         body, issue["path"], depth, nodes=[article]))
 for issue in ISSUES:
-    if issue.get("path"):
+    if issue_is_live(issue):
         write_issue(issue)
 # Alias paths. Meta refresh plus a plain link. Kept out of the sitemap.
 def alias_page(folder):
+    # One level for /issues/. Two levels for /newsletter/2/, which used to be the letter.
+    depth = folder.strip("/").count("/") + 1
+    up = "../" * depth
     (OUT / folder).mkdir(parents=True, exist_ok=True)
     (OUT / folder / "index.html").write_text(f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Newsletter Archive — {e(N)}</title>
 <meta name="robots" content="noindex">
-<meta http-equiv="refresh" content="0; url=../newsletter/">
+<meta http-equiv="refresh" content="0; url={up}newsletter/">
 <link rel="canonical" href="{BASE}/newsletter/">
 <meta name="description" content="The newsletter archive has moved.">
-<link rel="stylesheet" href="../style.css"></head><body>
+<link rel="stylesheet" href="{up}style.css"></head><body>
 <main class="w" style="padding:48px 0"><h1>Newsletter Archive</h1>
 <p>This page has moved.</p>
-<p><a href="../newsletter/">Go to the newsletter archive</a></p></main></body></html>""")
-for alias in ("issues", "archive", "newsletters"):
+<p><a href="{up}newsletter/">Go to the newsletter archive</a></p></main></body></html>""")
+for alias in ("issues", "archive", "newsletters", "newsletter/2"):
     alias_page(alias)
 suggest_body = f"""<header class="pagehead"><p class="kicker">For builders</p><h1>Suggest a tool</h1><p class="lede">Indie developers: send a tool you built, or one you want listed.</p></header>
 <p><a class="btn" href="{e(suggest_href)}">Suggest a tool by email</a></p>
@@ -1395,7 +1408,7 @@ suggest_body = f"""<header class="pagehead"><p class="kicker">For builders</p><h
     f"Suggest a tool — {N}",
     "Indie developers can email a tool suggestion to Toolsmith Weekly.",
     suggest_body, "suggest/", 1))
-issue_urls = [i["path"] for i in ISSUES if i.get("path")]
+issue_urls = [i["path"] for i in ISSUES if issue_is_live(i)]
 urls = ["index.html", "tools/", "this-week.html", "newsletter/"] + issue_urls + ["suggest/"] + [f"tools/{t['slug']}.html" for t in tools]
 (OUT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + "".join(f"<url><loc>{BASE}/{u}</loc></url>" for u in urls) + "</urlset>")
 (OUT / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {BASE}/sitemap.xml\n")
@@ -1412,7 +1425,7 @@ llms = [
     f"- [Home]({BASE}/): Landing page with This Week's Stars, categories, and the latest letter.",
     f"- [Tool directory]({BASE}/tools/): Search, filter by category, free tier, and letter, and sort the full list. A to Z is the default sort. Newest is available from the sort control and from ?sort=newest. Category links use a ?cat= query. A text search uses ?q=.",
     f"- [This week]({BASE}/this-week.html): This week's picks, each with a sourced reason, plus other tools added in the seven days up to the newest date in the directory.",
-    f"- [Newsletter archive]({BASE}/newsletter/): The weekly letter. [Issue #2]({BASE}/newsletter/2/) (Friday, Oct 23, 2026) is published. Issue #1 is listed as coming Oct 23, 2026, with no link until it is sent. /issues/, /archive/, and /newsletters/ redirect here.",
+    f"- [Newsletter archive]({BASE}/newsletter/): The weekly letter. Issue #1 is listed as coming Oct 23, with no link until it is sent. /newsletter/2/, /issues/, /archive/, and /newsletters/ redirect here.",
     f"- [Suggest a tool]({BASE}/suggest/): Indie developers can email {CONFIG['suggest_email']} with a tool suggestion.",
     f"- [Subscribe]({CONFIG['subscribe_url']}): Free weekly letter on beehiiv.",
     "",

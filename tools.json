@@ -883,7 +883,7 @@
     "mobile_note": "Runs on one B300 or H200 GPU per replica, not on phones",
     "mobile_source": "https://huggingface.co/RecursiveSI/flint",
     "mobile_description": "The model card says it runs on one B300 or H200 GPU per replica (an 80 GB download), and quantized variants are for NVIDIA and Apple Silicon computers, not phones.",
-    "covered_in": "2",
+    "covered_in": "1",
     "pick_rank": 1,
     "pick_reason": "Open-weight coding model with 39.8B parameters and about 2.5B active per token",
     "pick_source": "https://huggingface.co/RecursiveSI/flint"
@@ -907,7 +907,7 @@
     "mobile_note": "No official mobile info found",
     "mobile_source": "https://www.inceptionlabs.ai/blog/introducing-mercury-3",
     "mobile_description": "The official site doesn't say whether it works on mobile, so check before relying on it.",
-    "covered_in": "2",
+    "covered_in": "1",
     "pick_rank": 2,
     "pick_reason": "Diffusion LLM that Inception says runs at more than 1,000 tokens per second",
     "pick_source": "https://www.inceptionlabs.ai/blog/introducing-mercury-3"
@@ -931,7 +931,7 @@
     "mobile_note": "Agents work over phone or web; no mobile app stated",
     "mobile_source": "https://mistral.ai/news/voxtral-3/",
     "mobile_description": "Mistral says the agents work over phone or web, meaning phone calls, not a mobile app. The official site doesn't say whether it works on mobile, so check before relying on it.",
-    "covered_in": "2",
+    "covered_in": "1",
     "pick_rank": 3,
     "pick_reason": "Speech models and a voice agent SDK that listen, reason, call tools and speak",
     "pick_source": "https://mistral.ai/news/voxtral-3/"
@@ -955,7 +955,7 @@
     "mobile_note": "Local CLI, Python API, and MCP server; no mobile app stated",
     "mobile_source": "https://github.com/Leonxlnx/earshot",
     "mobile_description": "The official site doesn't say whether it works on mobile, so check before relying on it.",
-    "covered_in": "2",
+    "covered_in": "1",
     "pick_rank": 4,
     "pick_reason": "Gives coding agents ears for sound files, long recordings and whole videos",
     "pick_source": "https://github.com/Leonxlnx/earshot"
@@ -978,7 +978,7 @@
     "mobile_note": "No official mobile info found",
     "mobile_source": "https://fx0.vercel.dev",
     "mobile_description": "The official site doesn't say whether it works on mobile, so check before relying on it.",
-    "covered_in": "2",
+    "covered_in": "1",
     "pick_rank": 5,
     "pick_reason": "Describe a page and it writes the whole thing as one HTML file",
     "pick_source": "https://github.com/vercel-labs/fx0"
@@ -1001,7 +1001,7 @@
     "mobile_note": "A share link opens one window in a phone browser; the app needs two Macs",
     "mobile_source": "https://beam.win",
     "mobile_description": "Beam's FAQ says a share link opens one window in any browser, on any device, so you can view a window from a phone browser, but the app itself needs two Macs on macOS Sonoma or later, Apple silicon or Intel.",
-    "covered_in": "2",
+    "covered_in": "1",
     "pick_rank": 6,
     "pick_reason": "Pulls windows from another Mac onto yours as real windows with Dock icons",
     "pick_source": "https://beam.win"
@@ -1024,7 +1024,7 @@
     "mobile_note": "Needs a computer on the same Wi-Fi as the TV",
     "mobile_source": "https://github.com/Gathin23/cleanyourtv",
     "mobile_description": "The README says you need a computer on the same Wi-Fi as the TV and a coding assistant with shell access.",
-    "covered_in": "2",
+    "covered_in": "1",
     "pick_rank": 7,
     "pick_reason": "Lets Claude Code, Codex or Gemini CLI debloat an Android or Google TV over Wi-Fi",
     "pick_source": "https://github.com/Gathin23/cleanyourtv"
@@ -1047,7 +1047,7 @@
     "mobile_note": "You run it on a laptop on the same Wi-Fi as the TV",
     "mobile_source": "https://github.com/Ansub/tv-detox",
     "mobile_description": "You run Claude Code or Codex on your laptop, which has to be on the same Wi-Fi as the TV.",
-    "covered_in": "2",
+    "covered_in": "1",
     "pick_rank": 8,
     "pick_reason": "A prompt and tiny home screen that let Claude Code or Codex clean up a slow Android TV",
     "pick_source": "https://github.com/Ansub/tv-detox"
@@ -1070,7 +1070,7 @@
     "mobile_note": "Targets PC games, with friends joining over Steam",
     "mobile_source": "https://github.com/cranebeaker/coop-anything",
     "mobile_description": "The README targets games that run on your PC, with friends joining over Steam.",
-    "covered_in": "2",
+    "covered_in": "1",
     "pick_rank": 9,
     "pick_reason": "Lets a coding agent turn a single-player PC game into co-op",
     "pick_source": "https://github.com/cranebeaker/coop-anything"
