@@ -225,24 +225,25 @@ def cat_icon(name):
     rows = CAT_ICON.get(name, CAT_ICON["coding agents"])
     return ('<svg class="caticon" viewBox="0 0 12 12" aria-hidden="true" focusable="false" '
             f'shape-rendering="crispEdges">{pix(rows)}</svg>')
-def star_grid(w=65):
-    # Regular five-point star on an odd grid so the tips can sit on a center column.
-    # Inner radius is the pentagram ratio, which keeps the points sharp.
-    assert w % 2 == 1
-    cx = (w - 1) / 2
-    R = cx / math.cos(math.radians(18))
+def star_grid(w=97):
+    # Five-point star on a fine grid. The two lower tips sit further out along
+    # the same 36° point angle so each leg matches the top point in length and
+    # thickness. Left and right stay mirrors.
+    cx = cy = (w - 1) / 2
+    R = (w - 1) / 2 - 16
     inner = 0.382
+    leg = 1.18  # lower points, so the free legs match the top spike
     pts = []
     for i in range(5):
-        for ang, rad in ((-90 + i * 72, R), (-90 + i * 72 + 36, R * inner)):
-            a = math.radians(ang)
-            x = cx + rad * math.cos(a)
-            dx = abs(x - cx)
-            pts.append((cx + (dx if x >= cx else -dx), R + rad * math.sin(a)))
-    h = int(math.ceil(max(p[1] for p in pts) + 0.5))
+        ang = -90 + i * 72
+        rad = R * leg if ang in (54, 126) else R
+        a = math.radians(ang)
+        pts.append((cx + rad * math.cos(a), cy + rad * math.sin(a)))
+        ia = math.radians(ang + 36)
+        pts.append((cx + R * inner * math.cos(ia), cy + R * inner * math.sin(ia)))
     samples = 8
     offs = [(i + 0.5) / samples for i in range(samples)]
-    need = samples * samples * 0.45
+    need = samples * samples * 0.28
     def inside(x, y):
         c = False
         j = len(pts) - 1
@@ -252,51 +253,69 @@ def star_grid(w=65):
                 c = not c
             j = i
         return c
-    mask = []
-    for y in range(h):
-        row = []
+    mask = [[False] * w for _ in range(w)]
+    for y in range(w):
         for x in range(w):
             hits = sum(1 for oy in offs for ox in offs if inside(x + ox, y + oy))
-            row.append(hits >= need)
+            mask[y][x] = hits >= need
+    # Same 36° thickness as the top point, plus a hair so the diagonal legs
+    # are not eaten down to a one-pixel line.
+    for ang in (54, 126):
+        a = math.radians(ang)
+        dx, dy = math.cos(a), math.sin(a)
+        px, py = -dy, dx
+        tip = R * leg
+        step = 0
+        while step * 0.5 <= tip:
+            t = step * 0.5
+            dist = tip - t
+            step += 1
+            if dist < 0 or t < R * 0.42:
+                continue
+            half = max(0.0, dist * math.tan(math.radians(18)) + 0.8)
+            if dist < 2.2:
+                half = max(half * 0.5, 0.6)
+            n = int(half * 2) + 2
+            for s in range(n + 1):
+                off = -half + (2 * half) * s / n
+                sx = cx + t * dx + off * px
+                sy = cy + t * dy + off * py
+                xi, yi = int(round(sx)), int(round(sy))
+                if 0 <= xi < w and 0 <= yi < w:
+                    mask[yi][xi] = True
+    for y in range(w):
         for x in range(w // 2):
-            row[w - 1 - x] = row[x]
-        mask.append(row)
-    while mask and not any(mask[0]):
-        mask.pop(0)
-    while mask and not any(mask[-1]):
-        mask.pop()
-    def span(row):
-        xs = [i for i, v in enumerate(row) if v]
-        return 0 if not xs else xs[-1] - xs[0] + 1
-    if mask and span(mask[0]) > 1:
-        tip = [False] * w
-        tip[w // 2] = True
-        mask.insert(0, tip)
-    h = len(mask)
-    grid = [["."] * w for _ in range(h)]
+            mask[y][w - 1 - x] = mask[y][x]
+    ys = [y for y in range(w) if any(mask[y])]
+    xs = [x for y in ys for x in range(w) if mask[y][x]]
+    x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
+    cropped = [row[x0:x1 + 1] for row in mask[y0:y1 + 1]]
+    h, width = len(cropped), len(cropped[0])
+    grid = [["."] * width for _ in range(h)]
     for y in range(h):
-        for x in range(w):
-            if not mask[y][x]:
+        for x in range(width):
+            if not cropped[y][x]:
                 continue
             edge = any(
-                not (0 <= x + dx < w and 0 <= y + dy < h and mask[y + dy][x + dx])
+                not (0 <= x + dx < width and 0 <= y + dy < h and cropped[y + dy][x + dx])
                 for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))
             )
             grid[y][x] = "o" if edge else "#"
-    # A light from above: the pixel just under the upper outline, mirrored.
     for y in range(h):
-        for x in range(w):
-            if grid[y][x] == "#" and y and grid[y - 1][x] == "o" and y < h * 0.72:
+        for x in range(width):
+            if grid[y][x] == "#" and y and grid[y - 1][x] == "o" and y < h * 0.85:
                 grid[y][x] = "+"
     for y in range(h):
-        for x in range(w // 2):
-            a, b = grid[y][x], grid[y][w - 1 - x]
-            if "o" in (a, b):
-                grid[y][x] = grid[y][w - 1 - x] = "o"
+        for x in range(width // 2):
+            a, b = grid[y][x], grid[y][width - 1 - x]
+            if a == "." and b != ".":
+                grid[y][x] = b
+            elif b == "." and a != ".":
+                grid[y][width - 1 - x] = a
+            elif "o" in (a, b):
+                grid[y][x] = grid[y][width - 1 - x] = "o"
             elif "+" in (a, b):
-                grid[y][x] = grid[y][w - 1 - x] = "+"
-            elif "#" in (a, b):
-                grid[y][x] = grid[y][w - 1 - x] = "#"
+                grid[y][x] = grid[y][width - 1 - x] = "+"
     return ["".join(row) for row in grid]
 def star_rects(rows):
     # o is the darker gold edge, # the body, + the inner highlight.
