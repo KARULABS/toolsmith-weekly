@@ -885,15 +885,9 @@ else:
     f'<header class="pagehead"><p class="kicker">{e(week_kicker)}</p><h1>{e(week_name)}</h1><p class="lede">{e(week_lede)}</p></header>{week_grid}<div class="sec">{SIGNUP}</div>',
     "this-week.html"))
 def take_paragraph(t):
-    # The opinion sentence, plus a guide line when that verdict has one.
-    # The old wait boilerplate is never printed.
-    # A written overview already includes the full opinion, so that card is verdict_reason alone.
-    reason = " ".join(t["verdict_reason"].replace(_TAKE_BOILERPLATE, "").split())
-    if isinstance(t.get("overview"), dict):
-        return reason
-    guide = GUIDE.get(t["verdict"], "").strip()
-    parts = [p for p in (guide, reason) if p and p != _TAKE_BOILERPLATE]
-    return " ".join(parts)
+    # The written take for this tool, with no verdict label or stock guide line.
+    # No stock verdict sentence: every take is written per tool.
+    return " ".join(t["verdict_reason"].replace(_TAKE_BOILERPLATE, "").split())
 def _lines(value):
     if value is None:
         return []
