@@ -41,6 +41,7 @@ CAT_LABEL = {
     "vibe-coding app builders": "Vibe Coding",
     "AI agents/automation": "Automation",
     "gaming/game dev": "Gaming",
+    "Security": "Security",
 }
 CAT_ORDER = list(CAT_LABEL)
 # Neutral first sentence of Our Take. Not shown as a label.
@@ -218,6 +219,20 @@ CAT_ICON = {
         "............",
         "............",
         "............",
+        "............",
+    ),
+    "Security": (
+        "............",
+        "...######...",
+        "..########..",
+        ".##########.",
+        ".###....###.",
+        ".###.##.###.",
+        ".###.##.###.",
+        "..########..",
+        "...######...",
+        "....####....",
+        ".....##.....",
         "............",
     ),
 }
@@ -991,7 +1006,7 @@ directory = f"""<header class="pagehead"><h1>Tool directory</h1>
 {JS}"""
 (OUT / "tools" / "index.html").write_text(page(
     f"Tool directory — {N}",
-    f"Searchable directory of {len(tools)} AI tools for coding, vibe coding, automation, and games.",
+    f"Searchable directory of {len(tools)} AI tools for coding, vibe coding, automation, games, and security.",
     directory, "tools/", 1, nodes=[item_list("Tool directory", sorted(tools, key=lambda t: t["name"].lower()))]))
 # Old verdicts URL. Noindex redirect, kept out of the sitemap.
 (OUT / "verdicts" / "index.html").write_text(f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -1267,7 +1282,7 @@ llms = [
     "",
     f"> {VALUE}",
     "",
-    f"{N} lists new AI tools for coding, vibe coding, automation, and games. {SOURCE_NOTE} The directory currently lists {len(tools)} tools. Tools added after 2026-10-20 and within the last 7 days are marked New this week on the website only. That badge is not used in the newsletter. The first batch is labeled Launch week.",
+    f"{N} lists new AI tools for coding, vibe coding, automation, games, and security. {SOURCE_NOTE} The directory currently lists {len(tools)} tools. Tools added after 2026-10-20 and within the last 7 days are marked New this week on the website only. That badge is not used in the newsletter. The first batch is labeled Launch week.",
     "",
     "## Pages",
     "",
