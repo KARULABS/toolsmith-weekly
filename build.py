@@ -729,6 +729,7 @@ shutil.rmtree(OUT, ignore_errors=True)
 (OUT / "suggest").mkdir(parents=True)
 (OUT / "style.css").write_text(CSS.replace("__CATN__", str(len(categories))))
 shutil.copyfile(R / "brand" / "og.jpg", OUT / "og.jpg")
+shutil.copyfile(R / "logo.png", OUT / "logo.png")
 shutil.copyfile(R / "CNAME", OUT / "CNAME")
 def cat_href(name):
     return "tools/?cat=" + quote(name, safe="")
