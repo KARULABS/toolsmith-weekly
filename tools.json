@@ -81,10 +81,7 @@
         "https://cursor.com/docs/models-and-pricing.md"
       ],
       "disclosure": "Drafted with AI assistance. No sponsorship."
-    },
-    "pick_rank": 1,
-    "pick_reason": "Opened an app marketplace with 20+ apps and public submissions",
-    "pick_source": "https://cursor.com/changelog"
+    }
   },
   {
     "name": "Claude Code",
@@ -265,10 +262,7 @@
         "https://lovable.dev/students"
       ],
       "disclosure": "Drafted with AI assistance. No sponsorship."
-    },
-    "pick_rank": 2,
-    "pick_reason": "New Growth tools plan toward goals like your first 100 signups",
-    "pick_source": "https://docs.lovable.dev/changelog"
+    }
   },
   {
     "name": "Bolt.new",
@@ -519,10 +513,7 @@
         "https://www.lindy.ai/pricing"
       ],
       "disclosure": "Drafted with AI assistance. No sponsorship."
-    },
-    "pick_rank": 3,
-    "pick_reason": "Record a task once, and Lindy repeats it on demand or schedule",
-    "pick_source": "https://www.lindy.ai/changelog"
+    }
   },
   {
     "name": "Manus",
@@ -809,10 +800,7 @@
         "https://inworld.ai/blog/introducing-inworld-inference"
       ],
       "disclosure": "Drafted with AI assistance. No sponsorship."
-    },
-    "pick_rank": 4,
-    "pick_reason": "Launched Inworld Inference, a hosted inference service",
-    "pick_source": "https://inworld.ai/blog/introducing-inworld-inference"
+    }
   },
   {
     "name": "Leonardo AI",
@@ -875,6 +863,217 @@
     "mobile_note": "iOS and Android apps",
     "mobile_source": "https://elevenlabs.io/docs/help-center/product/mobile-apps/eleven-labs-for-ios-and-android/what-is-the-eleven-labs-app.md",
     "mobile_description": "ElevenLabs has iOS and Android apps."
+  },
+  {
+    "name": "Recursive Flint",
+    "url": "https://huggingface.co/RecursiveSI/flint",
+    "category": "coding agents",
+    "description": "An open-weight coding model from Recursive, with 39.8B total parameters and about 2.5B active per token, built for coding agents that investigate codebases, fix bugs and write tests. It's Apache-2.0 and ships with an SGLang serving kit.",
+    "use_cases": [
+      "Self-hosted coding agents",
+      "Investigating codebases and fixing bugs",
+      "Writing tests"
+    ],
+    "pricing": "Free open weights (Apache 2.0). The model card says hosted API terms are separate, and it states no API price.",
+    "verdict_reason": "Recursive Flint is for self-hosters who want a fast coding model. Recursive reports 74.2% on SWE-bench Verified and 54.9% on Terminal-Bench 2.1, and those scores are self-reported. It's an 80 GB download that needs one B300 or H200 GPU per replica for now. On a Mac, the indie engine Kapitsa already runs it.",
+    "verdict_checked": "2026-10-22",
+    "date_added": "2026-10-22",
+    "source": "https://huggingface.co/RecursiveSI/flint",
+    "mobile": "none",
+    "mobile_note": "Runs on one B300 or H200 GPU per replica, not on phones",
+    "mobile_source": "https://huggingface.co/RecursiveSI/flint",
+    "mobile_description": "The model card says it runs on one B300 or H200 GPU per replica (an 80 GB download), and quantized variants are for NVIDIA and Apple Silicon computers, not phones.",
+    "covered_in": "2",
+    "pick_rank": 1,
+    "pick_reason": "Open-weight coding model with 39.8B parameters and about 2.5B active per token",
+    "pick_source": "https://huggingface.co/RecursiveSI/flint"
+  },
+  {
+    "name": "Mercury 3",
+    "url": "https://www.inceptionlabs.ai/blog/introducing-mercury-3",
+    "category": "coding agents",
+    "description": "A diffusion-based LLM that Inception says runs at more than 1,000 tokens per second with a 1M-token context window. It's OpenAI API compatible and available on Inception's API, OpenRouter, Baseten and Vercel.",
+    "use_cases": [
+      "Browser agents",
+      "Voice bots",
+      "Subagents where speed matters"
+    ],
+    "pricing": "$0.20 per 1M input tokens and $0.70 per 1M output tokens. It's 50% off at launch ($0.10/$0.35), and cached tokens are 90% off the input price.",
+    "verdict_reason": "Mercury 3 is for browser agents, voice bots and subagents where speed matters more than raw intelligence. Inception claims 1,068 tokens per second on NVIDIA GPUs, a 1M-token context window and quality on par with GPT-6 Luna and Claude Haiku 5.5. All benchmarks are Inception's own. It costs $0.20/$0.70 per million input/output tokens, and is half that during launch.",
+    "verdict_checked": "2026-10-22",
+    "date_added": "2026-10-22",
+    "source": "https://www.inceptionlabs.ai/blog/introducing-mercury-3",
+    "mobile": "unverified",
+    "mobile_note": "No official mobile info found",
+    "mobile_source": "https://www.inceptionlabs.ai/blog/introducing-mercury-3",
+    "mobile_description": "The official site doesn't say whether it works on mobile, so check before relying on it.",
+    "covered_in": "2",
+    "pick_rank": 2,
+    "pick_reason": "Diffusion LLM that Inception says runs at more than 1,000 tokens per second",
+    "pick_source": "https://www.inceptionlabs.ai/blog/introducing-mercury-3"
+  },
+  {
+    "name": "Voxtral 3",
+    "url": "https://mistral.ai/news/voxtral-3/",
+    "category": "AI agents/automation",
+    "description": "Mistral's speech-to-text and text-to-speech models plus a voice agent SDK that listens, reasons, calls tools and speaks in one real-time pipeline. Transcription covers 50+ languages, and you can use Mistral's EU-hosted API or self-deploy.",
+    "use_cases": [
+      "Phone and support agents",
+      "Speech transcription",
+      "Text to speech"
+    ],
+    "pricing": "The announcement gives one price: Voxtral Mini Transcribe 3 at $0.0035 per minute. No other prices are listed in the post.",
+    "verdict_reason": "Voxtral 3 is for phone and support agents, especially in Europe or anywhere audio has to stay on your own infrastructure. Transcription covers 50+ languages, the new TTS voices cover 35+ languages, and Pro Voice adapts a voice from 30 minutes of audio. Comparisons with Whisper and others are Mistral's own.",
+    "verdict_checked": "2026-10-22",
+    "date_added": "2026-10-22",
+    "source": "https://mistral.ai/news/voxtral-3/",
+    "mobile": "unverified",
+    "mobile_note": "Agents work over phone or web; no mobile app stated",
+    "mobile_source": "https://mistral.ai/news/voxtral-3/",
+    "mobile_description": "Mistral says the agents work over phone or web, meaning phone calls, not a mobile app. The official site doesn't say whether it works on mobile, so check before relying on it.",
+    "covered_in": "2",
+    "pick_rank": 3,
+    "pick_reason": "Speech models and a voice agent SDK that listen, reason, call tools and speak",
+    "pick_source": "https://mistral.ai/news/voxtral-3/"
+  },
+  {
+    "name": "earshot",
+    "url": "https://github.com/Leonxlnx/earshot",
+    "category": "coding agents",
+    "description": "Gives coding agents \"ears\": it describes sounds in words, finds moments in long recordings and critiques the audio of whole videos. It runs locally on CPU as a CLI, Python API and MCP server.",
+    "use_cases": [
+      "Describing a sound file in words",
+      "Finding a moment in a long recording",
+      "Listening reports on video audio"
+    ],
+    "pricing": "Free, open source (MIT).",
+    "verdict_reason": "earshot is for anyone having an agent build demos, launch videos or game audio. It describes a sound file in words, finds a specific moment in a long recording and writes a second-by-second listening report on a whole video. The descriptions are useful evidence, not a replacement for listening yourself.",
+    "verdict_checked": "2026-10-22",
+    "date_added": "2026-10-22",
+    "source": "https://github.com/Leonxlnx/earshot",
+    "mobile": "unverified",
+    "mobile_note": "Local CLI, Python API, and MCP server; no mobile app stated",
+    "mobile_source": "https://github.com/Leonxlnx/earshot",
+    "mobile_description": "The official site doesn't say whether it works on mobile, so check before relying on it.",
+    "covered_in": "2",
+    "pick_rank": 4,
+    "pick_reason": "Gives coding agents ears for sound files, long recordings and whole videos",
+    "pick_source": "https://github.com/Leonxlnx/earshot"
+  },
+  {
+    "name": "fx0",
+    "url": "https://fx0.vercel.dev",
+    "category": "vibe-coding app builders",
+    "description": "An open-source design agent: describe a page and it writes the whole thing as a single HTML file, keeping a version for every turn. It starts from ten design styles or your own design.md.",
+    "use_cases": [
+      "Landing pages",
+      "Mockups"
+    ],
+    "pricing": "Free and open source (Apache-2.0). Model calls bill through your own Vercel AI Gateway when you sign in with Vercel. A deployment can optionally offer five free prompts per IP.",
+    "verdict_reason": "fx0 is for landing pages and mockups, and a readable example if you want to build your own agent app on Vercel's libfx. You describe a page and it writes the whole thing as one HTML file, keeping a version for every turn. Model costs bill through your Vercel AI Gateway account, and each turn is capped at 64 model steps so a looping agent can't run up a bill.",
+    "verdict_checked": "2026-10-22",
+    "date_added": "2026-10-22",
+    "source": "https://github.com/vercel-labs/fx0",
+    "mobile": "unverified",
+    "mobile_note": "No official mobile info found",
+    "mobile_source": "https://fx0.vercel.dev",
+    "mobile_description": "The official site doesn't say whether it works on mobile, so check before relying on it.",
+    "covered_in": "2",
+    "pick_rank": 5,
+    "pick_reason": "Describe a page and it writes the whole thing as one HTML file",
+    "pick_source": "https://github.com/vercel-labs/fx0"
+  },
+  {
+    "name": "Beam",
+    "url": "https://beam.win",
+    "category": "coding agents",
+    "description": "Brings windows from another Mac, such as agents running on a headless Mac mini, onto the Mac in front of you as real windows with their own Dock icons. Traffic goes directly between your Macs, encrypted.",
+    "use_cases": [
+      "Agents on a headless Mac",
+      "Pulling remote Mac windows onto your Mac"
+    ],
+    "pricing": "Free ($0, 20 minutes a day). Yearly is $7/month, billed $84 a year. Lifetime is $199. Team pricing is shown per seat.",
+    "verdict_reason": "Beam is for anyone running agents on a headless Mac who is tired of Screen Sharing. Windows arrive as real windows, each with a Dock icon, and traffic goes directly between your Macs, encrypted. It needs two Macs on macOS Sonoma or later, Apple silicon or Intel. The free tier gives you 20 minutes a day. The yearly plan is $84 ($7 a month), and lifetime is $199.",
+    "verdict_checked": "2026-10-22",
+    "date_added": "2026-10-22",
+    "source": "https://beam.win",
+    "mobile": "partial",
+    "mobile_note": "A share link opens one window in a phone browser; the app needs two Macs",
+    "mobile_source": "https://beam.win",
+    "mobile_description": "Beam's FAQ says a share link opens one window in any browser, on any device, so you can view a window from a phone browser, but the app itself needs two Macs on macOS Sonoma or later, Apple silicon or Intel.",
+    "covered_in": "2",
+    "pick_rank": 6,
+    "pick_reason": "Pulls windows from another Mac onto yours as real windows with Dock icons",
+    "pick_source": "https://beam.win"
+  },
+  {
+    "name": "CleanYourTV",
+    "url": "https://cleanyour.tv",
+    "category": "vibe-coding app builders",
+    "description": "A prompt and a small launcher that let Claude Code, Codex or Gemini CLI debloat an Android or Google TV over Wi-Fi and swap in an ad-free, Apple TV-style home screen. Apps are disabled rather than uninstalled, and there's a one-line restore.",
+    "use_cases": [
+      "Debloating an Android or Google TV",
+      "Ad-free home screen"
+    ],
+    "pricing": "Free, open source (MIT license file). You need your own coding assistant.",
+    "verdict_reason": "CleanYourTV is for reviving an old Android or Google TV without buying new hardware. You need access to Claude Code, Codex or Gemini CLI. The agent connects over ADB, disables apps rather than deleting them, and keeps a restore script. TV Detox's own prompt warns that a few TVs got stuck at the logo or kept restarting. Keep the restore script handy, and don't do this to a TV you can't afford to fiddle with.",
+    "verdict_checked": "2026-10-22",
+    "date_added": "2026-10-22",
+    "source": "https://github.com/Gathin23/cleanyourtv",
+    "mobile": "none",
+    "mobile_note": "Needs a computer on the same Wi-Fi as the TV",
+    "mobile_source": "https://github.com/Gathin23/cleanyourtv",
+    "mobile_description": "The README says you need a computer on the same Wi-Fi as the TV and a coding assistant with shell access.",
+    "covered_in": "2",
+    "pick_rank": 7,
+    "pick_reason": "Lets Claude Code, Codex or Gemini CLI debloat an Android or Google TV over Wi-Fi",
+    "pick_source": "https://github.com/Gathin23/cleanyourtv"
+  },
+  {
+    "name": "TV Detox",
+    "url": "https://github.com/Ansub/tv-detox",
+    "category": "vibe-coding app builders",
+    "description": "A copy-paste prompt and a tiny home screen that let Claude Code or Codex clean up a slow Android TV, asking before every change and keeping an undo list. Its prompt warns that a few TVs have gotten stuck at the logo.",
+    "use_cases": [
+      "Cleaning up a slow Android TV",
+      "Undo list for TV changes"
+    ],
+    "pricing": "Free, open source (MIT).",
+    "verdict_reason": "TV Detox is a similar project to CleanYourTV that appeared within days. You paste its prompt into Claude Code or Codex, and it asks before every change, turns apps off instead of deleting them, and keeps an undo list. Its prompt warns that a few TVs got stuck at the logo or kept restarting.",
+    "verdict_checked": "2026-10-22",
+    "date_added": "2026-10-22",
+    "source": "https://github.com/Ansub/tv-detox",
+    "mobile": "none",
+    "mobile_note": "You run it on a laptop on the same Wi-Fi as the TV",
+    "mobile_source": "https://github.com/Ansub/tv-detox",
+    "mobile_description": "You run Claude Code or Codex on your laptop, which has to be on the same Wi-Fi as the TV.",
+    "covered_in": "2",
+    "pick_rank": 8,
+    "pick_reason": "A prompt and tiny home screen that let Claude Code or Codex clean up a slow Android TV",
+    "pick_source": "https://github.com/Ansub/tv-detox"
+  },
+  {
+    "name": "Co-op Anything",
+    "url": "https://coopanything.app",
+    "category": "gaming/game dev",
+    "description": "A playbook, skills and an MCP server that let a coding agent turn a single-player PC game into co-op, by reviving an existing mod or reverse engineering the game, then testing with in-game bots. It hosts no game files and avoids anti-cheat and online services.",
+    "use_cases": [
+      "Single-player PC games",
+      "Co-op mods"
+    ],
+    "pricing": "Free, open source (MIT).",
+    "verdict_reason": "Co-op Anything is for modders and anyone with a stack of single-player favorites. You tell Claude Code, Codex, Cursor or another agent which game you want to play with friends, and it follows the repo's playbook: look for an existing co-op mod and fix it, or reverse engineer the game and build one, then test with bots and package a one-click install so friends can join over Steam. Results will vary a lot by game. This is modding, not a button press.",
+    "verdict_checked": "2026-10-22",
+    "date_added": "2026-10-22",
+    "source": "https://github.com/cranebeaker/coop-anything",
+    "mobile": "none",
+    "mobile_note": "Targets PC games, with friends joining over Steam",
+    "mobile_source": "https://github.com/cranebeaker/coop-anything",
+    "mobile_description": "The README targets games that run on your PC, with friends joining over Steam.",
+    "covered_in": "2",
+    "pick_rank": 9,
+    "pick_reason": "Lets a coding agent turn a single-player PC game into co-op",
+    "pick_source": "https://github.com/cranebeaker/coop-anything"
   },
   {
     "name": "Snyk",
