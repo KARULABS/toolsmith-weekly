@@ -94,11 +94,11 @@
     ],
     "pricing": "Included in paid Claude plans. Pro $20/mo ($17/mo billed annually); Max from $100/mo.",
     "verdict": "use",
-    "verdict_reason": "Included in paid Claude plans, and terminal work shares that plan's usage.",
+    "verdict_reason": "Claude Code is for developers who want one agent that follows them across the terminal, VS Code, JetBrains, a desktop app and the browser, with the same CLAUDE.md files, settings and MCP servers on every surface. What stands out is how far it reaches past the editor: cloud scheduled tasks keep running when your computer is off, Remote Control lets you pick up a session from your phone, and an @Claude mention in Slack can turn a bug report into a pull request. Teams that script their workflows also get hooks, shareable skills and an Agent SDK for building their own agents on the same tools.",
     "verdict_short": "Included in paid Claude plans",
-    "verdict_checked": "2026-10-21",
+    "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://claude.com/pricing?mode=code"
+    "source": "https://code.claude.com/docs/en/overview"
   },
   {
     "name": "OpenAI Codex",
@@ -112,11 +112,11 @@
     ],
     "pricing": "Free $0, Go $8, Plus $20, Pro from $100 ($100/$200/$500).",
     "verdict": "use",
-    "verdict_reason": "Runs in the CLI, an IDE, and on the web. Plus adds cloud code review and Slack.",
+    "verdict_reason": "Codex is for developers who want OpenAI's coding agent in the CLI, an IDE, a desktop app and the web, and who like a tool that ships often. October brought a lot: GPT-6.1 Sol became the default model in the CLI catalog, GPT-5.5 retired from ChatGPT-signed-in Codex on Oct 14, and CLI 0.163.0 (Oct 15) added a searchable /config panel, mid-response steering and parallel read-only tools. The desktop app also gained composer predictions in beta, which suggest your next prompt as an editable draft but never send it for you.",
     "verdict_short": "Runs in CLI, IDE, and web",
-    "verdict_checked": "2026-10-21",
+    "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://learn.chatgpt.com/docs/pricing"
+    "source": "https://developers.openai.com/codex/changelog"
   },
   {
     "name": "GitHub Copilot Pro",
@@ -130,11 +130,11 @@
     ],
     "pricing": "Free, Pro $10, Pro+ $39, Max $100 a month.",
     "verdict": "use",
-    "verdict_reason": "Pro is $10 a month on GitHub's plans page.",
+    "verdict_reason": "Copilot is for developers who already live on GitHub and want an assistant inside their editor, the CLI and pull requests rather than a separate tool. The pace on GitHub's changelog is the story this month: local sandboxing became generally available and Copilot CLI can now discover local models (Oct 7), Copilot can drive desktop apps with computer use (Oct 1), and new models such as Gemini 4 Argon and Claude Haiku 5.5 joined the picker. Agentic autofix for code scanning alerts also reached general availability on Oct 15, which matters most to teams that already run GitHub's security tooling.",
     "verdict_short": "Pro is $10 a month",
-    "verdict_checked": "2026-10-21",
+    "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://docs.github.com/en/copilot/get-started/plans"
+    "source": "https://github.blog/changelog/label/copilot/"
   },
   {
     "name": "Devin Desktop (formerly Windsurf)",
@@ -148,11 +148,11 @@
     ],
     "pricing": "Free (light quota); Pro $20/mo; Max $200/mo; Teams $80/mo + $40 per seat.",
     "verdict": "wait",
-    "verdict_reason": "The docs say free SWE-2 ended Oct 15, but the pricing page still says free.",
+    "verdict_reason": "Devin is for engineering teams that want an autonomous agent working in the cloud or on their own machine, testing in its own browser and carrying work through to a merge-ready PR. The release notes show where it's heading: Devin Oncall became generally available on Oct 19, watching Slack, Teams and PagerDuty to triage alerts and post a likely root cause, and Devin Review added Bitbucket Cloud support on Oct 21. It suits teams that want an agent on incidents and code review, not just new features.",
     "verdict_reason_key": "pricing",
-    "verdict_checked": "2026-10-21",
+    "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://devin.ai/pricing"
+    "source": "https://docs.devin.ai/release-notes/overview"
   },
   {
     "name": "Amazon Q Developer",
@@ -164,9 +164,9 @@
     ],
     "pricing": "New signups stopped May 15, 2026. Support ends Apr 30, 2027.",
     "verdict": "skip",
-    "verdict_reason": "AWS stopped new signups May 15, 2026, and support ends Apr 30, 2027.",
+    "verdict_reason": "Amazon Q Developer is winding down. AWS stopped new signups on May 15, 2026, and the IDE plugins and paid subscriptions reach end of support on Apr 30, 2027. Existing Pro customers can still add users until then. AWS is steering developers to Kiro, its spec-driven IDE and CLI, which carries over agentic coding, inline chat and MCP support. Q Developer in the AWS Console, the docs and the Slack and Teams apps isn't affected. If you rely on its Java upgrades or .NET porting, AWS recommends finishing them before the cutoff.",
     "verdict_reason_key": "shutdown",
-    "verdict_checked": "2026-10-21",
+    "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
     "source": "https://aws.amazon.com/blogs/devops/amazon-q-developer-end-of-support-announcement/"
   },
@@ -180,11 +180,11 @@
     ],
     "pricing": "Pricing unverified.",
     "verdict": "wait",
-    "verdict_reason": "Pricing page now redirects to its parent company; plans unclear.",
+    "verdict_reason": "Tabnine is now part of Tricentis, and tabnine.com redirects to the Tricentis site, which points existing users to Tabnine's login, documentation and support. Tricentis presents itself as an agentic quality engineering platform for large enterprises, covering test creation, automation and performance testing under one control plane. That makes Tabnine a fit mainly for enterprise teams already in, or heading toward, the Tricentis ecosystem, not for individual developers shopping for a code assistant.",
     "verdict_reason_key": "pricing",
-    "verdict_checked": "2026-10-21",
+    "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://www.tabnine.com/pricing"
+    "source": "https://www.tabnine.com"
   },
   {
     "name": "Lovable",
@@ -250,11 +250,11 @@
     ],
     "pricing": "Pro $18/mo and Teams $27 per member/mo, both billed annually.",
     "verdict": "wait",
-    "verdict_reason": "Only annual prices are shown.",
+    "verdict_reason": "Bolt.new is for product managers, founders, marketers and agencies who want to chat their way to a working website, app or prototype in the browser. You can start from a prompt, a Figma file, a GitHub repo or a team template. What stands out is how much comes built in: Bolt picks the model for each task, and Bolt Cloud adds hosting with analytics and custom domains, databases, user authentication and SEO tools, so a project can go live without separate accounts.",
     "verdict_reason_key": "pricing",
-    "verdict_checked": "2026-10-21",
+    "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://bolt.new/pricing"
+    "source": "https://bolt.new"
   },
   {
     "name": "v0",
@@ -267,11 +267,11 @@
     ],
     "pricing": "Free (7 messages/day); Plus $30/user/mo; Business $100/user/mo; Premium $20 being sunset.",
     "verdict": "wait",
-    "verdict_reason": "Free tier is thin and plans just reshuffled; fine to try, wait before paying.",
+    "verdict_reason": "v0 is Vercel's chat-based builder for apps and UI, aimed at people who want to go from prompt to a working React and Next.js project and collaborate on it. It has been shipping steadily: on Oct 6, personal accounts became team workspaces so anyone can invite collaborators, and on Oct 19 a Slack MCP integration arrived on all plans, letting v0 use a Slack thread as context or post updates. Since Sep 29, ChatGPT Plus and Pro subscribers can also connect their ChatGPT subscription to build in v0.",
     "verdict_reason_key": "pricing",
-    "verdict_checked": "2026-10-21",
+    "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://v0.app/docs/pricing"
+    "source": "https://v0.app/changelog"
   },
   {
     "name": "Replit",
@@ -285,11 +285,11 @@
     ],
     "pricing": "Core $20/mo ($18 yearly); Pro $100/mo ($90 yearly). See replit.com/pricing.",
     "verdict": "use",
-    "verdict_reason": "Describe an app in plain language and Agent builds it, then you publish from the same project.",
+    "verdict_reason": "Replit is for builders who want to describe an app in plain language, let Agent build it and publish from the same project. Recent updates lean toward teams and enterprises. The Oct 16 changelog added Claude Haiku 5.5 to the model selector in Power Mode and a directory of Replit Solutions Partners, plus Bring Your Own Cloud: the full platform in your own cloud tenant (private preview), hosting published apps there, or exporting apps to self-host (both early access).",
     "verdict_short": "Builds the app, then you publish",
-    "verdict_checked": "2026-10-21",
+    "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://docs.replit.com/features/agent/overview"
+    "source": "https://docs.replit.com/updates"
   },
   {
     "name": "Base44",
@@ -302,10 +302,10 @@
     ],
     "pricing": "Free (25 message credits/mo). Starter $16/mo, Builder $40/mo, Pro $80/mo, Elite $160/mo.",
     "verdict": "try",
-    "verdict_reason": "Free plan is 25 message credits a month, and the paid prices are listed.",
-    "verdict_checked": "2026-10-21",
+    "verdict_reason": "Base44 is for non-coders who want to build apps, websites and AI agents in their own words without setting up servers, databases or payments, because backend, storage, auth, hosting and payments are already built in. What stands out is that it doesn't stop at launch: there are built-in marketing tools such as an SEO/GEO dashboard, plus design controls that set colors and fonts across the whole app at once. You can also create agents that connect to your tools and run around the clock.",
+    "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://base44.com/pricing"
+    "source": "https://base44.com/"
   },
   {
     "name": "n8n",
@@ -319,28 +319,29 @@
     ],
     "pricing": "Self-host free; Cloud Starter €20/mo billed annually (2,500 executions); Pro €50/mo.",
     "verdict": "use",
-    "verdict_reason": "Bills per workflow execution, not per step; strong default for repeat workflows.",
+    "verdict_reason": "n8n is for technical teams who want AI agents and workflows they can follow step by step. You can open any step, see what it did and explain it to whoever runs it. It's strongest for repeat operations work such as refunds, onboarding or threat triage, where an agent step sits inside a larger, auditable workflow with human approvals in Slack.",
     "verdict_short": "Bills per workflow execution",
-    "verdict_checked": "2026-10-21",
+    "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://n8n.io/pricing/"
+    "source": "https://n8n.io/"
   },
   {
     "name": "AI by Zapier",
     "url": "https://zapier.com",
     "category": "AI agents/automation",
-    "description": "AI step inside a Zap for tool calling and reasoning. A run that passes 75 tasks pauses.",
+    "description": "Zapier's AI step, formerly Zapier Agents, that reasons and acts with tools inside any Zap.",
     "use_cases": [
-      "AI step inside a Zap",
-      "Tool calling and reasoning"
+      "Agents inside Zaps",
+      "Tool calling across 9,000+ apps",
+      "Per-tool approvals"
     ],
     "pricing": "Agents Pro $33.33/mo billed annually ($400/yr), 1,500 activities (zapier.com/pricing).",
     "verdict": "use",
-    "verdict_reason": "It runs an agent inside Zapier that can take actions in the apps you connect.",
+    "verdict_reason": "Zapier Agents became AI by Zapier on Oct 6, 2026. The agent's tool calling, reasoning and autonomous actions now run as a single AI step inside the Zap editor, so they can use any of Zapier's 9,000+ app triggers, filters, paths and Zap History. It's for teams already automating in Zapier who want an agent inside their existing workflows. New since the move: you can require approval per tool, not just all-or-nothing, and pick a model tier or a specific model for each step. Eligible agents are converted to Zaps automatically.",
     "verdict_short": "Agent acts in connected apps",
-    "verdict_checked": "2026-10-21",
+    "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://help.zapier.com/hc/en-us/articles/24393442652557-Build-an-agent-in-Zapier-Agents"
+    "source": "https://zapier.com/blog/zapier-agents-is-now-ai-by-zapier/"
   },
   {
     "name": "Make",
@@ -353,11 +354,11 @@
     ],
     "pricing": "Pricing unverified.",
     "verdict": "wait",
-    "verdict_reason": "The $9 plan is Pricing unverified.",
+    "verdict_reason": "Make is for teams that want to build automations and AI agents on one visual canvas and see everything running in one place. You can build by prompting, by drag-and-drop, or from Claude, ChatGPT and Gemini through its MCP server, and drop into JavaScript or Python when needed. It connects to 3,500+ apps, and AI agents show their reasoning against the goals, tools and limits you set. For larger organizations, role-based access, audit logs and SOC 2 Type II and SOC 3 certification are the draw.",
     "verdict_reason_key": "pricing",
-    "verdict_checked": "2026-10-21",
+    "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://www.make.com"
+    "source": "https://www.make.com/en"
   },
   {
     "name": "Activepieces",
@@ -370,10 +371,10 @@
     ],
     "pricing": "Free 1,000 credits/mo, Plus $20/mo.",
     "verdict": "try",
-    "verdict_reason": "Free is 1,000 credits a month, and Plus is a flat $20/mo.",
-    "verdict_checked": "2026-10-21",
+    "verdict_reason": "Activepieces is for teams that want chat, AI agents, flows and tables in one open-source workspace, connected to 760+ apps. It runs in the cloud or self-hosted. It also offers an MCP server, so your pieces are usable from the AI tools people already work in, and it pitches enterprise control for teams rolling AI out beyond a single power user.",
+    "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://www.activepieces.com/pricing"
+    "source": "https://www.activepieces.com/"
   },
   {
     "name": "Gumloop",
@@ -386,11 +387,11 @@
     ],
     "pricing": "No free plan (14-day trial); Pro $37/mo (20,000 credits) plus 8% orchestration fee.",
     "verdict": "wait",
-    "verdict_reason": "Credits per chat vary, plus an 8% fee.",
+    "verdict_reason": "Gumloop is for go-to-market, support and operations teams that want to build, share and control AI agents connected to tools like Slack, HubSpot, Gong, Gmail and Salesforce. Each agent gets its own model, instructions, connectors and reusable skills. What stands out is the oversight layer Gumloop shows off, with views of AI spend, usage by model provider and adoption by teammate, which suits companies rolling agents out across many people.",
     "verdict_reason_key": "pricing",
-    "verdict_checked": "2026-10-21",
+    "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://docs.gumloop.com/core-concepts/credits"
+    "source": "https://www.gumloop.com/"
   },
   {
     "name": "Lindy",
@@ -462,11 +463,11 @@
     ],
     "pricing": "Pricing unverified.",
     "verdict": "wait",
-    "verdict_reason": "Pricing unverified.",
+    "verdict_reason": "Manus is a general-purpose agent for people who want to hand off whole tasks such as research, slides, websites, video and design. Manus 2.0 launched on Sep 28, 2026 with a new agent harness called Cascade, a Cloud Computer and Automations, Manus Studio for professional creation and Cue, a separate app for personal agents. Since then it has added Manus Flex for using your own API key (Sep 29) and a Video Editor and Game Dev mode (Oct 1).",
     "verdict_reason_key": "pricing",
-    "verdict_checked": "2026-10-21",
+    "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://manus.im"
+    "source": "https://manus.im/blog"
   },
   {
     "name": "Microsoft Copilot Studio",
@@ -479,11 +480,11 @@
     ],
     "pricing": "$200/mo per 25,000 Copilot Credits, or pay as you go.",
     "verdict": "wait",
-    "verdict_reason": "Credits per action vary, and it needs an Azure subscription.",
+    "verdict_reason": "Copilot Studio is for organizations on Microsoft 365 that want to build their own agents and workflows grounded in company data. September's releases focus on workflows. An extract node pulls values and tables out of invoices and contracts, and a Copilot node (preview) runs Copilot Chat or Cowork tasks grounded in a user's mail, files and calendar. Agents can also now read Excel, PowerPoint and Word attachments and use Dataverse tables as knowledge, and makers can pick models from a dropdown and run content safety tests.",
     "verdict_reason_key": "pricing",
-    "verdict_checked": "2026-10-21",
+    "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://www.microsoft.com/en-us/copilot/pricing/copilot-studio"
+    "source": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/whats-new"
   },
   {
     "name": "OpenAI Agent Builder",
@@ -495,9 +496,9 @@
     ],
     "pricing": "Shutting down Nov 30, 2026; use the Agents SDK or ChatGPT Workspace Agents.",
     "verdict": "skip",
-    "verdict_reason": "Scheduled to shut down Nov 30, 2026.",
+    "verdict_reason": "Agent Builder is shutting down. OpenAI announced the deprecation on Jun 3, 2026, and the visual canvas is scheduled to shut down on Nov 30, 2026. OpenAI's migration guide points existing users to the Agents SDK, for building in code, or to ChatGPT Workspace Agents. ChatKit stays available. This page is useful only if you still have flows to move.",
     "verdict_reason_key": "shutdown",
-    "verdict_checked": "2026-10-21",
+    "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
     "source": "https://developers.openai.com/api/docs/deprecations"
   },
@@ -512,10 +513,10 @@
     ],
     "pricing": "Sandbox is free. Professional is $590 per workspace a year.",
     "verdict": "try",
-    "verdict_reason": "Sandbox is free, and Professional is $590 per workspace a year.",
-    "verdict_checked": "2026-10-21",
+    "verdict_reason": "Dify is for teams building LLM apps, agentic workflows and RAG chatbots who want a visual builder plus the option to self-host. There's an open-source Community Edition for Docker, a hosted cloud and a private Enterprise deployment. Its newest piece, announced Aug 27, 2026, is a New Agent you build by chatting. Dify turns the conversation into reusable skills and keeps the context, and you can run the finished agent as its own app or drop it into a larger workflow.",
+    "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://dify.ai/pricing"
+    "source": "https://dify.ai/blog"
   },
   {
     "name": "Godot AI",
@@ -529,11 +530,11 @@
     ],
     "pricing": "Free, open source (MIT). Needs Godot 4.7+; telemetry on by default.",
     "verdict": "use",
-    "verdict_reason": "Voyager checked it hands-on with Claude Code and recommends it.",
+    "verdict_reason": "Godot AI is for Godot developers who want Claude Code, Codex or another MCP client to work directly in a running Godot editor. It's free and open source under the MIT license. Its 46 tools and 120+ operations let an agent build scenes, edit nodes and scripts, wire signals, and set up UI, materials, animation, particles, cameras and environments. GDScript is fully supported, while C# is text-only. It needs Godot 4.7 or later, and usage telemetry is on unless you turn it off with an environment variable. The latest release is v4.3.0 (Oct 3).",
     "verdict_short": "Checked hands-on and recommended",
-    "verdict_checked": "2026-10-21",
+    "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://voyager.so/blog/godot-mcp"
+    "source": "https://github.com/hi-godot/godot-ai"
   },
   {
     "name": "Unity AI agent plugin",
@@ -546,9 +547,9 @@
     ],
     "pricing": "Unity AI bundled with Unity Personal (free) or Pro ($210/mo/seat).",
     "verdict": "wait",
-    "verdict_reason": "Official and promising, but the public reports we cite don't include an independent check.",
+    "verdict_reason": "Unity's official plugin is for Unity 6+ developers who already work through a coding agent. It now ships for Claude Code, Codex and Grok Build, which Unity added as the third agent. All three get the same 30+ skills written by Unity's own feature teams, covering UI Toolkit and uGUI, 2D, URP and Shader Graph, physics, IAP, multiplayer, web and localization. Because Unity maintains them from one repository, a team mixing agents gets the same Unity guidance from each. Setup is one terminal command.",
     "verdict_reason_key": "new",
-    "verdict_checked": "2026-10-21",
+    "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
     "source": "https://unity.com/blog/unity-plugin-grok"
   },
@@ -563,11 +564,11 @@
     ],
     "pricing": "50 free daily credits (non-commercial); Starter $15/mo, Pro $45, Max $75. See scenario.com/pricing.",
     "verdict": "use",
-    "verdict_reason": "Train a model on your own art so new assets stay in that style.",
+    "verdict_reason": "Scenario is for game and creative teams that need on-style assets at volume. It puts image, video, 3D and audio models in one browser workspace, and you can train custom models on your own art so characters and style hold from shot to shot. What stands out is the range of ways in: the app, node-based workflows, agents, and an MCP server and API for your own pipeline. That lets a studio move from one-off generation to repeatable asset production, including turning an image into a textured, rigged 3D model for your engine.",
     "verdict_short": "Train a model on your art",
-    "verdict_checked": "2026-10-21",
+    "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://www.scenario.com/features/train"
+    "source": "https://www.scenario.com/"
   },
   {
     "name": "Meshy",
@@ -580,11 +581,11 @@
     ],
     "pricing": "Free 100 credits/mo, Pro $20, Premium $40, Studio $70 per seat, Ultra $100.",
     "verdict": "wait",
-    "verdict_reason": "The yearly view and the FAQ give different prices.",
+    "verdict_reason": "Meshy is for game developers, 3D printers and product designers who want 3D models from a text prompt, image or sketch. Meshy 7.1 is now live and focuses on true-to-reference results. Beyond generation, it handles PBR texturing, auto-rigging and animation, and plugs into Blender, Unity, Bambu Studio and Creality Print. Developers can reach it through an API, a CLI, or an MCP server that generates 3D inside Claude, Cursor and other agents.",
     "verdict_reason_key": "pricing",
-    "verdict_checked": "2026-10-21",
+    "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://help.meshy.ai/en/articles/12062933-which-meshy-plan-is-right-for-you"
+    "source": "https://www.meshy.ai/"
   },
   {
     "name": "Layer AI",
@@ -597,11 +598,11 @@
     ],
     "pricing": "From $10/mo for 300 Creative Units.",
     "verdict": "wait",
-    "verdict_reason": "The headline says $10, but the plan math works out to $18.",
+    "verdict_reason": "Layer is for game and creative studios that want one place to make and edit art with many models: 130+ image models plus video tools. What stands out is the editing toolkit around generation. You can change a scene's camera angle or lighting, swap objects, split images into movable layers, vectorize to SVG, and keep a whole cast in one art direction. It suits studios that want generation and cleanup in the same tool.",
     "verdict_reason_key": "pricing",
-    "verdict_checked": "2026-10-21",
+    "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://layer.ai/pricing"
+    "source": "https://www.layer.ai/"
   },
   {
     "name": "Rosebud AI",
@@ -615,11 +616,11 @@
     ],
     "pricing": "Free plan with 8,000 credits (weekly refill in eligible regions); paid tiers available.",
     "verdict": "use",
-    "verdict_reason": "Free and fast way to try vibe-coding a game.",
+    "verdict_reason": "Rosebud is for beginners, educators and game-jam makers who want to describe a game and get something playable in the browser, or start from a template. It covers 3D games, RPGs, visual novels and interactive stories, with AI NPCs and asset generators for sprites, sprite sheets, 3D models and skyboxes. Rosebud also offers free game hosting, which makes it a gentle first step into building and sharing games with AI.",
     "verdict_short": "Free way to try a game",
-    "verdict_checked": "2026-10-21",
+    "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://rosebud.ai/pricing"
+    "source": "https://rosebud.ai/"
   },
   {
     "name": "Inworld",
@@ -708,10 +709,10 @@
     ],
     "pricing": "Free 150 fast tokens a day; Essential $12/mo.",
     "verdict": "try",
-    "verdict_reason": "Free tier is 150 fast tokens a day, and Essential is $12/mo.",
-    "verdict_checked": "2026-10-21",
+    "verdict_reason": "Leonardo is for artists, designers and marketing teams who want images and video from prompts or custom models, then refine them without starting over. It brings in-house models such as Lucid Origin and Lucid Realism together with third-party models such as Nano Banana Pro, Seedream 4.5, FLUX.2 Pro and Ideogram 3.0. Editing tools are built to keep characters, composition and style intact, and upscaling prepares assets for print. For game work, that means concept and key art, with a developer API when you need it in a pipeline.",
+    "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://www.leonardo.ai/pricing"
+    "source": "https://leonardo.ai/"
   },
   {
     "name": "Ludo.ai",
@@ -724,11 +725,11 @@
     ],
     "pricing": "Indie $15/mo, Pro $35/mo, Studio $300/mo, all billed annually.",
     "verdict": "wait",
-    "verdict_reason": "Only annual prices are shown.",
+    "verdict_reason": "Ludo.ai is for indie developers and small studios who want game-ready assets from one place: sprites and animations, icons, UI, textures, music, 3D and video. What stands out is that it's built as an asset pipeline rather than a one-off generator, with MCP access for working from your own tools and a showcase of shipped games made with its output.",
     "verdict_reason_key": "pricing",
-    "verdict_checked": "2026-10-21",
+    "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://ludo.ai/pricing"
+    "source": "https://ludo.ai/"
   },
   {
     "name": "ElevenLabs",
@@ -741,10 +742,10 @@
     ],
     "pricing": "Free; Starter $6/mo with a commercial license.",
     "verdict": "use",
-    "verdict_reason": "Starter is $6/mo and includes a commercial license.",
+    "verdict_reason": "ElevenLabs is for game developers, creators and companies that need expressive AI voices for narration, character dialogue, dubbing and voice agents. The big recent change is Eleven v4, which ElevenLabs calls its most emotive model yet, released with Eleven v4 Turbo on Sep 28. The platform also covers music, speech to text, voice cloning and the ElevenAgents platform for conversational agents. ElevenAgents keeps shipping: on Oct 12 it added merging and searching of triage tickets.",
     "verdict_short": "Includes a commercial license",
-    "verdict_checked": "2026-10-21",
+    "verdict_checked": "2026-10-22",
     "date_added": "2026-10-20",
-    "source": "https://elevenlabs.io/pricing"
+    "source": "https://elevenlabs.io/docs/changelog"
   }
 ]
