@@ -225,25 +225,20 @@ def cat_icon(name):
     rows = CAT_ICON.get(name, CAT_ICON["coding agents"])
     return ('<svg class="caticon" viewBox="0 0 12 12" aria-hidden="true" focusable="false" '
             f'shape-rendering="crispEdges">{pix(rows)}</svg>')
-def star_grid(w=97):
-    # Five-point star on a fine grid. The two lower tips sit further out along
-    # the same 36° point angle so each leg matches the top point in length and
-    # thickness. Left and right stay mirrors.
-    cx = cy = (w - 1) / 2
-    R = (w - 1) / 2 - 16
-    inner = 0.382
-    leg = 1.18  # lower points, so the free legs match the top spike
+def star_grid():
+    # Regular five-point star on a 32×32 grid. Ten vertices of one pentagram:
+    # outer radius R, inner radius cos(72°)/cos(36°) ≈ 0.382R, top point up.
+    # Coverage-sampled, then mirrored so the left and right points match.
+    n = 32
+    cx = cy = (n - 1) / 2
+    R = 14.8
+    inner = math.cos(math.radians(72)) / math.cos(math.radians(36))
     pts = []
     for i in range(5):
-        ang = -90 + i * 72
-        rad = R * leg if ang in (54, 126) else R
-        a = math.radians(ang)
-        pts.append((cx + rad * math.cos(a), cy + rad * math.sin(a)))
-        ia = math.radians(ang + 36)
-        pts.append((cx + R * inner * math.cos(ia), cy + R * inner * math.sin(ia)))
-    samples = 8
-    offs = [(i + 0.5) / samples for i in range(samples)]
-    need = samples * samples * 0.28
+        ang = math.radians(-90 + i * 72)
+        pts.append((cx + R * math.cos(ang), cy + R * math.sin(ang)))
+        iang = ang + math.radians(36)
+        pts.append((cx + R * inner * math.cos(iang), cy + R * inner * math.sin(iang)))
     def inside(x, y):
         c = False
         j = len(pts) - 1
@@ -253,73 +248,30 @@ def star_grid(w=97):
                 c = not c
             j = i
         return c
-    mask = [[False] * w for _ in range(w)]
-    for y in range(w):
-        for x in range(w):
+    samples = 8
+    offs = [(i + 0.5) / samples for i in range(samples)]
+    need = samples * samples * 0.5
+    mask = [[False] * n for _ in range(n)]
+    for y in range(n):
+        for x in range(n):
             hits = sum(1 for oy in offs for ox in offs if inside(x + ox, y + oy))
             mask[y][x] = hits >= need
-    # Same 36° thickness as the top point, plus a hair so the diagonal legs
-    # are not eaten down to a one-pixel line.
-    for ang in (54, 126):
-        a = math.radians(ang)
-        dx, dy = math.cos(a), math.sin(a)
-        px, py = -dy, dx
-        tip = R * leg
-        step = 0
-        while step * 0.5 <= tip:
-            t = step * 0.5
-            dist = tip - t
-            step += 1
-            if dist < 0 or t < R * 0.42:
-                continue
-            half = max(0.0, dist * math.tan(math.radians(18)) + 0.8)
-            if dist < 2.2:
-                half = max(half * 0.5, 0.6)
-            n = int(half * 2) + 2
-            for s in range(n + 1):
-                off = -half + (2 * half) * s / n
-                sx = cx + t * dx + off * px
-                sy = cy + t * dy + off * py
-                xi, yi = int(round(sx)), int(round(sy))
-                if 0 <= xi < w and 0 <= yi < w:
-                    mask[yi][xi] = True
-    for y in range(w):
-        for x in range(w // 2):
-            mask[y][w - 1 - x] = mask[y][x]
-    ys = [y for y in range(w) if any(mask[y])]
-    xs = [x for y in ys for x in range(w) if mask[y][x]]
-    x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
-    cropped = [row[x0:x1 + 1] for row in mask[y0:y1 + 1]]
-    h, width = len(cropped), len(cropped[0])
-    grid = [["."] * width for _ in range(h)]
-    for y in range(h):
-        for x in range(width):
-            if not cropped[y][x]:
+    for y in range(n):
+        for x in range(n // 2):
+            mask[y][n - 1 - x] = mask[y][x]
+    grid = [["."] * n for _ in range(n)]
+    for y in range(n):
+        for x in range(n):
+            if not mask[y][x]:
                 continue
             edge = any(
-                not (0 <= x + dx < width and 0 <= y + dy < h and cropped[y + dy][x + dx])
+                not (0 <= x + dx < n and 0 <= y + dy < n and mask[y + dy][x + dx])
                 for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))
             )
             grid[y][x] = "o" if edge else "#"
-    for y in range(h):
-        for x in range(width):
-            if grid[y][x] == "#" and y and grid[y - 1][x] == "o" and y < h * 0.85:
-                grid[y][x] = "+"
-    for y in range(h):
-        for x in range(width // 2):
-            a, b = grid[y][x], grid[y][width - 1 - x]
-            if a == "." and b != ".":
-                grid[y][x] = b
-            elif b == "." and a != ".":
-                grid[y][width - 1 - x] = a
-            elif "o" in (a, b):
-                grid[y][x] = grid[y][width - 1 - x] = "o"
-            elif "+" in (a, b):
-                grid[y][x] = grid[y][width - 1 - x] = "+"
     return ["".join(row) for row in grid]
 def star_rects(rows):
-    # o is the darker gold edge, # the body, + the inner highlight.
-    fills = {"o": "#c98420", "#": "#ffc94a", "+": "#ffe7a8"}
+    fills = {"o": "#B37800", "#": "#F5B301"}
     parts = []
     for y, row in enumerate(rows):
         x = 0
@@ -336,8 +288,7 @@ def star_rects(rows):
     return "".join(parts)
 def star_svg():
     rows = star_grid()
-    w, h = len(rows[0]), len(rows)
-    return (f'<svg class="star-mark" viewBox="0 0 {w} {h}" aria-hidden="true" focusable="false" '
+    return ('<svg class="star-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false" '
             f'shape-rendering="crispEdges">{star_rects(rows)}</svg>')
 CSS = """:root{--bg:#070b1a;--bg2:#0b1124;--card:#0f1630;--card-h:#141c3b;--bd:rgba(148,163,214,.14);--bd-h:rgba(148,163,214,.32);--tx:#eef2ff;--mu:#9aa6c7;--ac:#ff8a3d;--ac2:#ffc94a;--ink:#140a02;--sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;--mono:ui-monospace,"JetBrains Mono",Menlo,monospace}
 *{box-sizing:border-box}[hidden]{display:none!important}
@@ -409,7 +360,7 @@ a.metric:hover{background:rgba(255,138,61,.06)}
 .band-stars{position:relative;background:radial-gradient(880px 380px at 0 0,rgba(255,138,61,.18),transparent 58%),linear-gradient(180deg,#121c3f,#0c1430);box-shadow:inset 0 1px 0 rgba(255,138,61,.55),inset 0 -1px 0 var(--bd)}
 .band-stars .band-head{flex-wrap:wrap;row-gap:8px}
 .band-stars h2{font-size:clamp(1.85rem,3.2vw,2.75rem)}
-.star-mark{display:inline-block;width:1.05em;height:auto;margin-right:10px;vertical-align:-0.06em;image-rendering:pixelated}
+.star-mark{display:inline-block;width:32px;height:32px;margin-right:10px;vertical-align:-0.08em;image-rendering:pixelated;flex:none}
 .sec{margin:48px 0}
 .sec-head{display:flex;justify-content:space-between;align-items:center;gap:16px 28px;flex-wrap:wrap;margin-bottom:18px}
 .sec-head p,.intro{color:var(--mu);margin:8px 0 0;max-width:40rem}
