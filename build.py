@@ -226,19 +226,32 @@ def cat_icon(name):
     return ('<svg class="caticon" viewBox="0 0 12 12" aria-hidden="true" focusable="false" '
             f'shape-rendering="crispEdges">{pix(rows)}</svg>')
 def star_svg():
-    # Decorative mark for the homepage stars heading. Same pixel language as the category icons.
+    # Pixel star for the homepage heading. About twice the first 11×9 grid,
+    # so the steps are smaller, and still drawn as crisp rects in the same gold.
     rows = (
-        ".....#.....",
-        "....###....",
-        "...#####...",
-        ".#########.",
-        "###########",
-        ".#########.",
-        "..##.#.##..",
-        ".##.....##.",
-        "#.........#",
+        "...........#...........",
+        "..........###..........",
+        ".........#####.........",
+        "........#######........",
+        ".......#########.......",
+        "......###########......",
+        ".....#############.....",
+        ".#####################.",
+        "#######################",
+        "#######################",
+        ".#####################.",
+        "..###################..",
+        "...#################...",
+        "....###############....",
+        ".....#############.....",
+        "......###########......",
+        ".....######.######.....",
+        "....######...######....",
+        "....####.......####....",
+        "....###.........###....",
+        "....#.............#....",
     )
-    return ('<svg class="star-mark" viewBox="0 0 11 9" aria-hidden="true" focusable="false" '
+    return ('<svg class="star-mark" viewBox="0 0 23 21" aria-hidden="true" focusable="false" '
             f'shape-rendering="crispEdges">{pix(rows, "#ffc94a")}</svg>')
 CSS = """:root{--bg:#070b1a;--bg2:#0b1124;--card:#0f1630;--card-h:#141c3b;--bd:rgba(148,163,214,.14);--bd-h:rgba(148,163,214,.32);--tx:#eef2ff;--mu:#9aa6c7;--ac:#ff8a3d;--ac2:#ffc94a;--ink:#140a02;--sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;--mono:ui-monospace,"JetBrains Mono",Menlo,monospace}
 *{box-sizing:border-box}[hidden]{display:none!important}
