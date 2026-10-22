@@ -1074,5 +1074,151 @@
     "pick_rank": 9,
     "pick_reason": "Lets a coding agent turn a single-player PC game into co-op",
     "pick_source": "https://github.com/cranebeaker/coop-anything"
+  },
+  {
+    "name": "Snyk",
+    "url": "https://snyk.io",
+    "category": "Security",
+    "description": "Security platform covering open-source dependencies (SCA), code (SAST), infrastructure as code and containers.",
+    "use_cases": [
+      "Scanning dependencies and code",
+      "Real-time code scanning in IDE, CLI and source control"
+    ],
+    "pricing": "Free $0/mo; Team starts at $25/mo (billed monthly; up to 10 developers); Enterprise is credit-based, contact sales. Evo agentic features need an Enterprise Platform Subscription.",
+    "verdict": "",
+    "verdict_reason": "Snyk is a good fit if you want dependency, code, IaC and container checks in one place, and the Free plan lets you try it from your IDE or CLI. The Team plan starts at $25 a month, billed monthly, for up to 10 developers. The newer Evo AI agents sit behind an Enterprise subscription, so smaller teams won't see those.",
+    "verdict_checked": "2026-10-22",
+    "date_added": "2026-10-22",
+    "source": "https://snyk.io/plans/",
+    "mobile": "unverified",
+    "mobile_note": "The official site doesn't mention a mobile app or mobile use, so this isn't confirmed.",
+    "mobile_source": "https://snyk.io",
+    "mobile_description": "The official site doesn't mention a mobile app or mobile use."
+  },
+  {
+    "name": "Semgrep",
+    "url": "https://semgrep.dev",
+    "category": "Security",
+    "description": "Code scanning platform for SAST, supply chain (SCA) and secrets detection, with AI-assisted triage and fixes.",
+    "use_cases": [
+      "Static code analysis with custom rules",
+      "Dependency reachability analysis",
+      "Secrets detection"
+    ],
+    "pricing": "Free for up to 10 contributors and 10 private repos; Teams: Code $30, Supply Chain $30, Secrets $15 per contributor/month; Enterprise custom.",
+    "verdict": "",
+    "verdict_reason": "Semgrep lets you buy only what you need: code scanning, supply chain, or secrets, each priced per contributor. The free edition covers up to 10 contributors, which is plenty for a small team to get a real feel for it. If you run it locally or in your own CI, your source code stays on your machines.",
+    "verdict_checked": "2026-10-22",
+    "date_added": "2026-10-22",
+    "source": "https://semgrep.dev/pricing",
+    "mobile": "unverified",
+    "mobile_note": "The official site doesn't mention a mobile app or mobile use, so this isn't confirmed.",
+    "mobile_source": "https://semgrep.dev",
+    "mobile_description": "The official site doesn't mention a mobile app or mobile use."
+  },
+  {
+    "name": "Socket",
+    "url": "https://socket.dev",
+    "category": "Security",
+    "description": "Supply-chain security that detects and blocks malicious or risky open-source dependencies.",
+    "use_cases": [
+      "Blocking malicious packages",
+      "Dependency risk scanning in PRs",
+      "Reachability analysis"
+    ],
+    "pricing": "Free $0 (1 dev seat); Team $25/dev seat/mo (from 5 seats); Business $50/dev seat/mo (from 20 seats); Enterprise custom. Yearly billing saves up to 20%. Free for open source.",
+    "verdict": "",
+    "verdict_reason": "Socket focuses on the packages you pull in, and can block malicious ones before they land. The free plan covers one developer with unlimited repositories, and Socket says it will always be free for open-source projects. Only your list of dependencies is sent to Socket, not your source code.",
+    "verdict_checked": "2026-10-22",
+    "date_added": "2026-10-22",
+    "source": "https://socket.dev/pricing",
+    "mobile": "unverified",
+    "mobile_note": "The official site doesn't mention a mobile app or mobile use, so this isn't confirmed.",
+    "mobile_source": "https://socket.dev",
+    "mobile_description": "The official site doesn't mention a mobile app or mobile use."
+  },
+  {
+    "name": "GitGuardian",
+    "url": "https://www.gitguardian.com",
+    "category": "Security",
+    "description": "Secrets detection and non-human identity (NHI) security across code, CI/CD and developer tools.",
+    "use_cases": [
+      "Finding leaked secrets in repos",
+      "Pre-commit secret checks with ggshield",
+      "Monitoring public GitHub leaks (limited on Growth, unlimited on Enterprise; not on Starter)"
+    ],
+    "pricing": "Starter: free $0 for up to 25 devs; Growth and Enterprise: contact sales (prices not public).",
+    "verdict": "",
+    "verdict_reason": "GitGuardian does one job, finding secrets that leak, across repos, CI/CD and containers. The free Starter plan works for teams of up to 25 developers and includes real-time scanning. Developer-machine protection and public leak monitoring are paid features, and the Growth and Enterprise plans aren't priced publicly, so expect a sales conversation once you need them.",
+    "verdict_checked": "2026-10-22",
+    "date_added": "2026-10-22",
+    "source": "https://www.gitguardian.com/pricing",
+    "mobile": "unverified",
+    "mobile_note": "The official site doesn't mention a mobile app or mobile use, so this isn't confirmed.",
+    "mobile_source": "https://www.gitguardian.com",
+    "mobile_description": "The official site doesn't mention a mobile app or mobile use."
+  },
+  {
+    "name": "Lakera",
+    "url": "https://www.lakera.ai",
+    "category": "Security",
+    "description": "AI security platform for runtime protection of GenAI apps and agents, workforce AI use and AI red teaming.",
+    "use_cases": [
+      "Blocking prompt injection and jailbreaks",
+      "Preventing data leakage in prompts",
+      "AI red teaming"
+    ],
+    "pricing": "Lakera Guard Community $0/mo (10k requests/month, 8k-token prompts, SaaS); Enterprise: contact sales.",
+    "verdict": "",
+    "verdict_reason": "Lakera sits between your users and your AI app, screening for prompt injection, jailbreaks and data leaks. The free Community plan gives you 10,000 requests a month, enough to wire it into a prototype and see how it behaves. Self-hosting, SSO and SIEM integration come with Enterprise.",
+    "verdict_checked": "2026-10-22",
+    "date_added": "2026-10-22",
+    "source": "https://platform.lakera.ai/pricing",
+    "mobile": "unverified",
+    "mobile_note": "The official site doesn't mention a mobile app or mobile use, so this isn't confirmed.",
+    "mobile_source": "https://www.lakera.ai",
+    "mobile_description": "The official site doesn't mention a mobile app or mobile use."
+  },
+  {
+    "name": "NVIDIA NeMo Guardrails",
+    "url": "https://github.com/NVIDIA/NeMo-Guardrails",
+    "category": "Security",
+    "description": "Open-source toolkit for adding programmable guardrails to LLM-based conversational applications.",
+    "use_cases": [
+      "Keeping an LLM app on-topic",
+      "Controlling responses and dialog paths",
+      "Extracting structured data"
+    ],
+    "pricing": "Free, open source (Apache 2.0).",
+    "verdict": "",
+    "verdict_reason": "NeMo Guardrails is a free, open-source Python library for setting rules on what your LLM app will and won't do. You install it with pip and write the rails yourself, so it suits developers who want full control. It's Apache 2.0 licensed, so you can use it commercially.",
+    "verdict_checked": "2026-10-22",
+    "date_added": "2026-10-22",
+    "source": "https://github.com/NVIDIA/NeMo-Guardrails",
+    "mobile": "unverified",
+    "mobile_note": "The official site doesn't mention a mobile app or mobile use, so this isn't confirmed.",
+    "mobile_source": "https://github.com/NVIDIA/NeMo-Guardrails",
+    "mobile_description": "The official site doesn't mention a mobile app or mobile use."
+  },
+  {
+    "name": "GitHub Advanced Security",
+    "url": "https://github.com/security/plans",
+    "category": "Security",
+    "description": "GitHub's paid security add-ons: Secret Protection and Code Security (code scanning, Copilot Autofix, dependency review).",
+    "use_cases": [
+      "Secret scanning and push protection",
+      "CodeQL code scanning",
+      "Reviewing dependency changes in PRs"
+    ],
+    "pricing": "Two separate add-ons, each per active committer/month and requiring GitHub Team or Enterprise: Secret Protection $19 (secret scanning, push protection, custom patterns) and Code Security $30 (CodeQL code scanning, Copilot Autofix, dependency review). Code and secret scanning are on by default for public repos.",
+    "verdict": "",
+    "verdict_reason": "If your code already lives on GitHub, secret scanning and code scanning run where your pull requests already are. Public repositories get code and secret scanning by default. For private repos you'll need a Team or Enterprise plan plus one or both add-ons: Secret Protection ($19) and Code Security ($30), each priced per active committer per month.",
+    "verdict_checked": "2026-10-22",
+    "date_added": "2026-10-22",
+    "source": "https://github.com/security/plans",
+    "mobile": "unverified",
+    "mobile_note": "The official site doesn't mention a mobile app or mobile use, so this isn't confirmed.",
+    "mobile_source": "https://github.com/security/plans",
+    "mobile_description": "The official site doesn't mention a mobile app or mobile use."
   }
 ]
