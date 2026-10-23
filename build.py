@@ -4,7 +4,7 @@ import json, html, math, re, shutil, datetime, pathlib
 from collections import Counter
 from urllib.parse import quote
 CONFIG = {"site_name": "Toolsmith Weekly",  # <- swap the brand name here
-          "tagline": "The newest AI tools and models, sorted every Friday.",
+          "tagline": "The newest AI tools and models, delivered weekly.",
           "base_url": "https://toolsmithweekly.com",  # no trailing slash; canonical URLs, sitemap, robots
           "subscribe_url": "https://toolsmithweekly.beehiiv.com/subscribe",
           "suggest_email": "hello@toolsmithweekly.com"}
