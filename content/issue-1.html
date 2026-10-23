@@ -1,61 +1,132 @@
-<p>Welcome back. This was a security week first and a launch week second, so the two urgent items come first and the fun stuff follows.</p>
+<p>Welcome to the first Toolsmith Weekly, and thanks for being here. This week: a very fast new model, real-time voice agents, side-by-side model comparisons in VS Code and a stack of small open-source finds.</p>
+
+<h2>In this issue</h2>
 <ul>
-<li><strong>PHP2Shell:</strong> AI-assisted research found critical remote code execution bugs in PHP itself. Patches shipped Wednesday and attacks have already started.</li>
-<li><strong>LiteLLM 1.107.0 was malicious.</strong> If you installed it on Wednesday, treat that machine as compromised.</li>
-<li><strong>Off the radar:</strong> a 40B open coding model that only uses about 2.5B parameters per token, and a tiny model that pretends to be a terminal.</li>
-<li><strong>Steal this:</strong> people are using Claude Code and Codex to strip the ads and bloat off old Android TVs.</li>
+<li>🚀 <strong>Big drops:</strong> Mercury 3, Voxtral 3 and Compare models in VS Code 1.143</li>
+<li>🔭 <strong>Off the radar:</strong> a 40B open coding model using ~2.5B parameters per token, and a tiny model that pretends to be a terminal</li>
+<li>🛠️ <strong>Vibe-coding corner:</strong> fx0 from Vercel Labs and Beam for headless Macs</li>
+<li>🎮 <strong>Gaming pick:</strong> Co-op Anything</li>
+<li>📰 <strong>News &amp; alerts:</strong> PHP2Shell, a malicious LiteLLM release and the OpenCode Console breach</li>
+<li>📺 <strong>Weekend project:</strong> CleanYourTV strips ads and bloat off old Android TVs</li>
 </ul>
 
-<h2>Big Drops</h2>
+<h2>🚀 Big drops</h2>
 
-<h3>PHP2Shell: patch PHP now (Oct 21)</h3>
-<p>PHP 8.5.12, 8.4.27, 8.3.36 and 8.2.35 fix two critical bugs (CVE-2026-109618 and CVE-2026-109619) that can allow unauthenticated remote code execution. PHP says every installation serving web requests is at risk. Wiz found the bugs with help from Gemini 4 Argon and GPT-5.6 Sol, and says every PHP version from the last decade, back to 5.4, is hit by at least one of them. Amazon spotted an exploit attempt on its honeypots dated Oct 17, four days before disclosure, and now says the bugs are "being broadly exploited in the wild."</p>
-<p><strong>Good for:</strong> anyone running WordPress, Drupal, Joomla or any other PHP app. Update today. Config tweaks only reduce exposure, and PHP is clear that updating is the only full fix. OpenAI published a <a href="https://github.com/openai/php2shell-checker" rel="noopener">free version checker as a Codex skill</a>. Read <a href="https://www.php.net/archive/2026.php" rel="noopener">PHP's advisory</a>, <a href="https://www.wiz.io/blog/php2shell-php-rce" rel="noopener">Wiz's write-up</a> and <a href="https://aws.amazon.com/blogs/security/amazon-threat-intelligence-identifies-php2shell-exploitation-prior-to-public-disclosure-in-madpot/" rel="noopener">Amazon's exploitation report</a>.</p>
+<h3><a href="__DIRECTORY__mercury-3.html">Mercury 3</a> from Inception · Oct 19</h3>
+<p>A diffusion LLM that refines many tokens in parallel. Inception claims 1,068 tokens per second and a 1M-token context. OpenAI API compatible.</p>
+<p><strong>Good for:</strong> browser agents, voice bots and subagents where speed matters.</p>
+<p><strong>Price:</strong> $0.20/$0.70 per million input/output tokens, half that during launch.</p>
+<p><a href="__DIRECTORY__mercury-3.html">See the listing →</a></p>
 
-<h3>LiteLLM 1.107.0 shipped a credential stealer (Oct 21)</h3>
-<p>The popular LLM gateway's release pipeline was hijacked. <code>litellm==1.107.0</code> sat on PyPI for about two hours on Wednesday, and the <code>v1.107.0</code>, <code>latest</code>, <code>main-latest</code> and <code>main-stable</code> Docker tags pointed to the bad image until 14:20 UTC. The malware runs every time Python starts, even if nothing imports LiteLLM. It grabs SSH keys, cloud credentials, browser passwords, coding-agent tokens and the provider keys stored in a LiteLLM proxy. LiteLLM says the attacker got in using GitHub CLI tokens found in the logs of an internal LiteLLM deployment, and that it has seen Claude Code embed those tokens in response bodies that ended up in logs.</p>
-<p><strong>Good for:</strong> anyone who runs LiteLLM unpinned or on <code>latest</code>. Pin <code>1.106.2</code>, rebuild the environment and rotate every key that machine could reach. A related fix from GitHub, out the same day: <code>gh auth login --expiring</code> (GitHub CLI v2.103.0, public preview) issues tokens that stop working within hours if they leak. See <a href="https://docs.litellm.ai/blog/security-incident-oct-21-2026" rel="noopener">LiteLLM's incident report</a>, <a href="https://safedep.io/litellm-pypi-compromise-credential-stealer-backdoor/" rel="noopener">SafeDep's analysis</a> and <a href="https://github.blog/changelog/2026-10-21-github-cli-opt-in-to-expiring-auto-refreshing-oauth-tokens" rel="noopener">GitHub's changelog</a>.</p>
+<h3><a href="__DIRECTORY__voxtral-3.html">Voxtral 3</a> from Mistral · Oct 20</h3>
+<p>New speech models plus a voice agent SDK that listens, reasons, calls tools and speaks in real time. Transcription covers 50+ languages. Use the EU-hosted API or your own servers.</p>
+<p><strong>Good for:</strong> phone and support agents.</p>
+<p><strong>Price:</strong> $0.0035/min for the 4B Mini transcription model.</p>
+<p><a href="__DIRECTORY__voxtral-3.html">See the listing →</a></p>
 
-<h3>Mercury 3 from Inception (Oct 19)</h3>
-<p>A diffusion LLM: it generates text by refining many tokens in parallel instead of strictly one at a time. Inception claims 1,068 tokens per second on NVIDIA GPUs, a 1M-token context window and quality on par with GPT-6 Luna and Claude Haiku 5.5. It costs $0.20/$0.70 per million input/output tokens, and is half that during launch. It's OpenAI API compatible and live on Inception's API, OpenRouter, Baseten and Vercel.</p>
-<p><strong>Good for:</strong> browser agents, voice bots and subagents where speed matters more than raw intelligence. All benchmarks are Inception's own. <a href="https://www.inceptionlabs.ai/blog/introducing-mercury-3" rel="noopener">Inception's announcement</a>.</p>
+<h3><a href="__DIRECTORY__vs-code.html">VS Code 1.143: Compare models</a> · Oct 19</h3>
+<p>A new preview sends one task to two or more models, with optional Judge and Synthesize steps to merge the best answers. Turn on <code>sessions.chat.compareAgents.enabled</code>.</p>
+<p><strong>Good for:</strong> settling "which model is better at our codebase" with your own tasks.</p>
+<p><a href="__DIRECTORY__vs-code.html">See the listing →</a></p>
 
-<h3>Voxtral 3 from Mistral (Oct 20)</h3>
-<p>Mistral's new speech models plus a voice agent SDK that handles listening, reasoning, tool calls and speaking in one real-time pipeline. Transcription covers 50+ languages with speaker labels and end-of-turn detection, the new TTS voices cover 35+ languages, and "Pro Voice" adapts a voice from 30 minutes of audio. The 4B Mini transcription model costs $0.0035 per minute. You can use the EU-hosted API or run it on your own servers.</p>
-<p><strong>Good for:</strong> phone and support agents, especially in Europe or anywhere audio has to stay on your own infrastructure. Comparisons with Whisper and others are Mistral's own. <a href="https://mistral.ai/news/voxtral-3/" rel="noopener">Mistral's post</a>.</p>
+<h2>🔭 Off the radar</h2>
 
-<h3>VS Code 1.143: Compare models (Oct 19)</h3>
-<p>The new Compare models preview in the Agents window sends one task to two or more models, lets you mix Copilot, Claude and Codex harnesses, and can add a Judge model and a Synthesize step to merge the best answers. Turn it on with <code>sessions.chat.compareAgents.enabled</code>. The release also makes the Copilot harness the default for new sessions.</p>
-<p><strong>Good for:</strong> settling "which model is better at our codebase" arguments with your own tasks instead of leaderboards. Skip the new on-device model unless you have an NVIDIA GPU with 96 GB or more of memory. <a href="https://code.visualstudio.com/updates/v1_143" rel="noopener">Release notes</a>.</p>
+<h3><a href="__DIRECTORY__recursive-flint.html">Recursive Flint</a> · Oct 21</h3>
+<p>An open-weight (Apache-2.0) coding model with 39.8B parameters, about 2.5B active per token. Self-reported 74.2% on SWE-bench Verified.</p>
+<p><strong>Good for:</strong> self-hosters wanting a fast coding model. Needs one B300 or H200 GPU for now, or <a href="__DIRECTORY__kapitsa.html">Kapitsa</a> on a Mac.</p>
+<p><a href="__DIRECTORY__recursive-flint.html">See the listing →</a></p>
 
-<h2>Off the Radar</h2>
+<h3><a href="__DIRECTORY__worldtui.html">WorldTUI</a> · Oct 21</h3>
+<p>A 360M-parameter model trained to <em>be</em> a terminal. There's no real shell: it predicts the next screen from each keypress. It runs vim and tmux and plays snake.</p>
+<p><strong>Good for:</strong> a five-minute "huh." The 208 MB demo runs in the browser.</p>
+<p><a href="__DIRECTORY__worldtui.html">See the listing →</a></p>
+
+<h3><a href="__DIRECTORY__qwen3-4b-deslop.html">qwen3-4b-deslop</a> · Show HN, Oct 19</h3>
+<p>Qwen3-4B fine-tuned to drop the usual AI writing tics. The author's "slop score" fell from 121 to 12.5 per 1,000 words.</p>
+<p><strong>Good for:</strong> local drafting through Ollama. The author admits the voice is flat and it still invents names and places.</p>
+<p><a href="__DIRECTORY__qwen3-4b-deslop.html">See the listing →</a></p>
+
+<h3><a href="__DIRECTORY__earshot.html">earshot</a> · Oct 15</h3>
+<p>Gives coding agents ears: it describes sound files, finds moments in long recordings and writes second-by-second listening reports on videos. Runs as a CLI, Python API or MCP server. MIT-licensed.</p>
+<p><strong>Good for:</strong> agents building demos, launch videos or game audio.</p>
+<p><a href="__DIRECTORY__earshot.html">See the listing →</a></p>
+
+<h2>🛠️ Vibe-coding corner</h2>
+
+<h3><a href="__DIRECTORY__fx0.html">fx0</a> · Oct 19</h3>
+<p>An open-source design agent from Vercel Labs. Describe a page and it writes the whole thing as one HTML file, starting from ten design styles or your own.</p>
+<p><strong>Good for:</strong> landing pages and mockups.</p>
+<p><strong>Price:</strong> model costs bill through your Vercel AI Gateway account.</p>
+<p><a href="__DIRECTORY__fx0.html">See the listing →</a></p>
+
+<h3><a href="__DIRECTORY__beam.html">Beam</a> · #1 on Product Hunt, Oct 19</h3>
+<p>Keep agents running on a Mac mini or Studio; their windows appear as real windows on your other Mac. Needs two Macs on macOS Sonoma+.</p>
+<p><strong>Good for:</strong> anyone tired of Screen Sharing a headless Mac.</p>
+<p><strong>Price:</strong> 20 free minutes/day; $84/year or $199 lifetime.</p>
+<p><a href="__DIRECTORY__beam.html">See the listing →</a></p>
+
+<h2>🎮 Gaming pick: Co-op Anything</h2>
+
+<h3><a href="__DIRECTORY__co-op-anything.html">Co-op Anything</a> · created Oct 16, MIT</h3>
+<p>Tell your coding agent which single-player game you want to play with friends. It fixes an existing co-op mod or builds one, tests it with bots and packages a one-click install, so friends can join over Steam.</p>
+<p><strong>Good for:</strong> modders. Deus Ex co-op is listed as released. Results vary a lot by game.</p>
+<p><a href="__DIRECTORY__co-op-anything.html">See the listing →</a></p>
+
+<h2>📰 News &amp; alerts</h2>
+<p><strong>Severity (0–10):</strong> 0–2 FYI · 3–4 Monitor · 5–6 Update soon · 7–8 Patch now · 9–10 Act immediately. Official CVSS where one exists; otherwise our rating.</p>
+
+<h3>Security alert · <a href="https://www.php.net/archive/2026.php" rel="noopener">PHP2Shell</a>: patch PHP now · Oct 21</h3>
+<p><strong>CVSS 9.2/10 · Act immediately</strong></p>
+<p>CVSS v4.0 base score from the PHP security team for CVE-2026-109618 and CVE-2026-109619.</p>
+<p>Two critical bugs in PHP itself allow unauthenticated remote code execution. Wiz found them with AI help, every version back to 5.4 is hit, and attacks have already started.</p>
+<p><strong>Who's affected:</strong> anyone running WordPress, Drupal, Joomla or another PHP app.</p>
+<p><strong>What to do:</strong> update to 8.5.12, 8.4.27, 8.3.36 or 8.2.35 today.</p>
+<p>Read more: <a href="https://www.wiz.io/blog/php2shell-php-rce" rel="noopener">Wiz's write-up</a></p>
+<p><strong>Tools for this</strong></p>
 <ul>
-<li><a href="https://huggingface.co/RecursiveSI/flint" rel="noopener"><strong>Recursive Flint</strong></a> (Oct 21) is an open-weight (Apache-2.0) coding model from Recursive. It has 39.8B total parameters, with about 2.5B active per token, and a 262K-token context window. Recursive reports 74.2% on SWE-bench Verified and 54.9% on Terminal-Bench 2.1. <strong>Good for:</strong> self-hosters who want a fast coding model. It's an 80 GB download that needs one B300 or H200 GPU per replica for now. On a Mac, the indie engine <a href="https://github.com/nace-ai/kapitsa" rel="noopener">Kapitsa</a> already runs it. Scores are self-reported.</li>
-<li><a href="https://simedw.com/2026/10/21/world-model-terminal/" rel="noopener"><strong>WorldTUI</strong></a> (Oct 21) is a 360M-parameter model trained to <em>be</em> a terminal. There's no real shell behind it: every keypress goes in and the model predicts the next screen. It can run vim and tmux, play snake and usually remember files you made a few commands earlier. <strong>Good for:</strong> a five-minute "huh" and a peek at where learned software is heading. The 208 MB demo runs in the browser and works best in desktop Chrome or Edge.</li>
-<li><a href="https://100toolkit.com/blog/deslop-model/" rel="noopener"><strong>qwen3-4b-deslop</strong></a> (Show HN, Oct 19) is Qwen3-4B fine-tuned on a MacBook Air to drop the usual AI writing tics. On 40 held-out prompts, the author's "slop score" fell from 121 to 12.5 per 1,000 words, and em dashes went to zero. <strong>Good for:</strong> local drafting through Ollama (a 2.5 GB download). The author admits the voice is flat and that it still invents names and places.</li>
-<li><a href="https://github.com/Leonxlnx/earshot" rel="noopener"><strong>earshot</strong></a> (Oct 15) gives coding agents ears. It describes a sound file in words, finds a specific moment in a long recording and writes a second-by-second listening report on a whole video. It runs on CPU as a CLI, a Python API and an MCP server, and it's MIT-licensed. <strong>Good for:</strong> anyone having an agent build demos, launch videos or game audio. The descriptions are useful evidence, not a replacement for listening yourself.</li>
+<li><a href="__DIRECTORY__snyk.html">Snyk</a>: Snyk Container scans container images for vulnerabilities and recommends base-image upgrades.</li>
+<li><a href="__DIRECTORY__trivy.html">Trivy</a>: open-source (Apache-2.0) scanner for known CVEs in container images, code repos and Kubernetes clusters.</li>
 </ul>
 
-<h2>Vibe-Coding Corner</h2>
+<h3>Security alert · <a href="https://docs.litellm.ai/blog/security-incident-oct-21-2026" rel="noopener">LiteLLM 1.107.0</a> shipped a credential stealer · Oct 21</h3>
+<p><strong>Our rating 9/10 · Act immediately</strong></p>
+<p>Not a CVSS score: a malicious release has no CVE. GitHub's advisory (GHSA-92x9-889m-jgmw) rates it Critical.</p>
+<p>The popular LLM gateway's release pipeline was hijacked. The bad release runs every time Python starts and grabs SSH keys, cloud credentials, browser passwords, coding-agent tokens and provider keys.</p>
+<p><strong>Who's affected:</strong> anyone running LiteLLM unpinned or on <code>latest</code>.</p>
+<p><strong>What to do:</strong> pin <code>1.106.2</code>, rebuild and rotate every key that machine could reach.</p>
+<p>Read more: <a href="https://safedep.io/litellm-pypi-compromise-credential-stealer-backdoor/" rel="noopener">SafeDep's analysis</a></p>
+<p><strong>Tools for this</strong></p>
 <ul>
-<li><a href="https://github.com/vercel-labs/fx0" rel="noopener"><strong>fx0</strong></a> (Oct 19) is an open-source design agent from Vercel Labs. You describe a page and it writes the whole thing as one HTML file, keeping a version for every turn. It starts from ten ready-made design styles, or you can upload your own. <strong>Good for:</strong> landing pages and mockups, plus a readable example if you want to build your own agent app on Vercel's libfx. Model costs bill through your Vercel AI Gateway account, and each turn is capped at 64 model steps so a looping agent can't run up a bill. <a href="https://fx0.vercel.dev" rel="noopener">Try it</a>.</li>
-<li><a href="https://beam.win" rel="noopener"><strong>Beam</strong></a> (#1 on Product Hunt, Oct 19) lets you keep agents and builds running on a Mac mini or Studio and pull their windows onto the Mac in front of you as real windows, each with a Dock icon. Traffic goes directly between your Macs, encrypted. <strong>Good for:</strong> anyone running agents on a headless Mac who is tired of Screen Sharing. It needs two Macs on macOS Sonoma or later, Apple silicon or Intel. The free tier gives you 20 minutes a day. The yearly plan is $84 ($7 a month), and lifetime is $199.</li>
+<li><a href="__DIRECTORY__socket.html">Socket</a>: blocks malicious packages before they reach your code; Python support covers pip, uv and Poetry.</li>
+<li><a href="__DIRECTORY__gitguardian.html">GitGuardian</a>: its ggshield CLI scans files and folders for secrets with <code>ggshield secret scan path</code>.</li>
 </ul>
 
-<h2>Use Case Worth Stealing: Fix a Bloated Android TV with a Coding Agent</h2>
-<p>On Oct 17, a developer posted before-and-after photos of his parents' TV, which Claude Code had cleaned up over Wi-Fi. He says the post reached 7.4M views. The repo that came out of it, <a href="https://github.com/Gathin23/cleanyourtv" rel="noopener"><strong>CleanYourTV</strong></a>, has passed 22,000 stars, and similar projects like <a href="https://github.com/Ansub/tv-detox" rel="noopener"><strong>TV Detox</strong></a> appeared within days. Here's the recipe:</p>
+<h3>Security alert · <a href="https://thehackernews.com/2026/10/opencode-console-breach-may-have.html" rel="noopener">OpenCode Console</a> breach · Oct 17-19</h3>
+<p><strong>Our rating 7/10 · Patch now</strong></p>
+<p>Not a CVSS score: a service breach has no CVE. Exposed provider keys and reported rogue charges, limited to 1.4% of Console users.</p>
+<p>A breach of a legacy system may have exposed the OpenAI, Anthropic and Google keys that 1.4% of Console users saved there. Some users report rogue charges up to about $1,700.</p>
+<p><strong>Who's affected:</strong> anyone who ever saved a provider key in OpenCode Console.</p>
+<p><strong>What to do:</strong> revoke it at the provider. Deleting it from Console isn't enough.</p>
+<p>Read more: <a href="https://www.bleepingcomputer.com/news/security/opencode-hack-exposes-api-keys-amid-ai-distillation-attacks/" rel="noopener">BleepingComputer</a></p>
+<p><strong>Tools for this</strong></p>
+<ul>
+<li><a href="__DIRECTORY__infisical.html">Infisical</a>: MIT-licensed secrets manager; its Agent Vault lets agents, OpenCode included, call APIs without holding the keys.</li>
+</ul>
+
+<h2>📺 Weekend project: fix a bloated Android TV</h2>
+
+<h3><a href="__DIRECTORY__cleanyourtv.html">CleanYourTV</a> · 22,000+ stars</h3>
+<p>A repo with a ready-made prompt that has your coding agent clean up an old Android TV. It started when a developer showed Claude Code cleaning up his parents' TV. <strong><a href="__DIRECTORY__tv-detox.html">TV Detox</a></strong> is similar.</p>
 <ol>
-<li><strong>On the TV,</strong> turn on Developer options and USB debugging. Your laptop has to be on the same Wi-Fi.</li>
-<li><strong>Paste the repo's prompt</strong> into Claude Code, Codex or Gemini CLI and give it your TV model.</li>
-<li><strong>The agent connects over ADB</strong> (Android's built-in debug bridge), lists every app and asks before each change. It disables apps rather than deleting them, keeps an undo list and installs a small, ad-free home screen.</li>
-<li><strong>Turn debugging off</strong> when it's done.</li>
+<li>Turn on USB debugging.</li>
+<li>Paste the repo's prompt into your coding agent.</li>
+<li>The agent disables apps over ADB, asking first.</li>
+<li>Turn debugging off.</li>
 </ol>
-<p><strong>Good for:</strong> reviving an old Android or Google TV without buying new hardware. You will need access to Claude Code, Codex or Gemini CLI. The honest caveat comes from TV Detox's own prompt: a few TVs got stuck at the logo or kept restarting. Keep the restore script handy, and don't do this to a TV you can't afford to fiddle with.</p>
+<p><strong>Heads-up:</strong> a few TVs got stuck at the logo; keep the restore script handy.</p>
+<p><a href="__DIRECTORY__cleanyourtv.html">See the listing →</a></p>
 
-<h2>Gaming Pick: Co-op Anything</h2>
-<p>Last week we covered REA, the "reverse engineer anything" repo. Now <a href="https://github.com/cranebeaker/coop-anything" rel="noopener"><strong>Co-op Anything</strong></a> (created Oct 16, MIT) points that kind of agent at single-player games. You tell Claude Code, Codex, Cursor or another agent which game you want to play with friends, and it follows the repo's playbook. The agent looks for an existing co-op mod and fixes it, or reverse engineers the game and builds one from scratch. Then it tests the mod with bots inside the game and packages it for a one-click install, so friends can join over Steam. The README suggests pairing it with REA for the binary work. Deus Ex co-op is listed as released, with Fallout: New Vegas and Ocarina of Time in progress. The repo hosts no game files and stays away from anti-cheat and online services.</p>
-<p><strong>Good for:</strong> modders and anyone with a stack of single-player favorites. Results will vary a lot by game. This is modding, not a button press.</p>
-
-<p>Browse every tool we've covered at <a href="__DIRECTORY__">toolsmithweekly.com</a>.</p>
-<p>No sponsors this week. Nothing in this issue is paid placement.</p>
-<p><em>Researched and drafted with AI help, checked by a human.</em></p>
+<p>That's it for Issue #1. Thanks for reading, and see you next Friday.</p>
+<p>Browse every tool we've covered at <a href="../../index.html">toolsmithweekly.com</a>. No sponsors this week; nothing here is paid placement.</p>
+<p><strong>Know someone who'd like this?</strong> Forward it along, or they can subscribe at <a href="https://toolsmithweekly.beehiiv.com/subscribe" rel="noopener">toolsmithweekly.beehiiv.com/subscribe</a>.</p>
+<p>Web version: <a href="https://toolsmithweekly.beehiiv.com/p/mercury-3-voxtral-3-and-an-agent-that-cleans-up-your-tv" rel="noopener">toolsmithweekly.beehiiv.com/p/mercury-3-voxtral-3-and-an-agent-that-cleans-up-your-tv</a></p>

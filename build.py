@@ -46,14 +46,14 @@ ISSUES = [
     {
         "id": "1",
         "title": "Issue #1",
-        "headline": "Patch PHP. Check LiteLLM. Then Fix Your TV.",
+        "headline": "Mercury 3, Voxtral 3 and an Agent That Cleans Up Your TV",
         "when": "Friday, Oct 23, 2026",
         "coming": "Coming Oct 23, 2026",
-        "note": "AI found a decade-old hole in PHP, LiteLLM shipped a poisoned release, and people are using coding agents to strip the ads off their TVs.",
+        "note": "Inception's Mercury 3 diffusion LLM, Mistral's Voxtral 3 voice stack, a 40B open coding model using ~2.5B parameters per token, and agents that strip the ads off your TV.",
         "path": "newsletter/1/",
         "date": "2026-10-23",
         "body": "content/issue-1.html",
-        "published": False,
+        "published": True,
     },
 ]
 # Reader-facing names for the categories stored in tools.json. Unknown categories
@@ -1430,7 +1430,7 @@ llms = [
     f"- [Home]({BASE}/): Landing page with This Week's Stars, categories, and the latest letter.",
     f"- [Tool directory]({BASE}/tools/): Search, filter by category, free tier, and letter, and sort the full list. A to Z is the default sort. Newest is available from the sort control and from ?sort=newest. Category links use a ?cat= query. A text search uses ?q=.",
     f"- [This week]({BASE}/this-week.html): This week's picks, each with a sourced reason, plus other tools added in the seven days up to the newest date in the directory.",
-    f"- [Newsletter archive]({BASE}/newsletter/): The weekly letter. Issue #1 is listed as Coming Oct 23, 2026, with no link until it is sent. /newsletter/2/, /issues/, /archive/, and /newsletters/ redirect here.",
+    f"- [Newsletter archive]({BASE}/newsletter/): The weekly letter. [Issue #1]({BASE}/newsletter/1/) was sent Friday, Oct 23, 2026. /newsletter/2/, /issues/, /archive/, and /newsletters/ redirect here.",
     f"- [Suggest a tool]({BASE}/suggest/): Indie developers can email {CONFIG['suggest_email']} with a tool suggestion.",
     f"- [Subscribe]({CONFIG['subscribe_url']}): Free weekly letter on beehiiv.",
     "",
