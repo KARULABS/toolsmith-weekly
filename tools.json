@@ -1220,5 +1220,125 @@
     "mobile_note": "The official site doesn't mention a mobile app or mobile use, so this isn't confirmed.",
     "mobile_source": "https://github.com/security/plans",
     "mobile_description": "The official site doesn't mention a mobile app or mobile use."
+  },
+  {
+    "name": "VS Code",
+    "url": "https://code.visualstudio.com",
+    "category": "coding agents",
+    "description": "Code editor. The 1.143 release notes add a Compare models preview that sends one task to two or more models, with optional Judge and Synthesize steps.",
+    "use_cases": [
+      "Sending one task to two or more models",
+      "Comparing agent attempts side by side"
+    ],
+    "pricing": "Free, built on open source.",
+    "verdict": "",
+    "verdict_reason": "VS Code is for developers who want coding agents in the editor. The 1.143 notes add a Compare models preview in the Agents window. You select two or more models, send them one prompt, and each attempt runs in its own session. A Judge model is optional: it scores the attempts and recommends a solution. Synthesize, which builds on the recommended attempt with ideas from the others, starts only when you request it. The preview stays off until you enable sessions.chat.compareAgents.enabled.",
+    "verdict_checked": "2026-10-23",
+    "date_added": "2026-10-23",
+    "source": "https://code.visualstudio.com/updates/v1_143",
+    "mobile": "partial",
+    "mobile_note": "VS Code for the Web runs on phones and tablets; small screens have limits",
+    "mobile_source": "https://code.visualstudio.com/docs/remote/vscode-web",
+    "mobile_description": "Official docs say VS Code for the Web can run on tablets such as iPads, and on mobile devices, though smaller screens may have limitations."
+  },
+  {
+    "name": "WorldTUI",
+    "url": "https://simedw.com/2026/10/21/world-model-terminal/",
+    "category": "coding agents",
+    "description": "A 360M-parameter model trained to act as a terminal, predicting the next screen from each keypress. A 208 MB demo runs in the browser.",
+    "use_cases": [
+      "Predicting a terminal screen from keypresses",
+      "Trying the demo in a browser"
+    ],
+    "pricing": "Pricing unverified.",
+    "verdict": "",
+    "verdict_reason": "WorldTUI is for anyone who wants to see a small model act as a terminal. The October 21, 2026 post says a 360M-parameter model, fine-tuned from Qwen2.5-Coder-0.5B, takes each keypress and predicts the next screen, with no shell or filesystem behind it. The browser demo is the int4 build at 208 MB. The post says it should work on a modern phone, but painfully slowly, and that it is designed for a desktop browser with WebGPU and a physical keyboard.",
+    "verdict_checked": "2026-10-23",
+    "date_added": "2026-10-23",
+    "source": "https://simedw.com/2026/10/21/world-model-terminal/",
+    "mobile": "partial",
+    "mobile_note": "Browser demo works on a modern phone, painfully slowly",
+    "mobile_source": "https://simedw.com/2026/10/21/world-model-terminal/",
+    "mobile_description": "The post says the demo should work on a modern phone, but painfully slowly. It is designed for a desktop browser with WebGPU and a physical keyboard."
+  },
+  {
+    "name": "qwen3-4b-deslop",
+    "url": "https://100toolkit.com/blog/deslop-model/",
+    "category": "vibe-coding app builders",
+    "description": "A Qwen3-4B fine-tune that drops common AI writing tics. The author reports the slop score fell from 121 to 12.5 per 1,000 words. It runs locally with Ollama.",
+    "use_cases": [
+      "Local drafts without common AI writing tics",
+      "Running a small model with Ollama"
+    ],
+    "pricing": "Pricing unverified.",
+    "verdict": "",
+    "verdict_reason": "qwen3-4b-deslop is a fine-tune of Qwen3-4B-Instruct for people who want a small local model with fewer assistant writing habits. The author reports that on 40 prompts held out of training, the slop score fell from 121 to 12.5 per 1,000 words, and em dashes fell from 20.5 per 1,000 words to zero. The Q4_K_M weights are a 2.5 GB download and run locally with Ollama or llama.cpp. The post says the voice is flat and the model still invents names and places.",
+    "verdict_checked": "2026-10-23",
+    "date_added": "2026-10-23",
+    "source": "https://100toolkit.com/blog/deslop-model/",
+    "mobile": "unverified",
+    "mobile_note": "The official site doesn't mention a mobile app or mobile use, so this isn't confirmed.",
+    "mobile_source": "https://100toolkit.com/blog/deslop-model/",
+    "mobile_description": "The official site doesn't mention a mobile app or mobile use."
+  },
+  {
+    "name": "Kapitsa",
+    "url": "https://github.com/nace-ai/kapitsa",
+    "category": "coding agents",
+    "description": "Inference engine for Apple silicon that runs Qwen and Nemotron models locally, with OpenAI- and Anthropic-compatible APIs. Apache-2.0.",
+    "use_cases": [
+      "Local Qwen and Nemotron models for coding agents",
+      "OpenAI- and Anthropic-compatible local APIs"
+    ],
+    "pricing": "Free, open source (Apache 2.0).",
+    "verdict": "",
+    "verdict_reason": "Kapitsa is for people who want Qwen or Nemotron running locally on a Mac and wired to a coding agent. The README says it also runs Recursive's Flint, serves OpenAI and Anthropic APIs, and can start OpenCode, Claude Code, Codex, or pi on a local model. It requires a Mac with Apple silicon (M1 or newer) and macOS 14 Sonoma or later. The license is Apache-2.0.",
+    "verdict_checked": "2026-10-23",
+    "date_added": "2026-10-23",
+    "source": "https://github.com/nace-ai/kapitsa",
+    "mobile": "none",
+    "mobile_note": "Requires a Mac with Apple silicon and macOS 14 or later",
+    "mobile_source": "https://github.com/nace-ai/kapitsa",
+    "mobile_description": "The README requires a Mac with Apple silicon (M1 or newer) and macOS 14 Sonoma or later. The installer says Kapitsa runs on Macs with Apple silicon only."
+  },
+  {
+    "name": "Trivy",
+    "url": "https://trivy.dev",
+    "category": "Security",
+    "description": "Open-source Apache-2.0 scanner for vulnerabilities, misconfigurations, and secrets across container images, Kubernetes, code repositories, and clouds.",
+    "use_cases": [
+      "Scanning container images and Kubernetes",
+      "Finding misconfigurations and secrets in repos"
+    ],
+    "pricing": "Free, open source (Apache 2.0).",
+    "verdict": "",
+    "verdict_reason": "Trivy is for developers who want one open-source scanner for vulnerabilities, misconfigurations, and secrets. The project README lists container images, filesystems, remote git repositories, virtual machine images, and Kubernetes as targets. trivy.dev also describes cloud scanning, and its comparison of the open-source scanner says that covers a subset of AWS services. The license is Apache-2.0.",
+    "verdict_checked": "2026-10-23",
+    "date_added": "2026-10-23",
+    "source": "https://github.com/aquasecurity/trivy",
+    "mobile": "unverified",
+    "mobile_note": "The official site doesn't mention a mobile app or mobile use, so this isn't confirmed.",
+    "mobile_source": "https://trivy.dev",
+    "mobile_description": "The official site doesn't mention a mobile app or mobile use."
+  },
+  {
+    "name": "Infisical",
+    "url": "https://infisical.com",
+    "category": "Security",
+    "description": "Open-source secrets manager with a self-hostable MIT core. Agent Vault lets AI agents such as Claude Code, Codex, and OpenCode call APIs without holding the keys.",
+    "use_cases": [
+      "Fetching secrets at runtime",
+      "Letting agents call APIs without holding keys"
+    ],
+    "pricing": "Secrets Management free tier $0 (5 identities); Pro $20/month per identity billed annually ($23 monthly); Advanced $40/month per identity billed annually ($46 monthly); Enterprise custom. MIT core is free to self-host. Agent Vault includes 5,000 requests a month, then $2 per 1,000.",
+    "verdict": "",
+    "verdict_reason": "Infisical is for teams that want application secrets, and for agents that need to call APIs without holding the keys. The site says the core is open source under the MIT license and can be self-hosted. Agent Vault attaches the credential at the network boundary so the agent never holds it, and the homepage lists Claude Code, Codex, and OpenCode among the agents that work with it. Secrets Management has a free tier at $0 for 5 identities. Paid plan prices are on the pricing page.",
+    "verdict_checked": "2026-10-23",
+    "date_added": "2026-10-23",
+    "source": "https://infisical.com",
+    "mobile": "unverified",
+    "mobile_note": "The official site doesn't mention a mobile app or mobile use, so this isn't confirmed.",
+    "mobile_source": "https://infisical.com",
+    "mobile_description": "The official site doesn't mention a mobile app or mobile use."
   }
 ]
