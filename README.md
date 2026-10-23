@@ -27,7 +27,7 @@ Output:
 - `dist/tools/<slug>.html` — one page per tool, with Open Graph and JSON-LD (`SoftwareApplication`: name, url, category, offers; no ratings). Facts come first. A long overview renders only when that tool has an `overview` object, then Our Take.
 - `dist/verdicts/` — meta refresh to `/tools/` (not listed in the sitemap)
 - `dist/this-week.html` — this week's ranked picks, each with its reason and source, then any other tools added in the last seven days. The initial batch is labeled Launch week only when it is the whole window.
-- `dist/newsletter/` — newsletter archive. A letter is built and linked only when its `published` field is true (`dist/newsletter/1/` for Issue #1). Until then the archive lists it as coming, with no page and no link. The letter body stays in `content/`.
+- `dist/newsletter/` — newsletter archive. A letter is built and linked only when its `published` field is true (`dist/newsletter/1/` for Issue #1). Until then the archive and homepage list it as Coming Oct 23, 2026, with no page, no link, and no letter note. The letter body stays in `content/`.
 - `dist/newsletter/2/`, `dist/issues/`, `dist/archive/`, and `dist/newsletters/` — meta refresh to `/newsletter/` (not listed in the sitemap)
 - `dist/suggest/` — mailto for indie devs
 - `dist/og.jpg` — 1200×630 share image. The homepage anvil is an inline pixel drawing, not a photo.
