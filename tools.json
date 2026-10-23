@@ -1305,14 +1305,14 @@
     "name": "Trivy",
     "url": "https://trivy.dev",
     "category": "Security",
-    "description": "Open-source Apache-2.0 scanner for vulnerabilities, misconfigurations, and secrets across container images, Kubernetes, code repositories, and clouds.",
+    "description": "Open-source Apache-2.0 scanner for vulnerabilities, misconfigurations, and secrets across container images, Kubernetes, and code repositories.",
     "use_cases": [
       "Scanning container images and Kubernetes",
       "Finding misconfigurations and secrets in repos"
     ],
     "pricing": "Free, open source (Apache 2.0).",
     "verdict": "",
-    "verdict_reason": "Trivy is for developers who want one open-source scanner for vulnerabilities, misconfigurations, and secrets. The project README lists container images, filesystems, remote git repositories, virtual machine images, and Kubernetes as targets. trivy.dev also describes cloud scanning, and its comparison of the open-source scanner says that covers a subset of AWS services. The license is Apache-2.0.",
+    "verdict_reason": "Trivy is for developers who want one open-source scanner for vulnerabilities, misconfigurations, and secrets. The project README lists container images, filesystems, remote git repositories, virtual machine images, and Kubernetes as targets. The license is Apache-2.0.",
     "verdict_checked": "2026-10-23",
     "date_added": "2026-10-23",
     "source": "https://github.com/aquasecurity/trivy",
