@@ -37,8 +37,10 @@ TODAY = datetime.date.today()
 NEW_CUTOFF = TODAY - datetime.timedelta(days=7)
 LAUNCH = datetime.date(2026, 10, 20)  # initial batch; do not badge these
 def is_new(t):
-    # Website only. The newsletter archive does not render this badge.
-    # Hidden for the launch batch: date_added must be after 2026-10-20 and within 7 days.
+    # After the launch batch, and inside the rolling 7 days ending today.
+    # The badge and the directory's New this week filter run this same rule
+    # in the visitor's browser. Build time uses it for This Week's Newly Added
+    # list, llms.txt, and the build summary. The newsletter does not use it.
     added = datetime.date.fromisoformat(t["date_added"])
     return added > LAUNCH and NEW_CUTOFF <= added <= TODAY
 # A letter with published false stays in the repo (path + body) but is not built.
@@ -424,8 +426,8 @@ a.metric:hover{background:rgba(255,138,61,.06)}
 .pick h3 a:hover{color:var(--ac)}
 .pick p{margin:0;color:var(--mu);font-size:.95rem}
 .featured{position:relative;overflow:hidden;padding:28px;gap:12px;justify-content:flex-start}
-.featured .more{align-self:flex-start;font-weight:600;color:var(--ac);text-decoration:none}
-.featured .more:hover{color:var(--ac)}
+.pick .more,.featured .more{align-self:flex-start;font-weight:600;color:var(--ac);text-decoration:none}
+.pick .more:hover,.featured .more:hover{color:var(--ac)}
 .featured::before,#signup::before{content:"";position:absolute;inset:0;background:radial-gradient(500px 260px at 0 0,rgba(255,138,61,.12),transparent 60%);pointer-events:none}
 .featured > *,#signup > *{position:relative;z-index:1}
 .featured h3{font-size:1.75rem;letter-spacing:-.03em}
@@ -672,6 +674,14 @@ footer{padding-top:28px}
 footer .foot-promo{flex-direction:column;align-items:center;gap:12px}
 footer .foot-bar{margin-top:22px}
 }
+/* This Week: ranked picks, then the other tools that pass the new-this-week rule. */
+.wk-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px 20px;flex-wrap:wrap;margin:0 0 16px}
+.wk-head p{margin:6px 0 0;color:var(--mu);max-width:40rem}
+.wk-head a{font-size:.875rem;color:var(--mu);text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
+.wk-head a::after{content:" →";color:var(--ac)}
+.wk-head a:hover{color:var(--ac)}
+.wk-sec{margin:0 0 56px}
+.wk-sec .kicker{color:var(--ac2)}
 @media(prefers-reduced-motion:reduce){
 html{scroll-behavior:auto}
 .rise,.orb,.anvil,.spark{animation:none}
@@ -886,6 +896,62 @@ def item_list(name, items):
             for i, t in enumerate(items, 1)
         ],
     }
+# Calendar dates in the visitor's timezone, not UTC. toISOString() can move the
+# 7-day window a day away from the local date the build rule uses.
+VISITOR_JS = """<script>
+const TW_LAUNCH="__LAUNCH__";
+function addedIsNew(date){
+  const now=new Date();
+  const today=new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const cut=new Date(today);
+  cut.setDate(cut.getDate()-7);
+  const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  return date>TW_LAUNCH&&date>=iso(cut)&&date<=iso(today);
+}
+function revealNewBadges(){
+  document.querySelectorAll('.badge-new[data-added]').forEach(el=>{
+    el.hidden=!addedIsNew(el.getAttribute('data-added'));
+  });
+}
+function fitDesc(){
+  document.querySelectorAll('.row .desc').forEach(el=>{
+    const row=el.closest('.row');
+    if(!row||row.hidden||el.clientWidth===0) return;
+    const full=(el.dataset.full||el.textContent).trim();
+    el.dataset.full=full;
+    el.textContent=full;
+    if(el.scrollHeight<=el.clientHeight+1) return;
+    const words=full.split(/\\s+/);
+    let lo=1, hi=words.length, best=words[0];
+    while(lo<=hi){
+      const mid=(lo+hi)>>1;
+      el.textContent=words.slice(0,mid).join(' ')+'\\u2026';
+      if(el.scrollHeight<=el.clientHeight+1){best=el.textContent; lo=mid+1;}
+      else hi=mid-1;
+    }
+    el.textContent=best;
+  });
+}
+function refreshWeekNew(){
+  const sec=document.getElementById('wk-new-sec');
+  if(!sec) return;
+  let n=0;
+  sec.querySelectorAll('.row').forEach(row=>{
+    const ok=addedIsNew(row.dataset.date);
+    row.hidden=!ok;
+    if(ok) n++;
+  });
+  const lead=document.getElementById('wk-new-lead');
+  if(lead) lead.textContent=n+' more '+(n===1?'tool':'tools')+' added to the directory this week, each with a full listing.';
+  sec.hidden=n===0;
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  revealNewBadges();
+  refreshWeekNew();
+  fitDesc();
+});
+window.addEventListener('resize', fitDesc);
+</script>""".replace("__LAUNCH__", LAUNCH.isoformat())
 def page(title, desc, body, path, depth=0, nodes=None, bleed=False, og_type="website", share=False):
     p = "../" * depth
     # The homepage file is index.html, but its public URL is the site root.
@@ -920,13 +986,19 @@ def page(title, desc, body, path, depth=0, nodes=None, bleed=False, og_type="web
     inner = body if bleed else f'<div class="w"><div class="page">{body}</div></div>'
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{e(title)}</title><meta name="description" content="{e(desc)}">{metas}
-<link rel="stylesheet" href="{p}style.css">{schema_graph(nodes)}</head><body>
+<link rel="stylesheet" href="{p}style.css">{schema_graph(nodes)}{VISITOR_JS}</head><body>
 <a class="skip" href="#content">Skip to content</a>
 <header><div class="w"><div class="bar"><div class="brand"><a class="logo" href="{p}index.html">{mark_svg()}{e(N)}</a>{site_social("head")}</div>{nav_html(depth, path)}</div></div></header>
 <main id="content">{inner}</main><footer>{foot_html(depth)}</footer></body></html>"""
 def badge_html(t):
     # Website cards only. Callers on the newsletter archive must not use this.
-    return '<span class="badge-new">New this week</span>' if is_new(t) else ""
+    # Hidden until the visitor's browser applies the rolling 7-day rule, so the
+    # badge does not stay up after the window closes between builds. Launch-batch
+    # dates are omitted: they are never new.
+    added = t["date_added"]
+    if datetime.date.fromisoformat(added) <= LAUNCH:
+        return ""
+    return f'<span class="badge-new" data-added="{e(added)}" hidden>New this week</span>'
 PHONE_ROWS = (
     "####",
     "#..#",
@@ -973,22 +1045,70 @@ def mobile_fact(t):
                  f' <a class="mobile-src" href="{e(t["mobile_source"])}" rel="noopener">source</a>')
     return (f'<div class="mobile-fact"><p class="mobile-line">{line}</p>'
             f'<p class="mobile-desc">{e(t["mobile_description"])}</p></div>')
-def issue_for(t):
+_LISTING_HREF = re.compile(r"(?:__DIRECTORY__|(?:\.\./)*tools/)([a-z0-9-]+)\.html")
+def _explicit_issue_ids(t):
+    # covered_in may be one issue id or a list, when a tool is in several letters.
+    raw = t.get("covered_in")
+    if raw is None or raw == "":
+        return []
+    if isinstance(raw, (list, tuple)):
+        return [str(item) for item in raw if str(item).strip()]
+    return [str(raw)]
+def issue_listing_slugs(issue):
+    # Listing links in the letter body. __DIRECTORY__ is rewritten to tools/ at build.
+    body = issue.get("body")
+    if not body:
+        return []
+    path = R / body
+    if not path.is_file():
+        raise SystemExit(f"{issue.get('title', issue.get('id'))} body {body} is missing")
+    seen = []
+    for slug_id in _LISTING_HREF.findall(path.read_text()):
+        if slug_id not in seen:
+            seen.append(slug_id)
+    return seen
+def apply_coverage():
+    # Fill covered_in from letter bodies, and keep any id already set in tools.json.
+    # A tool can land in more than one issue. Unpublished issues stay in the list
+    # and issues_for hides the link until published is true.
+    by_slug = {t["slug"]: t for t in tools}
+    found = {t["slug"]: [] for t in tools}
+    known_ids = {str(issue.get("id")) for issue in ISSUES}
+    order = {str(issue.get("id")): n for n, issue in enumerate(ISSUES)}
+    for issue in ISSUES:
+        iid = str(issue.get("id") or "")
+        if not iid:
+            continue
+        for slug_id in issue_listing_slugs(issue):
+            if slug_id not in by_slug:
+                raise SystemExit(f"{issue.get('title', iid)} links {slug_id}.html but no tool has that slug")
+            if iid not in found[slug_id]:
+                found[slug_id].append(iid)
+    for t in tools:
+        ids = _explicit_issue_ids(t)
+        for iid in ids:
+            if iid not in known_ids:
+                raise SystemExit(f"{t['name']} covered_in {iid!r} does not match an issue")
+        for iid in found[t["slug"]]:
+            if iid not in ids:
+                ids.append(iid)
+        ids.sort(key=lambda iid: order.get(iid, 999))
+        t["covered_in"] = ids
+def issues_for(t):
     # Tool pages link a letter only while that issue is published.
-    cid = str(t.get("covered_in") or "")
-    if not cid:
-        return None
-    match = next((issue for issue in ISSUES if issue.get("id") == cid), None)
-    if match is None:
-        raise SystemExit(f"{t['name']} covered_in {cid!r} does not match an issue")
-    if not issue_is_live(match):
-        return None
-    return match
-def row(t, prefix):
+    found = []
+    for cid in t.get("covered_in") or []:
+        match = next((issue for issue in ISSUES if str(issue.get("id")) == str(cid)), None)
+        if match is None:
+            raise SystemExit(f"{t['name']} covered_in {cid!r} does not match an issue")
+        if issue_is_live(match):
+            found.append(match)
+    return found
+def row(t, prefix, show_new=True):
     # Every tool is in the HTML. Filters only hide rows; they do not inject them.
     letter = letter_of(t["name"])
     text = " ".join([t["name"], t["description"], t["pricing"], t["category"], *t["use_cases"]]).lower()
-    badge = badge_html(t)
+    badge = badge_html(t) if show_new else ""
     free = "1" if has_free_tier(t) else "0"
     return (
         f'<article class="row" id="{e(t["slug"])}" data-cat="{e(t["category"])}" '
@@ -1010,11 +1130,14 @@ def pick_source_html(t):
     if not src:
         return ""
     return f'<p class="pick-src"><a href="{e(src)}" rel="noopener">Source</a></p>'
-def pick_card(t, featured=False):
+def pick_card(t, featured=False, show_new=True, with_listing=False):
     href = f'tools/{t["slug"]}.html'
     why = pick_reason_html(t)
     src = pick_source_html(t)
-    badge = badge_html(t)
+    badge = badge_html(t) if show_new else ""
+    # Featured cards always link through to the listing. This Week asks for
+    # the same link on every pick. Homepage cards stay as they are.
+    more = f'<a class="more" href="{href}">See the listing →</a>' if featured or with_listing else ""
     if featured:
         return (f'<article class="pick featured">'
                 f'<h3><a href="{href}">{e(t["name"])}</a></h3>'
@@ -1022,13 +1145,14 @@ def pick_card(t, featured=False):
                 f'<p class="clamp">{e(t["description"])}</p>'
                 f'<p class="meta"><span class="cat">{e(cat_label(t["category"]))}</span> · '
                 f'<span class="price">{e(price_line(t))}</span></p>'
-                f'<a class="more" href="{href}">See the listing →</a></article>')
+                f'{more}</article>')
     return (f'<article class="pick">'
             f'<h3><a href="{href}">{e(t["name"])}</a></h3>'
             f'{badge}{why}{src}'
             f'<p class="clamp">{e(t["description"])}</p>'
             f'<span class="cat">{e(cat_label(t["category"]))}</span>'
-            f'<span class="price">{e(price_line(t))}</span></article>')
+            f'<span class="price">{e(price_line(t))}</span>'
+            f'{more}</article>')
 def weekly_picks(items):
     # Optional pick_rank. A ranked pick with a blank reason stops the build.
     picks = [t for t in items if t.get("pick_rank") is not None]
@@ -1123,7 +1247,7 @@ letters = "".join(
     for letter, slug_id in first_slug.items())
 JS = """<script>
 const q=document.getElementById('q'),s=document.getElementById('sort'),g=document.getElementById('grid'),
-free=document.getElementById('free'),empty=document.getElementById('empty'),cnt=document.getElementById('cnt');
+free=document.getElementById('free'),nw=document.getElementById('new'),empty=document.getElementById('empty'),cnt=document.getElementById('cnt');
 const cs=[...document.querySelectorAll('.chip')],ls=[...document.querySelectorAll('.letters a')];
 const rows=[...g.children];
 let cat='',letter='';
@@ -1134,10 +1258,12 @@ function sync(){
   if(cat)u.searchParams.set('cat',cat);else u.searchParams.delete('cat');
   if(s.value&&s.value!=='az')u.searchParams.set('sort',s.value);else u.searchParams.delete('sort');
   if(free.checked)u.searchParams.set('free','1');else u.searchParams.delete('free');
+  if(nw.checked)u.searchParams.set('new','1');else u.searchParams.delete('new');
   if(letter)u.searchParams.set('letter',letter);else u.searchParams.delete('letter');
   history.replaceState(null,'',u);
 }
 function run(){
+  revealNewBadges();
   const v=q.value.toLowerCase().trim();
   const o=[...rows].sort((a,b)=>{
     if(s.value==='az')return a.dataset.name.localeCompare(b.dataset.name);
@@ -1145,35 +1271,17 @@ function run(){
   });
   let n=0;
   o.forEach(c=>{
-    const ok=(!cat||c.dataset.cat===cat)&&(!v||c.dataset.text.includes(v))&&(!free.checked||c.dataset.free==='1')&&(!letter||c.dataset.letter===letter);
+    const ok=(!cat||c.dataset.cat===cat)&&(!v||c.dataset.text.includes(v))&&(!free.checked||c.dataset.free==='1')&&(!nw.checked||addedIsNew(c.dataset.date))&&(!letter||c.dataset.letter===letter);
     c.hidden=!ok;if(ok)n++;g.appendChild(c);
   });
   cnt.textContent='Showing '+n+(n===1?' tool':' tools');
   empty.hidden=n!==0;
   fitDesc();
 }
-function fitDesc(){
-  document.querySelectorAll('.row .desc').forEach(el=>{
-    if(el.closest('.row').hidden||el.clientWidth===0) return;
-    const full=(el.dataset.full||el.textContent).trim();
-    el.dataset.full=full;
-    el.textContent=full;
-    if(el.scrollHeight<=el.clientHeight+1) return;
-    const words=full.split(/\\s+/);
-    let lo=1, hi=words.length, best=words[0];
-    while(lo<=hi){
-      const mid=(lo+hi)>>1;
-      el.textContent=words.slice(0,mid).join(' ')+'\u2026';
-      if(el.scrollHeight<=el.clientHeight+1){best=el.textContent; lo=mid+1;}
-      else hi=mid-1;
-    }
-    el.textContent=best;
-  });
-}
-window.addEventListener('resize', fitDesc);
 q.oninput=()=>{sync();run()};
 s.onchange=()=>{sync();run()};
 free.onchange=()=>{sync();run()};
+nw.onchange=()=>{sync();run()};
 cs.forEach(b=>b.onclick=()=>{cs.forEach(x=>x.classList.remove('on'));b.classList.add('on');cat=b.dataset.c;sync();run()});
 ls.forEach(a=>a.addEventListener('click',ev=>{
   ev.preventDefault();
@@ -1189,18 +1297,20 @@ const initialQ=params.get('q')||'';
 if(initialQ)q.value=initialQ;
 if(params.get('sort')==='newest')s.value='newest';
 if(params.get('free')==='1')free.checked=true;
+if(params.get('new')==='1')nw.checked=true;
 const L=(params.get('letter')||'').toUpperCase();
 if(ls.some(a=>a.dataset.l===L)){letter=L;ls.forEach(x=>x.classList.toggle('on',x.dataset.l===letter));}
 run();
 </script>"""
 directory = f"""<header class="pagehead"><h1>Tool directory</h1>
-<p class="lede">Search by name, or narrow by category, letter, and free tier.</p></header>
+<p class="lede">Search by name, or narrow by category, letter, free tier, and what's new this week.</p></header>
 <label class="sr" for="q">Search tools</label>
 <input class="dirsearch" id="q" type="search" placeholder="Search by name, job, or price" autocomplete="off">
 <nav class="letters" aria-label="Jump to letter">{letters}</nav>
 <div class="dirbar">
 <div class="chips" role="group" aria-label="Filter by category">{chips}</div>
 <div class="dirtools">
+<label class="toggle" for="new"><input id="new" type="checkbox"> New this week</label>
 <label class="toggle" for="free"><input id="free" type="checkbox"> Free tier</label>
 <label class="sr" for="sort">Sort</label>
 <select id="sort" aria-label="Sort"><option value="az" selected>A to Z</option><option value="newest">Newest</option></select>
@@ -1224,15 +1334,21 @@ directory = f"""<header class="pagehead"><h1>Tool directory</h1>
 <main class="w" style="padding:48px 0"><h1>Tool directory</h1>
 <p>This page has moved.</p>
 <p><a href="../tools/">Go to the tool directory</a></p></main></body></html>""")
-# This Week leads with the ranked picks and the sourced reason on each card.
-# Other tools still inside the seven-day window stay below that list.
-pick_block = f'<div class="bento">{"".join(pick_card(t, i == 0) for i, t in enumerate(picks))}</div>'
-others = [t for t in wk if t.get("pick_rank") is None]
+# This Week leads with the ranked picks. Newly Added is every other tool that
+# passes the same new-this-week rule, so the launch batch is not counted.
+# The visitor's browser drops a row once its date leaves that window.
+pick_block = f'<div class="bento">{"".join(pick_card(t, i == 0, show_new=False, with_listing=True) for i, t in enumerate(picks))}</div>'
+others = [t for t in tools if t.get("pick_rank") is None and is_new(t)]
+# Same order as the directory's Newest sort: date, then name.
+others.sort(key=lambda t: (t["date_added"], t["name"].lower()), reverse=True)
 if others:
-    also = (f'<div class="sec"><h2>Also added in the last 7 days</h2>'
-            f'<p class="mu">{len(others)} other tools added in the 7 days up to {e(fmt_date(latest.isoformat()))}.</p>'
-            f'<div class="rows">{"".join(row(t, "tools/") for t in others)}</div></div>')
-elif not wk and not picks:
+    n_others = len(others)
+    noun = "tool" if n_others == 1 else "tools"
+    also = (f'<section class="wk-sec" id="wk-new-sec" aria-labelledby="wk-new"><div class="wk-head"><div><p class="kicker">Database</p><h2 id="wk-new">Newly Added</h2>'
+            f'<p id="wk-new-lead">{n_others} more {noun} added to the directory this week, each with a full listing.</p></div>'
+            f'<a href="tools/?new=1&amp;sort=newest">All new this week in the directory</a></div>'
+            f'<div class="rows">{"".join(row(t, "tools/", show_new=False) for t in others)}</div></section>')
+elif not picks:
     also = "<p class='mu'>Nothing new in the last seven days.</p>"
 else:
     also = ""
@@ -1243,11 +1359,19 @@ if launch_only and not picks:
 else:
     week_name = "This week"
     week_kicker = latest_issue["title"] if issue_is_live(latest_issue) else f"Added through {fmt_date(latest.isoformat())}"
-    week_lede = "This week's picks, each with a short reason and a source."
+    week_lede = "The tools we picked out this week, plus everything else new in the directory."
+issue_link = f'<a href="{e(latest_issue["path"])}">Read {e(latest_issue["title"])}</a>' if issue_is_live(latest_issue) else ""
+picks_sec = (
+    '<section class="wk-sec" aria-labelledby="wk-picks"><div class="wk-head"><div>'
+    '<p class="kicker">Editor\'s selection</p><h2 id="wk-picks">This Week\'s Picks</h2>'
+    "<p>Chosen for this week's letter, each with why it stood out and a source. Open any pick for the full breakdown.</p></div>"
+    f"{issue_link}</div>{pick_block}</section>"
+)
 (OUT / "this-week.html").write_text(page(
     f"{week_name} — {N}",
     week_lede,
-    f'<header class="pagehead"><p class="kicker">{e(week_kicker)}</p><h1>{e(week_name)}</h1><p class="lede">{e(week_lede)}</p></header>{pick_block}{also}<div class="sec">{SIGNUP}</div>',
+    f'<header class="pagehead"><p class="kicker">{e(week_kicker)}</p><h1>{e(week_name)}</h1><p class="lede">{e(week_lede)}</p></header>{picks_sec}{also}<div class="sec">{SIGNUP}</div>'
+    '<script>revealNewBadges();refreshWeekNew();fitDesc();</script>',
     "this-week.html", nodes=[item_list("This week's picks", picks)]))
 def take_paragraph(t):
     # The written take for this tool, with no verdict label or stock guide line.
@@ -1572,12 +1696,14 @@ def listing_nodes(t, title, desc, covered=None):
             "item": f"{BASE}/tools/?cat={quote(t['category'], safe='')}",
         },
     ]
-    if covered:
+    # covered_in can be several published issues. One breadcrumb step per letter.
+    issues = covered if isinstance(covered, list) else ([covered] if covered else [])
+    for issue in issues:
         crumbs.append({
             "@type": "ListItem",
             "position": len(crumbs) + 1,
-            "name": f"Featured in {covered['title']}",
-            "item": f"{BASE}/{covered['path']}",
+            "name": f"Featured in {issue['title']}",
+            "item": f"{BASE}/{issue['path']}",
         })
     crumbs.append({
         "@type": "ListItem",
@@ -1601,18 +1727,24 @@ def listing_nodes(t, title, desc, covered=None):
     ]
     _forbid_rating(nodes, t["name"])
     return nodes
+apply_coverage()
 for t in tools:
     ov = overview_html(t)
     rule = '<hr class="rule">' if ov else ""
-    covered = issue_for(t)
+    covered = issues_for(t)
     issue_crumb = ""
     issue_fact = ""
     signup = ""
     if covered:
-        issue_href = f'../{covered["path"]}'
-        featured = f'Featured in {covered["title"]}'
-        issue_crumb = f' · <a href="{e(issue_href)}">{e(featured)}</a>'
-        issue_fact = f'<dt>Letter</dt><dd><a href="{e(issue_href)}">{e(featured)}</a></dd>'
+        crumbs = []
+        facts = []
+        for issue in covered:
+            issue_href = f'../{issue["path"]}'
+            featured = f'Featured in {issue["title"]}'
+            crumbs.append(f'<a href="{e(issue_href)}">{e(featured)}</a>')
+            facts.append(f'<dt>Letter</dt><dd><a href="{e(issue_href)}">{e(featured)}</a></dd>')
+        issue_crumb = " · " + " · ".join(crumbs)
+        issue_fact = "".join(facts)
         signup = f'<div class="sec">{SIGNUP}</div>'
     title = seo_title(t)
     desc = seo_desc(t)
@@ -1660,7 +1792,7 @@ def write_issue(issue):
     depth = issue["path"].strip("/").count("/") + 1
     prefix = "../" * depth
     letter = (R / issue["body"]).read_text().replace("__DIRECTORY__", f"{prefix}tools/")
-    listed = [t for t in tools if str(t.get("covered_in") or "") == issue.get("id")]
+    listed = [t for t in tools if str(issue.get("id")) in (t.get("covered_in") or [])]
     listed.sort(key=lambda t: (t.get("pick_rank") is None, t.get("pick_rank") or 0, t["name"].lower()))
     items = "".join(f'<li><a href="{prefix}tools/{t["slug"]}.html">{e(t["name"])}</a></li>' for t in listed)
     directory = ""
@@ -1785,13 +1917,13 @@ llms = [
     "",
     f"> {VALUE}",
     "",
-    f"{N} lists new AI tools for coding, vibe coding, automation, games, and security. {SOURCE_NOTE} The directory currently lists {len(tools)} tools. Tools added after 2026-10-20 and within the last 7 days are marked New this week on the website only. That badge is not used in the newsletter. The first batch is labeled Launch week.",
+    f"{N} lists new AI tools for coding, vibe coding, automation, games, and security. {SOURCE_NOTE} The directory currently lists {len(tools)} tools. Tools added after 2026-10-20 and within the last 7 days are marked New this week on the website. The badge is chosen in the visitor's browser, so it stays current between builds, and it is not used in the newsletter or on the This Week page. The launch batch is not marked new.",
     "",
     "## Pages",
     "",
     f"- [Home]({BASE}/): Landing page with This Week's Picks, categories, and the latest letter.",
-    f"- [Tool directory]({BASE}/tools/): Search, filter by category, free tier, and letter, and sort the full list. A to Z is the default sort. Newest is available from the sort control and from ?sort=newest. Category links use a ?cat= query. A text search uses ?q=.",
-    f"- [This week]({BASE}/this-week.html): This week's picks, each with a sourced reason, plus other tools added in the seven days up to the newest date in the directory.",
+    f"- [Tool directory]({BASE}/tools/): Search, filter by category, free tier, letter, and new this week, and sort the full list. A to Z is the default sort. Newest is available from the sort control and from ?sort=newest. New this week uses ?new=1 and is checked in the browser from the date added. It combines with the other filters. Category links use a ?cat= query. A text search uses ?q=.",
+    f"- [This week]({BASE}/this-week.html): This Week's Picks, each with a sourced reason and a link to its listing, plus other tools added after the launch batch and within the last seven days. That list links to the directory with ?new=1 sorted newest first.",
     f"- [Newsletter archive]({BASE}/newsletter/): The weekly letter. [Issue #1]({BASE}/newsletter/1/) was sent Friday, Oct 23, 2026. /newsletter/2/, /issues/, /archive/, and /newsletters/ redirect here.",
     f"- [About]({BASE}/about/): What the publication is, what a listing contains, how tools are found, and how facts, opinion and paid placement are handled.",
     f"- [Contact]({BASE}/contact/): Email {CONFIG['suggest_email']}, or a DM to @toolsmithweekly on X.",
