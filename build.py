@@ -15,8 +15,16 @@ CONFIG["base_url"] = CONFIG["base_url"].rstrip("/")
 N = CONFIG["site_name"]; R = pathlib.Path(__file__).parent; OUT = R / "dist"
 BASE = CONFIG["base_url"]
 VALUE = CONFIG["tagline"]
-# Shown in the footer. The site does not claim a hands-on check of its own.
+# Used in llms.txt. The site does not claim a hands-on check of its own.
 SOURCE_NOTE = "Where our info comes from: official pricing pages, docs and public announcements, linked on every tool page. Written with AI help and reviewed for accuracy."
+# Profile links. Icons in the header and footer, and sameAs on the Organization node.
+X_URL = "https://x.com/toolsmithweekly"
+REDDIT_URL = "https://www.reddit.com/user/ToolsmithWeekly/"
+KARU_NAME = "Karu Labs"
+KARU_X = "https://x.com/KaruLabs"
+KARU_LINKEDIN = "https://www.linkedin.com/in/karu-labs-7a3460446"
+# Product Hunt featured badge. Kept as the official embed, light theme included.
+PH_BADGE = '<a href="https://www.producthunt.com/products/toolsmith-weekly?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-toolsmith-weekly" target="_blank" rel="noopener noreferrer"><img alt="Toolsmith Weekly - Curated AI tools, Clear Breakdowns, every Friday | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1290810&amp;theme=light&amp;t=1792798554574"></a>'
 e = lambda s: html.escape(str(s), quote=True)
 slug = lambda s: re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
 tools = json.load(open(R / "tools.json"))
@@ -341,6 +349,7 @@ img,svg{max-width:100%;height:auto}
 .w{max-width:1120px;margin:auto;padding:0 24px}
 header{position:sticky;top:0;z-index:10;background:rgba(7,11,26,.72);backdrop-filter:saturate(160%) blur(12px);-webkit-backdrop-filter:saturate(160%) blur(12px);border-bottom:1px solid var(--bd)}
 .bar{display:flex;gap:18px;align-items:center;flex-wrap:wrap;min-height:60px;position:relative}
+.brand{display:flex;align-items:center;gap:0;min-width:0}
 .logo{display:inline-flex;align-items:center;gap:10px;font-weight:650;font-size:1rem;letter-spacing:-.02em;color:var(--tx);text-decoration:none;white-space:nowrap}
 .mark{width:22px;height:22px;flex:none;display:block;image-rendering:pixelated}
 .nav-toggle{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
@@ -510,12 +519,34 @@ time,.num,.count,.metric b{font-family:var(--mono)}
 .letter-banner{display:block;width:min(100%,720px);height:auto;margin:0 0 24px;background:#000;image-rendering:pixelated}
 .dirlist{margin:0;padding-left:1.25rem}
 .dirlist li{margin:0 0 8px}
-footer{border-top:1px solid var(--bd);padding:48px 0 64px;color:var(--mu);font-size:.85rem}
-footer nav{display:flex;gap:4px 18px;flex-wrap:wrap}
-footer nav a{color:var(--mu);text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
-footer nav a:hover{color:var(--ac)}
-footer p{margin:8px 0 0;max-width:46rem}
-footer .sources{margin-top:12px;max-width:40rem;line-height:1.5}
+footer{border-top:1px solid var(--bd);padding:32px 0 0;color:var(--mu);font-size:.85rem}
+.social{display:flex;align-items:center;gap:2px}
+.social a{color:var(--mu);text-decoration:none;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;transition:color .15s ease,background .15s ease}
+.social a:hover,.social a:focus-visible{color:var(--ac);background:rgba(255,138,61,.1)}
+.social svg{width:18px;height:18px;display:block;flex:none}
+header .social.head{flex:none}
+header nav .social.menu{display:none}
+footer .foot-promo{display:flex;align-items:center;justify-content:center;gap:16px 28px;margin:0}
+footer .foot-promo .ph{margin:0;flex:none}
+footer .foot-promo .social{flex:none}
+footer .foot-promo .social a{width:44px;height:44px}
+footer .foot-promo .social svg{width:20px;height:20px}
+footer .foot-bar{margin-top:28px;border-top:1px solid var(--bd);background:var(--bg2)}
+footer .foot-bar .w{display:flex;justify-content:center;padding-top:12px;padding-bottom:14px}
+footer .credit{display:flex;align-items:center;justify-content:center;gap:2px;flex-wrap:wrap;margin:0;max-width:none;line-height:1.3;text-align:center}
+footer .credit>span{color:var(--mu)}
+footer .credit a{color:var(--tx);text-decoration:underline;text-decoration-color:rgba(154,166,199,.45);text-underline-offset:3px}
+footer .credit a:hover{color:var(--ac);text-decoration-color:var(--ac)}
+footer .credit .social{margin:0}
+footer .credit .social a{width:32px;height:32px;color:var(--mu);text-decoration:none}
+footer .credit .social a:hover{color:var(--ac)}
+footer .credit .social svg{width:15px;height:15px}
+.ph{margin:16px 0 0;line-height:0}
+.ph a{display:inline-block;max-width:100%;line-height:0}
+.ph img{display:block;width:250px;max-width:100%;height:auto}
+.signup-wrap{display:flex;flex-direction:column;gap:14px;min-width:0}
+.signup-wrap>.panel{flex:1}
+.signup-wrap>.ph{margin:0}
 dl dt{margin-top:16px}dl dd{margin:4px 0 0}
 .vrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px}
 .back{margin:0 0 14px;color:var(--mu)}
@@ -572,6 +603,9 @@ header nav{display:none;width:100%;flex-direction:column;align-items:stretch;gap
 header nav a{min-height:48px}
 header nav a.on{box-shadow:inset 2px 0 0 var(--ac)}
 header nav a.btn{display:flex;margin-top:8px;text-align:center}
+header .social.head{display:none}
+header nav .social.menu{display:flex;flex-direction:row;align-self:flex-start;margin:0 0 4px}
+header nav .social.menu a{width:44px;min-height:44px;flex:none}
 }
 @media(max-width:980px){
 .hero-grid,.split,.tool-hero{grid-template-columns:1fr}
@@ -607,11 +641,14 @@ header nav a.btn{display:flex;margin-top:8px;text-align:center}
 .overview h2{margin-bottom:10px}
 .rule + .take{margin-top:32px}
 .tbl th,.tbl td{font-size:1rem}
+footer{padding-top:28px}
+footer .foot-promo{flex-direction:column;align-items:center;gap:12px}
+footer .foot-bar{margin-top:22px}
 }
 @media(prefers-reduced-motion:reduce){
 html{scroll-behavior:auto}
 .rise,.orb,.anvil,.spark{animation:none}
-.pick,a.catcard,.row,a.btn{transition:none}
+.pick,a.catcard,.row,a.btn,.social a{transition:none}
 .pick:hover,a.catcard:hover,.row:hover,a.btn:hover,.band-stars .pick:hover{transform:none}
 }
 """
@@ -705,6 +742,30 @@ def section_of(path):
     if path.startswith("suggest/"):
         return "suggest"
     return ""
+def icon_x():
+    # Monochrome X mark. currentColor follows the link color.
+    return ('<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">'
+            '<path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>'
+            '</svg>')
+def icon_reddit():
+    return ('<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">'
+            '<path fill="currentColor" d="M14.238 15.348c.085.084.085.221 0 .306-.465.462-1.194.687-2.231.687l-.008-.002-.008.002c-1.036 0-1.766-.225-2.231-.687-.085-.085-.085-.221 0-.306.084-.084.222-.084.307 0 .379.377 1.008.561 1.924.561l.008.002.008-.002c.915 0 1.544-.184 1.924-.561.084-.084.223-.084.307 0zm-3.44-2.418c0-.507-.414-.912-.912-.912-.511 0-.923.405-.923.912 0 .506.412.911.923.911.498 0 .912-.405.912-.911zm4.415-.912c-.512 0-.924.405-.924.912 0 .506.412.911.924.911.498 0 .911-.405.911-.911 0-.507-.413-.912-.911-.912zM24 12c0 6.627-5.373 12-12 12S0 18.627 0 12 5.373 0 12 0s12 5.373 12 12zm-4.996-1.211c0-.816-.679-1.479-1.514-1.479-.401 0-.764.159-1.03.411-.97-.695-2.298-1.137-3.762-1.192l.638-3.006 2.084.442c.018.628.532 1.134 1.166 1.134.645 0 1.168-.523 1.168-1.168 0-.646-.523-1.168-1.168-1.168-.421 0-.79.225-.995.56l-2.342-.496a.24.24 0 0 0-.281.178l-.716 3.375c-1.508.034-2.888.463-3.892 1.156-.268-.252-.631-.411-1.033-.411-.835 0-1.513.663-1.513 1.479 0 .543.296 1.016.73 1.271-.029.181-.045.366-.045.554 0 2.342 2.721 4.242 6.077 4.242s6.077-1.9 6.077-4.242c0-.188-.016-.373-.045-.554.435-.255.73-.728.73-1.271z"/>'
+            '</svg>')
+def icon_linkedin():
+    return ('<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">'
+            '<path fill="currentColor" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>'
+            '</svg>')
+def ext_icon(href, label, svg):
+    return (f'<a href="{e(href)}" target="_blank" rel="noopener noreferrer" '
+            f'aria-label="{e(label)}">{svg}</a>')
+def site_social(variant):
+    # head sits beside the logo on wide screens. menu is the same links inside
+    # the collapsed header. foot sits beside the Product Hunt badge.
+    cls = "social" if variant == "foot" else f"social {variant}"
+    return (f'<div class="{cls}" role="group" aria-label="Toolsmith Weekly on social">'
+            + ext_icon(X_URL, "Toolsmith Weekly on X", icon_x())
+            + ext_icon(REDDIT_URL, "Toolsmith Weekly on Reddit", icon_reddit())
+            + "</div>")
 def nav_html(depth, path):
     p = "../" * depth
     sec = section_of(path)
@@ -712,20 +773,28 @@ def nav_html(depth, path):
     for href, label, key in NAV:
         cls = ' class="on"' if key == sec else ""
         links.append(f'<a href="{p}{href}"{cls}>{label}</a>')
+    links.append(site_social("menu"))
     links.append(f'<a class="btn" href="{e(CONFIG["subscribe_url"])}">Subscribe</a>')
     return ('<input class="nav-toggle" id="nav-toggle" type="checkbox" aria-controls="site-nav">'
             '<label class="nav-btn" for="nav-toggle"><span class="m-open">Menu</span>'
             '<span class="m-close">Close</span></label>'
             '<nav id="site-nav" aria-label="Primary">' + "".join(links) + "</nav>")
-def foot_html(depth):
-    p = "../" * depth
-    links = "".join(f'<a href="{p}{href}">{label}</a>' for href, label, _ in NAV)
-    links += f'<a href="{e(CONFIG["subscribe_url"])}">Subscribe</a>'
-    return (f'<nav aria-label="Footer">{links}</nav>'
-            f'<p>{e(N)}. {e(VALUE)}</p>'
-            f'<p class="sources">{e(SOURCE_NOTE)}</p>')
+def foot_html(_depth):
+    # Page links stay in the header. There is no privacy page, so the footer
+    # is the badge row and the Karu Labs line only.
+    karu = f'<a href="{e(KARU_X)}" target="_blank" rel="noopener noreferrer">{e(KARU_NAME)}</a>'
+    karu_icons = (
+        f'<span class="social" role="group" aria-label="{e(KARU_NAME)}">'
+        + ext_icon(KARU_X, "Karu Labs on X", icon_x())
+        + ext_icon(KARU_LINKEDIN, "Karu Labs on LinkedIn", icon_linkedin())
+        + "</span>"
+    )
+    return (f'<div class="w foot-main"><div class="foot-promo"><p class="ph">{PH_BADGE}</p>{site_social("foot")}</div></div>'
+            f'<div class="foot-bar"><div class="w"><p class="credit"><span>A {karu} project</span>{karu_icons}</p></div></div>')
 def schema_graph(extra=None):
     # Organization and WebSite on every page. SearchAction matches the directory ?q= filter.
+    # Karu Labs is the publisher. Toolsmith Weekly stays the site organization.
+    karu_id = f"{BASE}/#karu-labs"
     graph = {
         "@context": "https://schema.org",
         "@graph": [
@@ -737,6 +806,15 @@ def schema_graph(extra=None):
                 "email": CONFIG["suggest_email"],
                 "description": VALUE,
                 "logo": {"@type": "ImageObject", "url": f"{BASE}/og.jpg", "width": 1200, "height": 630},
+                "sameAs": [X_URL, REDDIT_URL],
+                "parentOrganization": {"@id": karu_id},
+            },
+            {
+                "@type": "Organization",
+                "@id": karu_id,
+                "name": KARU_NAME,
+                "url": KARU_X,
+                "sameAs": [KARU_X, KARU_LINKEDIN],
             },
             {
                 "@type": "WebSite",
@@ -744,7 +822,7 @@ def schema_graph(extra=None):
                 "name": N,
                 "url": f"{BASE}/",
                 "description": VALUE,
-                "publisher": {"@id": f"{BASE}/#organization"},
+                "publisher": {"@id": karu_id},
                 "potentialAction": {
                     "@type": "SearchAction",
                     "target": BASE + "/tools/?q={search_term_string}",
@@ -791,8 +869,8 @@ def page(title, desc, body, path, depth=0, nodes=None, bleed=False):
 <title>{e(title)}</title><meta name="description" content="{e(desc)}">{metas}
 <link rel="stylesheet" href="{p}style.css">{schema_graph(nodes)}</head><body>
 <a class="skip" href="#content">Skip to content</a>
-<header><div class="w"><div class="bar"><a class="logo" href="{p}index.html">{mark_svg()}{e(N)}</a>{nav_html(depth, path)}</div></div></header>
-<main id="content">{inner}</main><footer><div class="w">{foot_html(depth)}</div></footer></body></html>"""
+<header><div class="w"><div class="bar"><div class="brand"><a class="logo" href="{p}index.html">{mark_svg()}{e(N)}</a>{site_social("head")}</div>{nav_html(depth, path)}</div></div></header>
+<main id="content">{inner}</main><footer>{foot_html(depth)}</footer></body></html>"""
 def badge_html(t):
     # Website cards only. Callers on the newsletter archive must not use this.
     return '<span class="badge-new">New this week</span>' if is_new(t) else ""
@@ -917,12 +995,13 @@ def weekly_picks(items):
             raise SystemExit(f"{t['name']} has pick_rank but no pick_source")
     picks.sort(key=lambda t: (t["pick_rank"], t["name"].lower()))
     return picks
-SIGNUP = f"""<div class="panel" id="signup"><p class="kicker">Get the Weekly Roundup</p><h2>{e("The week's new AI tools, every Friday")}</h2>
+SIGNUP = f"""<div class="signup-wrap"><div class="panel" id="signup"><p class="kicker">Get the Weekly Roundup</p><h2>{e("The week's new AI tools, every Friday")}</h2>
 <p class="sub">{e("One short, free email with the newest AI tool drops, from big launches to indie projects. Each one comes with a plain-English summary, what it costs, and a direct link.")}</p>
 <ul class="points"><li>{e("Catch new AI tools the week they ship, including small indie projects")}</li>
 <li>{e("Get what each tool does and what it costs, explained in plain language")}</li>
 <li>{e("Go straight to each tool with a direct link, or browse the full directory at ")}<a href="{e(BASE)}/tools/">toolsmithweekly.com</a></li></ul>
-<p><a class="btn" href="{e(CONFIG['subscribe_url'])}">Subscribe free</a></p></div>"""
+<p><a class="btn" href="{e(CONFIG['subscribe_url'])}">Subscribe free</a></p></div>
+<p class="ph">{PH_BADGE}</p></div>"""
 picks = weekly_picks(tools)
 counts = Counter(t["category"] for t in tools)
 known = [c for c in CAT_ORDER if c in counts]
