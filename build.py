@@ -15,7 +15,7 @@ CONFIG["base_url"] = CONFIG["base_url"].rstrip("/")
 N = CONFIG["site_name"]; R = pathlib.Path(__file__).parent; OUT = R / "dist"
 BASE = CONFIG["base_url"]
 VALUE = CONFIG["tagline"]
-# Shown in the footer. The site does not claim a hands-on check of its own.
+# Used in llms.txt. The site does not claim a hands-on check of its own.
 SOURCE_NOTE = "Where our info comes from: official pricing pages, docs and public announcements, linked on every tool page. Written with AI help and reviewed for accuracy."
 # Profile links. Icons in the header and footer, and sameAs on the Organization node.
 X_URL = "https://x.com/toolsmithweekly"
@@ -519,25 +519,19 @@ time,.num,.count,.metric b{font-family:var(--mono)}
 .letter-banner{display:block;width:min(100%,720px);height:auto;margin:0 0 24px;background:#000;image-rendering:pixelated}
 .dirlist{margin:0;padding-left:1.25rem}
 .dirlist li{margin:0 0 8px}
-footer{border-top:1px solid var(--bd);padding:48px 0 0;color:var(--mu);font-size:.85rem}
-footer nav{display:flex;gap:4px 18px;flex-wrap:wrap}
-footer nav a{color:var(--mu);text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
-footer nav a:hover{color:var(--ac)}
-footer p{margin:8px 0 0;max-width:46rem}
-footer .tagline{margin-top:20px}
-footer .sources{margin-top:10px;max-width:40rem;line-height:1.5}
+footer{border-top:1px solid var(--bd);padding:32px 0 0;color:var(--mu);font-size:.85rem}
 .social{display:flex;align-items:center;gap:2px}
 .social a{color:var(--mu);text-decoration:none;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;transition:color .15s ease,background .15s ease}
 .social a:hover,.social a:focus-visible{color:var(--ac);background:rgba(255,138,61,.1)}
 .social svg{width:18px;height:18px;display:block;flex:none}
 header .social.head{flex:none}
 header nav .social.menu{display:none}
-footer .foot-promo{display:flex;align-items:center;gap:16px 28px;margin-top:28px}
+footer .foot-promo{display:flex;align-items:center;justify-content:center;gap:16px 28px;margin:0}
 footer .foot-promo .ph{margin:0;flex:none}
 footer .foot-promo .social{flex:none}
 footer .foot-promo .social a{width:44px;height:44px}
 footer .foot-promo .social svg{width:20px;height:20px}
-footer .foot-bar{margin-top:36px;border-top:1px solid var(--bd);background:var(--bg2)}
+footer .foot-bar{margin-top:28px;border-top:1px solid var(--bd);background:var(--bg2)}
 footer .foot-bar .w{display:flex;justify-content:center;padding-top:12px;padding-bottom:14px}
 footer .credit{display:flex;align-items:center;justify-content:center;gap:2px;flex-wrap:wrap;margin:0;max-width:none;line-height:1.3;text-align:center}
 footer .credit>span{color:var(--mu)}
@@ -647,11 +641,9 @@ header nav .social.menu a{width:44px;min-height:44px;flex:none}
 .overview h2{margin-bottom:10px}
 .rule + .take{margin-top:32px}
 .tbl th,.tbl td{font-size:1rem}
-footer{padding-top:36px}
-footer nav{justify-content:center}
-footer .tagline,footer .sources{text-align:center;margin-left:auto;margin-right:auto}
-footer .foot-promo{flex-direction:column;align-items:center;justify-content:center;gap:12px;margin-top:24px}
-footer .foot-bar{margin-top:28px}
+footer{padding-top:28px}
+footer .foot-promo{flex-direction:column;align-items:center;gap:12px}
+footer .foot-bar{margin-top:22px}
 }
 @media(prefers-reduced-motion:reduce){
 html{scroll-behavior:auto}
@@ -787,10 +779,9 @@ def nav_html(depth, path):
             '<label class="nav-btn" for="nav-toggle"><span class="m-open">Menu</span>'
             '<span class="m-close">Close</span></label>'
             '<nav id="site-nav" aria-label="Primary">' + "".join(links) + "</nav>")
-def foot_html(depth):
-    p = "../" * depth
-    links = "".join(f'<a href="{p}{href}">{label}</a>' for href, label, _ in NAV)
-    links += f'<a href="{e(CONFIG["subscribe_url"])}">Subscribe</a>'
+def foot_html(_depth):
+    # Page links stay in the header. There is no privacy page, so the footer
+    # is the badge row and the Karu Labs line only.
     karu = f'<a href="{e(KARU_X)}" target="_blank" rel="noopener noreferrer">{e(KARU_NAME)}</a>'
     karu_icons = (
         f'<span class="social" role="group" aria-label="{e(KARU_NAME)}">'
@@ -798,11 +789,7 @@ def foot_html(depth):
         + ext_icon(KARU_LINKEDIN, "Karu Labs on LinkedIn", icon_linkedin())
         + "</span>"
     )
-    # Nav and notes, then the badge with the site icons, then a slim Karu Labs bar.
-    return (f'<div class="w foot-main"><nav aria-label="Footer">{links}</nav>'
-            f'<p class="tagline">{e(N)}. {e(VALUE)}</p>'
-            f'<p class="sources">{e(SOURCE_NOTE)}</p>'
-            f'<div class="foot-promo"><p class="ph">{PH_BADGE}</p>{site_social("foot")}</div></div>'
+    return (f'<div class="w foot-main"><div class="foot-promo"><p class="ph">{PH_BADGE}</p>{site_social("foot")}</div></div>'
             f'<div class="foot-bar"><div class="w"><p class="credit"><span>A {karu} project</span>{karu_icons}</p></div></div>')
 def schema_graph(extra=None):
     # Organization and WebSite on every page. SearchAction matches the directory ?q= filter.
