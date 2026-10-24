@@ -386,10 +386,10 @@ h3{font-weight:650;letter-spacing:-.03em;line-height:1.15}
 .hero .lede{opacity:1}
 .actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:0}
 .hero-signup{display:flex;flex-wrap:wrap;align-items:flex-start;gap:16px 20px;max-width:40rem}
-.hero-signup-main{flex:1 1 18rem;min-width:min(100%,18rem)}
+.hero-signup-main{flex:1 1 auto;min-width:min(100%,18rem)}
 .bh-form{width:100%;min-width:0}
-.bh-hero{min-height:200px}
-.bh-listing{min-height:140px;max-width:32rem}
+.bh-hero,.bh-listing{min-height:48px}
+.bh-listing{max-width:32rem}
 .bh-form.is-fallback{min-height:0}
 .bh-fallback{margin:0}
 .bh-note{margin:8px 0 0;color:var(--mu);font-size:.875rem;line-height:1.45}
