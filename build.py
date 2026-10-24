@@ -581,9 +581,6 @@ footer .foot-nav .sep{display:inline-block;padding:0 .7em;color:var(--mu)}
 .ph{margin:16px 0 0;line-height:0}
 .ph a{display:inline-block;max-width:100%;line-height:0}
 .ph img{display:block;width:250px;max-width:100%;height:auto}
-.signup-wrap{display:flex;flex-direction:column;gap:14px;min-width:0}
-.signup-wrap>.panel{flex:1}
-.signup-wrap>.ph{margin:0}
 dl dt{margin-top:16px}dl dd{margin:4px 0 0}
 .vrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px}
 .back{margin:0 0 14px;color:var(--mu)}
@@ -1239,13 +1236,12 @@ def beehiiv_form(form_id, kind):
         f'<p class="bh-fallback" data-bh-fallback hidden>{link}</p>'
         f'</div>'
     )
-SIGNUP = f"""<div class="signup-wrap"><div class="panel" id="signup"><p class="kicker">Get the Weekly Roundup</p><h2>{e("The week's new AI tools, every Friday")}</h2>
+SIGNUP = f"""<div class="panel" id="signup"><p class="kicker">Get the Weekly Roundup</p><h2>{e("The week's new AI tools, every Friday")}</h2>
 <p class="sub">{e("One short, free email with the newest AI tool drops, from big launches to indie projects. Each one comes with a plain-English summary, what it costs, and a direct link.")}</p>
 <ul class="points"><li>{e("Catch new AI tools the week they ship, including small indie projects")}</li>
 <li>{e("Get what each tool does and what it costs, explained in plain language")}</li>
 <li>{e("Go straight to each tool with a direct link, or browse the full directory at ")}<a href="{e(BASE)}/tools/">toolsmithweekly.com</a></li></ul>
-<p>{subscribe_link()}</p></div>
-<p class="ph">{PH_BADGE}</p></div>"""
+<p>{subscribe_link()}</p></div>"""
 picks = weekly_picks(tools)
 counts = Counter(t["category"] for t in tools)
 known = [c for c in CAT_ORDER if c in counts]
