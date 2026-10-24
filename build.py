@@ -1011,6 +1011,25 @@ BEEHIIV_BOOT = """<script>
 })();
 </script>
 <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>"""
+# Root-absolute so nested pages still resolve /favicon.ico. Navy is the most
+# common background pixel in the provided icon-512.png.
+NAVY = "#041e43"
+FAVICON_FILES = (
+    "favicon.ico",
+    "favicon-16x16.png",
+    "favicon-32x32.png",
+    "apple-touch-icon.png",
+    "icon-192.png",
+    "icon-512.png",
+)
+FAVICON_LINKS = (
+    '<link rel="icon" href="/favicon.ico">'
+    '<link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32">'
+    '<link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16">'
+    '<link rel="apple-touch-icon" href="/apple-touch-icon.png">'
+    '<link rel="manifest" href="/site.webmanifest">'
+    f'<meta name="theme-color" content="{NAVY}">'
+)
 def page(title, desc, body, path, depth=0, nodes=None, bleed=False, og_type="website", share=False):
     p = "../" * depth
     # The homepage file is index.html, but its public URL is the site root.
@@ -1038,7 +1057,7 @@ def page(title, desc, body, path, depth=0, nodes=None, bleed=False, og_type="web
         f'{share_meta}'
         f'<meta name="twitter:image" content="{img}">'
         f'<link rel="canonical" href="{canon}">'
-        f'<meta name="theme-color" content="#070b1a">'
+        f'{FAVICON_LINKS}'
         f'<meta name="color-scheme" content="dark">'
     )
     # .page only sets vertical padding. Nest it so it does not wipe the .w gutters.
@@ -1267,6 +1286,17 @@ shutil.copyfile(R / "brand" / "og.jpg", OUT / "og.jpg")
 shutil.copyfile(R / "brand" / "header-anvil.jpg", OUT / "header-anvil.jpg")
 shutil.copyfile(R / "logo.png", OUT / "logo.png")
 shutil.copyfile(R / "CNAME", OUT / "CNAME")
+for name in FAVICON_FILES:
+    shutil.copyfile(R / name, OUT / name)
+(OUT / "site.webmanifest").write_text(json.dumps({
+    "name": "Toolsmith Weekly",
+    "icons": [
+        {"src": "/icon-192.png", "sizes": "192x192", "type": "image/png"},
+        {"src": "/icon-512.png", "sizes": "512x512", "type": "image/png"},
+    ],
+    "theme_color": NAVY,
+    "background_color": NAVY,
+}, indent=2) + "\n")
 def letter_panel(issue):
     # Homepage teaser. A published letter links to its page and shows its note.
     # An unpublished letter is the title and the coming date, with no note and no issue link.
@@ -1404,6 +1434,7 @@ directory = f"""<header class="pagehead"><h1>Tool directory</h1>
 <meta http-equiv="refresh" content="0; url=../tools/">
 <link rel="canonical" href="{BASE}/tools/">
 <meta name="description" content="The tool directory lists every tool.">
+{FAVICON_LINKS}
 <link rel="stylesheet" href="../style.css"></head><body>
 <main class="w" style="padding:48px 0"><h1>Tool directory</h1>
 <p>This page has moved.</p>
@@ -1916,6 +1947,7 @@ def alias_page(folder):
 <meta http-equiv="refresh" content="0; url={up}newsletter/">
 <link rel="canonical" href="{BASE}/newsletter/">
 <meta name="description" content="The newsletter archive has moved.">
+{FAVICON_LINKS}
 <link rel="stylesheet" href="{up}style.css"></head><body>
 <main class="w" style="padding:48px 0"><h1>Newsletter Archive</h1>
 <p>This page has moved.</p>
