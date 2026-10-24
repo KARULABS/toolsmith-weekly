@@ -4,7 +4,8 @@ import json, html, math, re, shutil, datetime, pathlib
 from collections import Counter
 from urllib.parse import quote
 CONFIG = {"site_name": "Toolsmith Weekly",  # <- swap the brand name here
-          "tagline": "The newest AI tools and models, sorted every Friday.",
+          "tagline": "Find the AI tools worth knowing.",
+          "hero_sub": "Detailed breakdowns, pricing, use cases, source links and independent takes, plus the newest finds delivered every Friday.",
           "base_url": "https://toolsmithweekly.com",  # no trailing slash; canonical URLs, sitemap, robots
           "subscribe_url": "https://toolsmithweekly.beehiiv.com/subscribe",
           "suggest_email": "hello@toolsmithweekly.com"}
@@ -16,7 +17,7 @@ N = CONFIG["site_name"]; R = pathlib.Path(__file__).parent; OUT = R / "dist"
 BASE = CONFIG["base_url"]
 VALUE = CONFIG["tagline"]
 # Used in llms.txt. The site does not claim a hands-on check of its own.
-SOURCE_NOTE = "Where our info comes from: official pricing pages, docs and public announcements, linked on every tool page. Written with AI help and reviewed for accuracy."
+SOURCE_NOTE = "Where our info comes from: official pricing pages, docs and public announcements, linked on every tool page."
 # Profile links. Icons in the header and footer, and sameAs on the Organization node.
 X_URL = "https://x.com/toolsmithweekly"
 REDDIT_URL = "https://www.reddit.com/user/ToolsmithWeekly/"
@@ -87,7 +88,7 @@ GUIDE = {
 _TAKE_BOILERPLATE = "Price, access, or the evidence is not settled."
 suggest_href = "mailto:" + CONFIG["suggest_email"] + "?" + "&".join([
     "subject=" + quote("Tool suggestion for Toolsmith Weekly"),
-    "body=" + quote("I'm an indie developer.\n\nTool name:\nWebsite:\nWhat it does:\nWhy it belongs in Toolsmith Weekly:\n")])
+    "body=" + quote("I'm an indie developer.\n\nTool name:\nWebsite:\nWhat it does:\nWhy it belongs in Toolsmith Weekly:\nPricing page:\nDocs or announcement link:\n")])
 # Side-view pixel anvil. Horn left, flat face, heel, waist, two feet.
 # h and t are the steel top, b the body, d the deep shade. Sparks are separate rects.
 ANVIL_FILL = {
@@ -399,6 +400,7 @@ a.metric:hover{background:rgba(255,138,61,.06)}
 .page{padding:56px 0 96px}
 .pagehead{margin:0 0 28px;max-width:40rem}
 .pagehead h1{margin:0 0 10px}
+.pagehead-wide h1{max-width:none}
 .band{padding:88px 0}
 .band-alt{background:var(--bg2);box-shadow:inset 0 1px 0 var(--bd),inset 0 -1px 0 var(--bd)}
 .band-head{display:flex;justify-content:space-between;align-items:center;gap:12px 20px;margin:0 0 28px}
@@ -481,6 +483,7 @@ input:hover,select:hover{border-color:var(--bd-h)}
 .row .price{color:var(--tx);white-space:nowrap}
 .row .badge-new{margin-left:8px;vertical-align:2px}
 .badge-new{display:inline-block;font-weight:650;font-size:.7rem;padding:4px 8px;border-radius:999px;background:rgba(255,138,61,.12);color:var(--ac2);letter-spacing:.04em;text-transform:uppercase}
+.pick .badge-new{align-self:flex-start}
 .mbadge{display:inline-flex;align-items:center;gap:5px;margin-left:8px;padding:3px 7px 3px 4px;border:1px solid;border-radius:2px;background:#0b1124;font-family:var(--mono);font-size:.72rem;font-weight:650;letter-spacing:.02em;line-height:1.2;white-space:nowrap}
 .mbadge .phone{width:12px;height:18px;flex:none;display:block;image-rendering:pixelated}
 .mbadge.m-full{color:#ffc94a;border-color:#ffc94a}
@@ -517,6 +520,16 @@ time,.num,.count,.metric b{font-family:var(--mono)}
 .letter ul,.letter ol{margin:0 0 16px;padding-left:1.25rem}
 .letter li::marker{color:var(--ac)}
 .letter code{font-family:var(--mono);font-size:.92em}
+.prose{max-width:68ch}
+.prose h2{margin:36px 0 10px;max-width:none;font-size:1.35rem}
+.prose p,.prose li{font-size:1.0625rem;line-height:1.7;color:#d6dcf0}
+.prose p{margin:0 0 14px}
+.prose ul{margin:0 0 16px;padding-left:1.25rem}
+.prose li{margin:0 0 6px}
+.prose li::marker{color:var(--ac)}
+.prose .callout{padding:16px 18px;border:1px solid var(--bd-h);border-radius:12px;background:rgba(15,22,48,.6);box-shadow:inset 3px 0 0 var(--ac2)}
+.prose .callout p{margin:0;color:var(--tx)}
+.prose code{font-family:var(--mono);font-size:.92em}
 .letter .meta{margin:0 0 18px;font-family:var(--mono);color:var(--mu)}
 .letter-banner{display:block;width:min(100%,720px);height:auto;margin:0 0 24px;background:#000;image-rendering:pixelated}
 .dirlist{margin:0;padding-left:1.25rem}
@@ -543,6 +556,10 @@ footer .credit .social{margin:0}
 footer .credit .social a{width:32px;height:32px;color:var(--mu);text-decoration:none}
 footer .credit .social a:hover{color:var(--ac)}
 footer .credit .social svg{width:15px;height:15px}
+footer .foot-nav{margin:18px 0 0;text-align:center;line-height:1.4}
+footer .foot-nav a{color:var(--mu);text-decoration:none;font-size:.85rem;min-height:32px;display:inline-flex;align-items:center}
+footer .foot-nav a:hover{color:var(--ac)}
+footer .foot-nav .sep{display:inline-block;padding:0 .7em;color:var(--mu)}
 .ph{margin:16px 0 0;line-height:0}
 .ph a{display:inline-block;max-width:100%;line-height:0}
 .ph img{display:block;width:250px;max-width:100%;height:auto}
@@ -588,6 +605,15 @@ hr.rule{border:0;border-top:1px solid var(--bd);margin:0}
 .rule + .take{margin-top:56px}
 .take h2{margin:0 0 8px;font-size:1.2rem;letter-spacing:-.02em}
 .take p{margin:0;max-width:44rem;color:var(--tx);font-size:1.05rem;line-height:1.55}
+.take-tw{position:relative;padding:22px 26px 20px;border:1px solid rgba(255,138,61,.45);box-shadow:inset 3px 0 0 var(--ac),0 10px 30px -18px rgba(255,138,61,.6)}
+.take-tw .take-head{display:flex;align-items:center;gap:10px;margin:0 0 12px}
+.take-tw .take-head .mark{width:26px;height:26px}
+.take-tw h2{flex:none;margin:0;font-family:var(--mono);font-size:.85rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;line-height:1.2;color:var(--ac2)}
+.take-tw .take-head:after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(255,201,74,.45),transparent)}
+.take-tw p.take-body{font-size:1.125rem;line-height:1.6}
+.take-tw .take-foot{margin:14px 0 0;font-family:var(--mono);font-size:.75rem;letter-spacing:.03em;color:var(--mu)}
+.take-tw .take-foot a{color:var(--mu)}
+.take-tw .take-foot a:hover{color:var(--ac)}
 .facts{position:sticky;top:84px;padding:20px;border-radius:16px;border:1px solid var(--bd);background:linear-gradient(180deg,#0f1630,rgba(15,22,48,.6));box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 8px 24px -12px rgba(0,0,0,.6)}
 .facts dt:first-child{margin-top:0}
 .facts a,.overview a,.overview code{overflow-wrap:anywhere}
@@ -638,10 +664,11 @@ header nav .social.menu a{width:44px;min-height:44px;flex:none}
 .band{padding:56px 0}
 .chips{flex-wrap:nowrap;overflow-x:auto}
 .chip{flex:none}
-.overview p,.overview li{font-size:1rem;line-height:1.65}
+.overview p,.overview li,.prose p,.prose li{font-size:1rem;line-height:1.65}
 .overview section,.overview .whatsnew{margin-top:22px}
 .overview h2{margin-bottom:10px}
 .rule + .take{margin-top:32px}
+.take-tw{padding:18px}
 .tbl th,.tbl td{font-size:1rem}
 footer{padding-top:28px}
 footer .foot-promo{flex-direction:column;align-items:center;gap:12px}
@@ -790,8 +817,22 @@ def nav_html(depth, path):
             '<span class="m-close">Close</span></label>'
             '<nav id="site-nav" aria-label="Primary">' + "".join(links) + "</nav>")
 def foot_html(_depth):
-    # Page links stay in the header. There is no privacy page, so the footer
-    # is the badge row and the Karu Labs line only.
+    # Header keeps the page links. The footer stays the badge row, a short
+    # text nav, and the Karu Labs line at the bottom. No text link for X:
+    # the icon in the social row is the X link.
+    p = "../" * _depth
+    items = [
+        (f"{p}about/", "About"),
+        (f"{p}contact/", "Contact"),
+        (f"{p}privacy/", "Privacy"),
+        (f"{p}suggest/", "Suggest a Tool"),
+    ]
+    bits = []
+    for i, (href, label) in enumerate(items):
+        if i:
+            bits.append('<span class="sep" aria-hidden="true">·</span>')
+        bits.append(f'<a href="{href}">{e(label)}</a>')
+    fnav = f'<nav class="foot-nav" aria-label="Footer">{"".join(bits)}</nav>'
     karu = f'<a href="{e(KARU_X)}" target="_blank" rel="noopener noreferrer">{e(KARU_NAME)}</a>'
     karu_icons = (
         f'<span class="social" role="group" aria-label="{e(KARU_NAME)}">'
@@ -799,7 +840,7 @@ def foot_html(_depth):
         + ext_icon(KARU_LINKEDIN, "Karu Labs on LinkedIn", icon_linkedin())
         + "</span>"
     )
-    return (f'<div class="w foot-main"><div class="foot-promo"><p class="ph">{PH_BADGE}</p>{site_social("foot")}</div></div>'
+    return (f'<div class="w foot-main"><div class="foot-promo"><p class="ph">{PH_BADGE}</p>{site_social("foot")}</div>{fnav}</div>'
             f'<div class="foot-bar"><div class="w"><p class="credit"><span>A {karu} project</span>{karu_icons}</p></div></div>')
 def schema_graph(extra=None):
     # Organization and WebSite on every page. SearchAction matches the directory ?q= filter.
@@ -911,19 +952,31 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 window.addEventListener('resize', fitDesc);
 </script>""".replace("__LAUNCH__", LAUNCH.isoformat())
-def page(title, desc, body, path, depth=0, nodes=None, bleed=False):
+def page(title, desc, body, path, depth=0, nodes=None, bleed=False, og_type="website", share=False):
     p = "../" * depth
-    canon = f"{BASE}/{path}"
+    # The homepage file is index.html, but its public URL is the site root.
+    canon_path = "" if path == "index.html" else path
+    canon = f"{BASE}/{canon_path}"
     img = f"{BASE}/og.jpg"
+    # Listing pages pass share=True. Other pages keep the website card.
+    share_meta = ""
+    if share:
+        share_meta = (
+            f'<meta property="og:site_name" content="{e(N)}">'
+            f'<meta name="twitter:site" content="@toolsmithweekly">'
+            f'<meta name="twitter:title" content="{e(title)}">'
+            f'<meta name="twitter:description" content="{e(desc)}">'
+        )
     metas = (
         f'<meta property="og:title" content="{e(title)}">'
         f'<meta property="og:description" content="{e(desc)}">'
-        f'<meta property="og:type" content="website">'
+        f'<meta property="og:type" content="{e(og_type)}">'
         f'<meta property="og:url" content="{canon}">'
         f'<meta property="og:image" content="{img}">'
         f'<meta property="og:image:width" content="1200">'
         f'<meta property="og:image:height" content="630">'
         f'<meta name="twitter:card" content="summary_large_image">'
+        f'{share_meta}'
         f'<meta name="twitter:image" content="{img}">'
         f'<link rel="canonical" href="{canon}">'
         f'<meta name="theme-color" content="#070b1a">'
@@ -1170,17 +1223,18 @@ week_link = "See launch week" if launch_only else "See this week"
 home = f"""<section class="hero"><div class="orb orb-a" aria-hidden="true"></div>
 <div class="w hero-grid"><div class="hero-copy">
 <h1 class="rise">{e(VALUE)}</h1>
-<p class="actions rise d2"><a class="btn" href="{e(CONFIG['subscribe_url'])}">Subscribe free</a><a class="btn secondary" href="tools/">Browse the directory</a></p>
+<p class="lede rise d2">{e(CONFIG["hero_sub"])}</p>
+<p class="actions rise d2"><a class="btn" href="{e(CONFIG['subscribe_url'])}">Subscribe Free</a><a class="btn secondary" href="tools/">Browse the Directory</a></p>
 </div><div class="hero-art" aria-hidden="true"><div class="anvil-glow"></div>{anvil_svg()}</div></div>
 <div class="w"><div class="metrics rise d3"><div class="metric"><b>{len(tools)}</b><span>Tools</span></div><div class="metric"><b><time datetime="{e(checked_dates[-1])}">{e(fmt_date(checked_dates[-1]))}</time></b><span>Last checked</span></div></div></div></section>
-<section class="band band-stars" id="picks"><div class="w"><div class="band-head"><h2>{star_svg()}This Week's Stars</h2><a href="this-week.html">{week_link}</a></div>
+<section class="band band-stars" id="picks"><div class="w"><div class="band-head"><h2>{star_svg()}This Week's Picks</h2><a href="this-week.html">{week_link}</a></div>
 <div class="bento">{pick_html}</div></div></section>
 <section class="band band-alt" id="categories"><div class="w"><div class="band-head"><h2>Browse by category</h2><a href="tools/">Full directory</a></div>
 <div class="cats">{cat_cards}</div></div></section>
 <section class="band" id="letter"><div class="w"><div class="split">{letter_panel(latest_issue)}{SIGNUP}</div></div></section>"""
 (OUT / "index.html").write_text(page(
-    f"{N} — the newest AI tools, sorted every Friday",
-    VALUE,
+    f"{N}: Find the AI tools worth knowing",
+    CONFIG["hero_sub"],
     home, "index.html", nodes=[item_list("This Week's Stars", picks)], bleed=True))
 cats = sorted(counts)
 chips = '<button class="chip on" data-c="">All</button>' + "".join(
@@ -1434,6 +1488,14 @@ def whats_new_html(raw):
         bits.append(f'<time datetime="{e(date)}">{e(fmt_date(date))}</time>')
     line = f'<p class="src">{" · ".join(bits)}</p>' if bits else ""
     return f'<aside class="whatsnew" id="whats-new"><p class="label">What\'s new</p>{body}{line}</aside>'
+def _public_disclosure(value):
+    # Listing pages do not print AI-disclosure lines.
+    raw = str(value or "").strip()
+    if not raw:
+        return ""
+    if re.search(r"AI assistance|AI help|drafted with AI|written with AI|AI-generated", raw, re.I):
+        return ""
+    return raw
 def overview_html(t):
     # Absent overview renders nothing. Empty sections are left out, including What's new.
     ov = t.get("overview")
@@ -1466,7 +1528,7 @@ def overview_html(t):
                     "<ul>" + "".join(f"<li>{rich(item)}</li>" for item in notes) + "</ul>")
     if not blocks:
         return ""
-    disclosure = str(ov.get("disclosure") or "").strip()
+    disclosure = _public_disclosure(ov.get("disclosure"))
     note = f'<p class="disclosure"><em>{rich(disclosure)}</em></p>' if disclosure else ""
     toc = f'<nav class="toc" aria-label="On this page">{"".join(links)}</nav>'
     return f'<article class="overview"><h2>{e(t["name"])} overview</h2>{toc}{"".join(blocks)}{note}</article>'
@@ -1501,19 +1563,170 @@ def software_offers(t):
         if str(pricing.get("note") or "").strip():
             parts.append(str(pricing["note"]).strip())
     return {"@type": "Offer", "description": " ".join(parts) if parts else t["pricing"]}
-def software_ld(t):
-    data = {
-        "@context": "https://schema.org",
+# Internal category names are not schema.org applicationCategory values.
+SCHEMA_APP_CATEGORY = {
+    "coding agents": "DeveloperApplication",
+    "vibe-coding app builders": "DeveloperApplication",
+    "AI agents/automation": "BusinessApplication",
+    "gaming/game dev": "GameApplication",
+    "Security": "SecurityApplication",
+}
+TITLE_LIMIT = 62  # about 60 characters
+DESC_LIMIT = 160
+def pricing_confirmed(t):
+    return "pricing unverified" not in t["pricing"].lower()
+def has_key_features(t):
+    ov = t.get("overview")
+    if not isinstance(ov, dict):
+        return False
+    return bool(_lines(ov.get("key_features")))
+def seo_title(t):
+    # Built from sections the listing actually has. "Breakdown", never "Review".
+    name = t["name"]
+    priced = pricing_confirmed(t)
+    features = has_key_features(t)
+    uses = bool(t.get("use_cases"))
+    if features and priced:
+        options = ["Features, Pricing & Breakdown", "Features & Pricing"]
+    elif features:
+        options = ["Features & Breakdown", "Features"]
+    elif priced and uses:
+        options = ["Pricing, Use Cases & Breakdown", "Pricing & Use Cases"]
+    elif uses:
+        options = ["Use Cases & Breakdown", "Use Cases"]
+    else:
+        options = ["Breakdown"]
+    for label in options:
+        title = f"{name}: {label} | {N}"
+        if len(title) <= TITLE_LIMIT:
+            return title
+    return f"{name} | {N}"
+def _desc_parts(t):
+    # Only name sections this listing has.
+    parts = []
+    if str(t.get("description") or "").strip():
+        parts.append("what it does")
+    if t.get("use_cases"):
+        parts.append("use cases")
+    if pricing_confirmed(t):
+        parts.append("pricing")
+    if t.get("mobile") in ("full", "partial"):
+        parts.append("mobile support")
+    elif re.search(r"\bGPU|\bGB\b|hardware|RAM", t.get("mobile_note") or ""):
+        parts.append("hardware requirements")
+    ov = t.get("overview") if isinstance(t.get("overview"), dict) else {}
+    if _lines(ov.get("getting_started")):
+        parts.append("how to get started")
+    if str(t.get("source") or "").strip():
+        parts.append("source links")
+    return parts
+def _desc_sentence(name, parts, short):
+    body = ", ".join(parts)
+    take = "The Toolsmith Take." if short else "Toolsmith Weekly's independent take."
+    if short:
+        return f"Explore {name}: {body} and {take}"
+    return f"Explore {name}, including {body} and {take}"
+def seo_desc(t):
+    parts = _desc_parts(t)
+    long = _desc_sentence(t["name"], parts, False)
+    if len(long) <= DESC_LIMIT:
+        return long
+    short = _desc_sentence(t["name"], parts, True)
+    if len(short) <= DESC_LIMIT:
+        return short
+    kept = list(parts)
+    droppable = [p for p in parts if p not in ("what it does", "source links")]
+    while droppable and len(_desc_sentence(t["name"], kept, True)) > DESC_LIMIT:
+        gone = droppable.pop()
+        kept.remove(gone)
+    text = _desc_sentence(t["name"], kept, True)
+    if len(text) <= DESC_LIMIT:
+        return text
+    minimal = f"Explore {t['name']}: Toolsmith Weekly's independent take."
+    if len(minimal) <= DESC_LIMIT:
+        return minimal
+    raise SystemExit(f"{t['name']} meta description cannot fit in {DESC_LIMIT} characters")
+def operating_system(t):
+    # Only an explicit field. Do not infer an OS from notes or the category.
+    raw = t.get("operatingSystem", t.get("operating_system"))
+    if isinstance(raw, str):
+        raw = raw.strip()
+        return raw or None
+    if isinstance(raw, list):
+        values = [str(v).strip() for v in raw if str(v).strip()]
+        return values or None
+    return None
+def _forbid_rating(node, name):
+    if isinstance(node, dict):
+        for key, value in node.items():
+            if key.lower() in {"aggregaterating", "rating", "review", "reviewrating"}:
+                raise SystemExit(f"{name} schema includes {key}")
+            if key == "@type" and value in {"Review", "AggregateRating", "Rating"}:
+                raise SystemExit(f"{name} schema includes {value}")
+            _forbid_rating(value, name)
+    elif isinstance(node, list):
+        for value in node:
+            _forbid_rating(value, name)
+def listing_nodes(t, title, desc, covered=None):
+    page_url = f"{BASE}/tools/{t['slug']}.html"
+    app_id = page_url + "#app"
+    crumb_id = page_url + "#breadcrumb"
+    category = SCHEMA_APP_CATEGORY.get(t["category"])
+    if not category:
+        raise SystemExit(f"{t['name']} category {t['category']!r} has no schema.org applicationCategory")
+    app = {
         "@type": "SoftwareApplication",
+        "@id": app_id,
         "name": t["name"],
         "url": t["url"],
-        "applicationCategory": t["category"],
+        "applicationCategory": category,
         "description": t["description"],
         "offers": software_offers(t),
         "dateModified": checked_iso(t),
     }
-    raw = json.dumps(data, ensure_ascii=False).replace("<", "\\u003c")
-    return f'<script type="application/ld+json">{raw}</script>'
+    system = operating_system(t)
+    if system:
+        app["operatingSystem"] = system
+    crumbs = [
+        {"@type": "ListItem", "position": 1, "name": "Tool directory", "item": f"{BASE}/tools/"},
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": cat_label(t["category"]),
+            "item": f"{BASE}/tools/?cat={quote(t['category'], safe='')}",
+        },
+    ]
+    # covered_in can be several published issues. One breadcrumb step per letter.
+    issues = covered if isinstance(covered, list) else ([covered] if covered else [])
+    for issue in issues:
+        crumbs.append({
+            "@type": "ListItem",
+            "position": len(crumbs) + 1,
+            "name": f"Featured in {issue['title']}",
+            "item": f"{BASE}/{issue['path']}",
+        })
+    crumbs.append({
+        "@type": "ListItem",
+        "position": len(crumbs) + 1,
+        "name": t["name"],
+        "item": page_url,
+    })
+    nodes = [
+        {
+            "@type": "WebPage",
+            "@id": page_url + "#webpage",
+            "url": page_url,
+            "name": title,
+            "description": desc,
+            "isPartOf": {"@id": f"{BASE}/#website"},
+            "about": {"@id": app_id},
+            "breadcrumb": {"@id": crumb_id},
+        },
+        {"@type": "BreadcrumbList", "@id": crumb_id, "itemListElement": crumbs},
+        app,
+    ]
+    _forbid_rating(nodes, t["name"])
+    return nodes
 apply_coverage()
 for t in tools:
     ov = overview_html(t)
@@ -1533,19 +1746,31 @@ for t in tools:
         issue_crumb = " · " + " · ".join(crumbs)
         issue_fact = "".join(facts)
         signup = f'<div class="sec">{SIGNUP}</div>'
-    b = f"""<div class="tool-hero"><div class="tool-copy"><p class="back"><a href="index.html">Tool directory</a> · {e(cat_label(t['category']))}{issue_crumb}</p><h1>{e(t['name'])}</h1><p class="vrow">{badge_html(t)}{verdict_stamp(t)}</p><p class="sum">{e(t['description'])}</p>
-{software_ld(t)}</div>
+    title = seo_title(t)
+    desc = seo_desc(t)
+    if len(title) > TITLE_LIMIT or re.search(r"\bReview\b", title):
+        raise SystemExit(f"{t['name']} title is not a Breakdown title of about 60 characters: {title}")
+    if len(desc) > DESC_LIMIT:
+        raise SystemExit(f"{t['name']} meta description is {len(desc)} characters")
+    cat_href = "index.html?cat=" + quote(t["category"], safe="")
+    b = f"""<div class="tool-hero"><div class="tool-copy"><p class="back"><a href="index.html">Tool directory</a> · <a href="{e(cat_href)}">{e(cat_label(t['category']))}</a>{issue_crumb}</p><h1>{e(t['name'])}</h1><p class="vrow">{badge_html(t)}{verdict_stamp(t)}</p><p class="sum">{e(t['description'])}</p>
+</div>
 <aside class="facts" aria-label="Facts">{mobile_fact(t)}<dl><dt>Use cases</dt><dd><ul>{''.join(f'<li>{e(u)}</li>' for u in t['use_cases'])}</ul></dd><dt>Pricing</dt><dd>{e(t['pricing'])}</dd><dt>Website</dt><dd><a href="{e(t['url'])}" rel="noopener">{e(t['url'])}</a></dd>
 <dt>Source</dt><dd><a href="{e(t['source'])}" rel="noopener">{e(t['source'])}</a></dd><dt>Added</dt><dd><time datetime="{e(t['date_added'])}">{e(fmt_date(t['date_added']))}</time></dd>{issue_fact}</dl>
 <a class="btn" href="{e(t['url'])}" rel="nofollow noopener">Visit website</a></aside>
 {ov}</div>
 {rule}
-<section class="take" aria-labelledby="our-take"><h2 id="our-take">Our Take</h2><p>{e(take_paragraph(t))} <a href="{e(t['source'])}" rel="noopener">Source</a></p></section>
+<section class="take take-tw" aria-labelledby="tw-take"><div class="take-head">{mark_svg()}<h2 id="tw-take">The Toolsmith Take</h2></div><p class="take-body">{e(take_paragraph(t))}</p>
+<p class="take-foot">Our independent assessment · <a href="{e(t['source'])}" rel="noopener">Source</a> · <a href="../about/">How listings work</a></p></section>
 {signup}"""
+    if re.search(r"hands-on|we tested|I tested|our testing", b, re.I):
+        raise SystemExit(f"{t['name']} listing makes a testing claim")
+    if re.search(r"AI assistance|drafted with AI|written with AI|AI-generated", b, re.I):
+        raise SystemExit(f"{t['name']} listing has AI-disclosure text")
     (OUT / "tools" / f"{t['slug']}.html").write_text(page(
-        f"{t['name']} — {N}",
-        f"{t['name']}: {t['description']}"[:300],
-        b, f"tools/{t['slug']}.html", 1))
+        title, desc, b, f"tools/{t['slug']}.html", 1,
+        nodes=listing_nodes(t, title, desc, covered),
+        og_type="article", share=True))
 def issue_card(issue):
     # Archive cards. A published letter links to its page. An upcoming letter
     # is the title and coming date only: no headline, no note, no link.
@@ -1615,15 +1840,75 @@ def alias_page(folder):
 <p><a href="{up}newsletter/">Go to the newsletter archive</a></p></main></body></html>""")
 for alias in ("issues", "archive", "newsletters", "newsletter/2"):
     alias_page(alias)
-suggest_body = f"""<header class="pagehead"><p class="kicker">For builders</p><h1>Suggest a tool</h1><p class="lede">Indie developers: send a tool you built, or one you want listed.</p></header>
+suggest_body = f"""<header class="pagehead pagehead-wide"><p class="kicker">For builders</p><h1>Suggest a tool</h1><p class="lede">Built something useful, or found a tool more people should know about? Send it over. Indie projects are welcome.</p></header>
 <p><a class="btn" href="{e(suggest_href)}">Suggest a tool by email</a></p>
-<p class="mu">Opens your mail app to {e(CONFIG['suggest_email'])} with the subject filled in. No account and no third-party form.</p><div class="sec">{SIGNUP}</div>"""
+<p class="mu">Opens your mail app to {e(CONFIG['suggest_email'])} with a short template. No account, no form.</p>
+<div class="prose"><h2>Good to know</h2><ul>
+<li>It's free. Paying is not required for consideration, and inclusion can't be bought.</li>
+<li>Every tool is evaluated independently, using its own site, docs, pricing page and announcements.</li>
+<li>Sending a tool doesn't guarantee it gets listed or featured in the newsletter.</li>
+<li>It helps to include a link to the official site, the pricing page if there is one, and where it's documented.</li>
+</ul></div><div class="sec">{SIGNUP}</div>"""
 (OUT / "suggest" / "index.html").write_text(page(
     f"Suggest a tool — {N}",
-    "Indie developers can email a tool suggestion to Toolsmith Weekly.",
+    "Send a tool to Toolsmith Weekly. Indie projects are welcome. It's free, tools are evaluated independently, and sending one doesn't guarantee a listing.",
     suggest_body, "suggest/", 1))
+(OUT / "about").mkdir(parents=True, exist_ok=True)
+about_body = f"""<header class="pagehead pagehead-wide"><p class="kicker">About</p><h1>About Toolsmith Weekly</h1>
+<p class="lede">An independent AI tool discovery publication, backed by a searchable research database. It's here to help you quickly understand the AI tools worth knowing.</p></header>
+<div class="prose">
+<h2>What it is</h2>
+<p>Three parts that work together. The <a href="../tools/">directory</a> is a searchable database of AI tools. Each listing is a breakdown of one tool, built from its own sources. The <a href="../newsletter/">newsletter</a> is a free email every Friday with the week's best new finds, and The Toolsmith Take is where we say what we think.</p>
+<h2>What's in a listing</h2>
+<p>Depending on the tool, a listing covers:</p>
+<ul><li>What it does</li><li>Who it's useful for</li><li>Use cases</li><li>Pricing</li><li>Mobile and platform availability</li><li>Original sources</li><li>Relevant links</li><li>The Toolsmith Take</li></ul>
+<p>If something can't be confirmed from a public source, the listing says so, for example "Pricing unverified", instead of guessing.</p>
+<h2>How tools are found</h2>
+<p>Tools come from product launches, developer announcements, documentation, community discoveries, indie projects, direct submissions and other primary sources. Indie projects are welcome, and anyone can <a href="../suggest/">suggest a tool</a>.</p>
+<p>Being listed doesn't mean we endorse a tool. It means it's relevant to people researching AI tools.</p>
+<h2 id="facts-and-opinion">Facts and opinion</h2>
+<p>Listings keep the two apart. Facts such as pricing, features and availability come from official pricing pages, docs and public announcements, and every listing links its sources. When a claim comes only from the developer, such as a benchmark score, the listing says so.</p>
+<p>The Toolsmith Take is our independent assessment: who the tool is for, what stands out, and what to keep in mind.</p>
+<h2>Paid placement</h2>
+<div class="callout"><p>Tool inclusion cannot be purchased. Sponsored content, if introduced in the future, will always be clearly labeled.</p></div>
+<h2>Get in touch</h2>
+<p>Spotted something out of date, or want to suggest a tool? Email <a href="mailto:{e(CONFIG['suggest_email'])}">{e(CONFIG['suggest_email'])}</a> or message <a href="{e(X_URL)}" rel="noopener">@toolsmithweekly on X</a>.</p>
+</div>"""
+(OUT / "about" / "index.html").write_text(page(
+    f"About Toolsmith Weekly: how listings work",
+    "What Toolsmith Weekly is, what a listing contains, how tools are found, and how facts, opinion and paid placement are handled.",
+    about_body, "about/", 1))
+(OUT / "contact").mkdir(parents=True, exist_ok=True)
+contact_body = f"""<header class="pagehead pagehead-wide"><p class="kicker">Contact</p><h1>Contact</h1>
+<p class="lede">Email {e(CONFIG['suggest_email'])}, or send a DM to @toolsmithweekly on X.</p></header>
+<div class="prose">
+<p>For a correction, a question, or anything else, email <a href="mailto:{e(CONFIG['suggest_email'])}">{e(CONFIG['suggest_email'])}</a>.</p>
+<p>You can also send a DM to <a href="{e(X_URL)}" rel="noopener">@toolsmithweekly on X</a>.</p>
+<p>To suggest a tool, use <a href="../suggest/">Suggest a Tool</a>. It opens one email, with a short template. No account and no form.</p>
+</div>"""
+(OUT / "contact" / "index.html").write_text(page(
+    f"Contact — {N}",
+    "Email hello@toolsmithweekly.com, or send a DM to @toolsmithweekly on X.",
+    contact_body, "contact/", 1))
+(OUT / "privacy").mkdir(parents=True, exist_ok=True)
+privacy_body = f"""<header class="pagehead pagehead-wide"><p class="kicker">Privacy</p><h1>Privacy</h1>
+<p class="lede">Toolsmith Weekly has no accounts. Subscriber emails go to beehiiv, and the footer loads the Product Hunt badge image.</p></header>
+<div class="prose">
+<h2>No accounts</h2>
+<p>This site has no accounts. There is nothing to register for here, and nothing to log in to.</p>
+<h2>Newsletter</h2>
+<p>The Friday letter is sent by beehiiv. Subscriber email addresses go to beehiiv. They are not stored in an account on this site. How beehiiv handles that address is covered in <a href="https://www.beehiiv.com/privacy" rel="noopener">beehiiv's privacy policy</a>.</p>
+<h2>Product Hunt badge</h2>
+<p>The footer loads the Product Hunt badge image from Product Hunt (<code>api.producthunt.com</code>). Your browser requests that image when a page loads.</p>
+<h2>Suggest a tool</h2>
+<p><a href="../suggest/">Suggest a Tool</a> is one email button. It opens your mail app to <a href="mailto:{e(CONFIG['suggest_email'])}">{e(CONFIG['suggest_email'])}</a>. There is no form and no account.</p>
+</div>"""
+(OUT / "privacy" / "index.html").write_text(page(
+    f"Privacy — {N}",
+    "Toolsmith Weekly has no accounts. Subscriber emails go to beehiiv, and the footer loads the Product Hunt badge image.",
+    privacy_body, "privacy/", 1))
 issue_urls = [i["path"] for i in ISSUES if issue_is_live(i)]
-urls = ["index.html", "tools/", "this-week.html", "newsletter/"] + issue_urls + ["suggest/"] + [f"tools/{t['slug']}.html" for t in tools]
+urls = ["index.html", "tools/", "this-week.html", "newsletter/"] + issue_urls + ["about/", "contact/", "privacy/", "suggest/"] + [f"tools/{t['slug']}.html" for t in tools]
 (OUT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + "".join(f"<url><loc>{BASE}/{u}</loc></url>" for u in urls) + "</urlset>")
 (OUT / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {BASE}/sitemap.xml\n")
 new_count = sum(is_new(t) for t in tools)
@@ -1636,11 +1921,14 @@ llms = [
     "",
     "## Pages",
     "",
-    f"- [Home]({BASE}/): Landing page with This Week's Stars, categories, and the latest letter.",
+    f"- [Home]({BASE}/): Landing page with This Week's Picks, categories, and the latest letter.",
     f"- [Tool directory]({BASE}/tools/): Search, filter by category, free tier, letter, and new this week, and sort the full list. A to Z is the default sort. Newest is available from the sort control and from ?sort=newest. New this week uses ?new=1 and is checked in the browser from the date added. It combines with the other filters. Category links use a ?cat= query. A text search uses ?q=.",
     f"- [This week]({BASE}/this-week.html): This Week's Picks, each with a sourced reason and a link to its listing, plus other tools added after the launch batch and within the last seven days. That list links to the directory with ?new=1 sorted newest first.",
     f"- [Newsletter archive]({BASE}/newsletter/): The weekly letter. [Issue #1]({BASE}/newsletter/1/) was sent Friday, Oct 23, 2026. /newsletter/2/, /issues/, /archive/, and /newsletters/ redirect here.",
-    f"- [Suggest a tool]({BASE}/suggest/): Indie developers can email {CONFIG['suggest_email']} with a tool suggestion.",
+    f"- [About]({BASE}/about/): What the publication is, what a listing contains, how tools are found, and how facts, opinion and paid placement are handled.",
+    f"- [Contact]({BASE}/contact/): Email {CONFIG['suggest_email']}, or a DM to @toolsmithweekly on X.",
+    f"- [Privacy]({BASE}/privacy/): No accounts. Subscriber emails go to beehiiv. The footer loads the Product Hunt badge image.",
+    f"- [Suggest a tool]({BASE}/suggest/): One email to {CONFIG['suggest_email']}. Indie projects are welcome. No account and no form. Inclusion is not for sale and is not guaranteed.",
     f"- [Subscribe]({CONFIG['subscribe_url']}): Free weekly letter on beehiiv.",
     "",
     "## Tools",
