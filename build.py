@@ -479,6 +479,7 @@ input:hover,select:hover{border-color:var(--bd-h)}
 .row .price{color:var(--tx);white-space:nowrap}
 .row .badge-new{margin-left:8px;vertical-align:2px}
 .badge-new{display:inline-block;font-weight:650;font-size:.7rem;padding:4px 8px;border-radius:999px;background:rgba(255,138,61,.12);color:var(--ac2);letter-spacing:.04em;text-transform:uppercase}
+.pick .badge-new{align-self:flex-start}
 .mbadge{display:inline-flex;align-items:center;gap:5px;margin-left:8px;padding:3px 7px 3px 4px;border:1px solid;border-radius:2px;background:#0b1124;font-family:var(--mono);font-size:.72rem;font-weight:650;letter-spacing:.02em;line-height:1.2;white-space:nowrap}
 .mbadge .phone{width:12px;height:18px;flex:none;display:block;image-rendering:pixelated}
 .mbadge.m-full{color:#ffc94a;border-color:#ffc94a}
@@ -586,6 +587,15 @@ hr.rule{border:0;border-top:1px solid var(--bd);margin:0}
 .rule + .take{margin-top:56px}
 .take h2{margin:0 0 8px;font-size:1.2rem;letter-spacing:-.02em}
 .take p{margin:0;max-width:44rem;color:var(--tx);font-size:1.05rem;line-height:1.55}
+.take-tw{position:relative;padding:22px 26px 20px;border:1px solid rgba(255,138,61,.45);box-shadow:inset 3px 0 0 var(--ac),0 10px 30px -18px rgba(255,138,61,.6)}
+.take-tw .take-head{display:flex;align-items:center;gap:10px;margin:0 0 12px}
+.take-tw .take-head .mark{width:26px;height:26px}
+.take-tw h2{flex:none;margin:0;font-family:var(--mono);font-size:.85rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;line-height:1.2;color:var(--ac2)}
+.take-tw .take-head:after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(255,201,74,.45),transparent)}
+.take-tw p.take-body{font-size:1.125rem;line-height:1.6}
+.take-tw .take-foot{margin:14px 0 0;font-family:var(--mono);font-size:.75rem;letter-spacing:.03em;color:var(--mu)}
+.take-tw .take-foot a{color:var(--mu)}
+.take-tw .take-foot a:hover{color:var(--ac)}
 .facts{position:sticky;top:84px;padding:20px;border-radius:16px;border:1px solid var(--bd);background:linear-gradient(180deg,#0f1630,rgba(15,22,48,.6));box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 8px 24px -12px rgba(0,0,0,.6)}
 .facts dt:first-child{margin-top:0}
 .facts a,.overview a,.overview code{overflow-wrap:anywhere}
@@ -640,6 +650,7 @@ header nav .social.menu a{width:44px;min-height:44px;flex:none}
 .overview section,.overview .whatsnew{margin-top:22px}
 .overview h2{margin-bottom:10px}
 .rule + .take{margin-top:32px}
+.take-tw{padding:18px}
 .tbl th,.tbl td{font-size:1rem}
 footer{padding-top:28px}
 footer .foot-promo{flex-direction:column;align-items:center;gap:12px}
@@ -845,19 +856,29 @@ def item_list(name, items):
             for i, t in enumerate(items, 1)
         ],
     }
-def page(title, desc, body, path, depth=0, nodes=None, bleed=False):
+def page(title, desc, body, path, depth=0, nodes=None, bleed=False, og_type="website", share=False):
     p = "../" * depth
     canon = f"{BASE}/{path}"
     img = f"{BASE}/og.jpg"
+    # Listing pages pass share=True. Other pages keep the website card.
+    share_meta = ""
+    if share:
+        share_meta = (
+            f'<meta property="og:site_name" content="{e(N)}">'
+            f'<meta name="twitter:site" content="@toolsmithweekly">'
+            f'<meta name="twitter:title" content="{e(title)}">'
+            f'<meta name="twitter:description" content="{e(desc)}">'
+        )
     metas = (
         f'<meta property="og:title" content="{e(title)}">'
         f'<meta property="og:description" content="{e(desc)}">'
-        f'<meta property="og:type" content="website">'
+        f'<meta property="og:type" content="{e(og_type)}">'
         f'<meta property="og:url" content="{canon}">'
         f'<meta property="og:image" content="{img}">'
         f'<meta property="og:image:width" content="1200">'
         f'<meta property="og:image:height" content="630">'
         f'<meta name="twitter:card" content="summary_large_image">'
+        f'{share_meta}'
         f'<meta name="twitter:image" content="{img}">'
         f'<link rel="canonical" href="{canon}">'
         f'<meta name="theme-color" content="#070b1a">'
@@ -1310,6 +1331,14 @@ def whats_new_html(raw):
         bits.append(f'<time datetime="{e(date)}">{e(fmt_date(date))}</time>')
     line = f'<p class="src">{" · ".join(bits)}</p>' if bits else ""
     return f'<aside class="whatsnew" id="whats-new"><p class="label">What\'s new</p>{body}{line}</aside>'
+def _public_disclosure(value):
+    # Listing pages do not print AI-disclosure lines.
+    raw = str(value or "").strip()
+    if not raw:
+        return ""
+    if re.search(r"AI assistance|AI help|drafted with AI|written with AI|AI-generated", raw, re.I):
+        return ""
+    return raw
 def overview_html(t):
     # Absent overview renders nothing. Empty sections are left out, including What's new.
     ov = t.get("overview")
@@ -1342,7 +1371,7 @@ def overview_html(t):
                     "<ul>" + "".join(f"<li>{rich(item)}</li>" for item in notes) + "</ul>")
     if not blocks:
         return ""
-    disclosure = str(ov.get("disclosure") or "").strip()
+    disclosure = _public_disclosure(ov.get("disclosure"))
     note = f'<p class="disclosure"><em>{rich(disclosure)}</em></p>' if disclosure else ""
     toc = f'<nav class="toc" aria-label="On this page">{"".join(links)}</nav>'
     return f'<article class="overview"><h2>{e(t["name"])} overview</h2>{toc}{"".join(blocks)}{note}</article>'
@@ -1377,19 +1406,168 @@ def software_offers(t):
         if str(pricing.get("note") or "").strip():
             parts.append(str(pricing["note"]).strip())
     return {"@type": "Offer", "description": " ".join(parts) if parts else t["pricing"]}
-def software_ld(t):
-    data = {
-        "@context": "https://schema.org",
+# Internal category names are not schema.org applicationCategory values.
+SCHEMA_APP_CATEGORY = {
+    "coding agents": "DeveloperApplication",
+    "vibe-coding app builders": "DeveloperApplication",
+    "AI agents/automation": "BusinessApplication",
+    "gaming/game dev": "GameApplication",
+    "Security": "SecurityApplication",
+}
+TITLE_LIMIT = 62  # about 60 characters
+DESC_LIMIT = 160
+def pricing_confirmed(t):
+    return "pricing unverified" not in t["pricing"].lower()
+def has_key_features(t):
+    ov = t.get("overview")
+    if not isinstance(ov, dict):
+        return False
+    return bool(_lines(ov.get("key_features")))
+def seo_title(t):
+    # Built from sections the listing actually has. "Breakdown", never "Review".
+    name = t["name"]
+    priced = pricing_confirmed(t)
+    features = has_key_features(t)
+    uses = bool(t.get("use_cases"))
+    if features and priced:
+        options = ["Features, Pricing & Breakdown", "Features & Pricing"]
+    elif features:
+        options = ["Features & Breakdown", "Features"]
+    elif priced and uses:
+        options = ["Pricing, Use Cases & Breakdown", "Pricing & Use Cases"]
+    elif uses:
+        options = ["Use Cases & Breakdown", "Use Cases"]
+    else:
+        options = ["Breakdown"]
+    for label in options:
+        title = f"{name}: {label} | {N}"
+        if len(title) <= TITLE_LIMIT:
+            return title
+    return f"{name} | {N}"
+def _desc_parts(t):
+    # Only name sections this listing has.
+    parts = []
+    if str(t.get("description") or "").strip():
+        parts.append("what it does")
+    if t.get("use_cases"):
+        parts.append("use cases")
+    if pricing_confirmed(t):
+        parts.append("pricing")
+    if t.get("mobile") in ("full", "partial"):
+        parts.append("mobile support")
+    elif re.search(r"\bGPU|\bGB\b|hardware|RAM", t.get("mobile_note") or ""):
+        parts.append("hardware requirements")
+    ov = t.get("overview") if isinstance(t.get("overview"), dict) else {}
+    if _lines(ov.get("getting_started")):
+        parts.append("how to get started")
+    if str(t.get("source") or "").strip():
+        parts.append("source links")
+    return parts
+def _desc_sentence(name, parts, short):
+    body = ", ".join(parts)
+    take = "The Toolsmith Take." if short else "Toolsmith Weekly's independent take."
+    if short:
+        return f"Explore {name}: {body} and {take}"
+    return f"Explore {name}, including {body} and {take}"
+def seo_desc(t):
+    parts = _desc_parts(t)
+    long = _desc_sentence(t["name"], parts, False)
+    if len(long) <= DESC_LIMIT:
+        return long
+    short = _desc_sentence(t["name"], parts, True)
+    if len(short) <= DESC_LIMIT:
+        return short
+    kept = list(parts)
+    droppable = [p for p in parts if p not in ("what it does", "source links")]
+    while droppable and len(_desc_sentence(t["name"], kept, True)) > DESC_LIMIT:
+        gone = droppable.pop()
+        kept.remove(gone)
+    text = _desc_sentence(t["name"], kept, True)
+    if len(text) <= DESC_LIMIT:
+        return text
+    minimal = f"Explore {t['name']}: Toolsmith Weekly's independent take."
+    if len(minimal) <= DESC_LIMIT:
+        return minimal
+    raise SystemExit(f"{t['name']} meta description cannot fit in {DESC_LIMIT} characters")
+def operating_system(t):
+    # Only an explicit field. Do not infer an OS from notes or the category.
+    raw = t.get("operatingSystem", t.get("operating_system"))
+    if isinstance(raw, str):
+        raw = raw.strip()
+        return raw or None
+    if isinstance(raw, list):
+        values = [str(v).strip() for v in raw if str(v).strip()]
+        return values or None
+    return None
+def _forbid_rating(node, name):
+    if isinstance(node, dict):
+        for key, value in node.items():
+            if key.lower() in {"aggregaterating", "rating", "review", "reviewrating"}:
+                raise SystemExit(f"{name} schema includes {key}")
+            if key == "@type" and value in {"Review", "AggregateRating", "Rating"}:
+                raise SystemExit(f"{name} schema includes {value}")
+            _forbid_rating(value, name)
+    elif isinstance(node, list):
+        for value in node:
+            _forbid_rating(value, name)
+def listing_nodes(t, title, desc, covered=None):
+    page_url = f"{BASE}/tools/{t['slug']}.html"
+    app_id = page_url + "#app"
+    crumb_id = page_url + "#breadcrumb"
+    category = SCHEMA_APP_CATEGORY.get(t["category"])
+    if not category:
+        raise SystemExit(f"{t['name']} category {t['category']!r} has no schema.org applicationCategory")
+    app = {
         "@type": "SoftwareApplication",
+        "@id": app_id,
         "name": t["name"],
         "url": t["url"],
-        "applicationCategory": t["category"],
+        "applicationCategory": category,
         "description": t["description"],
         "offers": software_offers(t),
         "dateModified": checked_iso(t),
     }
-    raw = json.dumps(data, ensure_ascii=False).replace("<", "\\u003c")
-    return f'<script type="application/ld+json">{raw}</script>'
+    system = operating_system(t)
+    if system:
+        app["operatingSystem"] = system
+    crumbs = [
+        {"@type": "ListItem", "position": 1, "name": "Tool directory", "item": f"{BASE}/tools/"},
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": cat_label(t["category"]),
+            "item": f"{BASE}/tools/?cat={quote(t['category'], safe='')}",
+        },
+    ]
+    if covered:
+        crumbs.append({
+            "@type": "ListItem",
+            "position": len(crumbs) + 1,
+            "name": f"Featured in {covered['title']}",
+            "item": f"{BASE}/{covered['path']}",
+        })
+    crumbs.append({
+        "@type": "ListItem",
+        "position": len(crumbs) + 1,
+        "name": t["name"],
+        "item": page_url,
+    })
+    nodes = [
+        {
+            "@type": "WebPage",
+            "@id": page_url + "#webpage",
+            "url": page_url,
+            "name": title,
+            "description": desc,
+            "isPartOf": {"@id": f"{BASE}/#website"},
+            "about": {"@id": app_id},
+            "breadcrumb": {"@id": crumb_id},
+        },
+        {"@type": "BreadcrumbList", "@id": crumb_id, "itemListElement": crumbs},
+        app,
+    ]
+    _forbid_rating(nodes, t["name"])
+    return nodes
 for t in tools:
     ov = overview_html(t)
     rule = '<hr class="rule">' if ov else ""
@@ -1403,19 +1581,31 @@ for t in tools:
         issue_crumb = f' · <a href="{e(issue_href)}">{e(featured)}</a>'
         issue_fact = f'<dt>Letter</dt><dd><a href="{e(issue_href)}">{e(featured)}</a></dd>'
         signup = f'<div class="sec">{SIGNUP}</div>'
-    b = f"""<div class="tool-hero"><div class="tool-copy"><p class="back"><a href="index.html">Tool directory</a> · {e(cat_label(t['category']))}{issue_crumb}</p><h1>{e(t['name'])}</h1><p class="vrow">{badge_html(t)}{verdict_stamp(t)}</p><p class="sum">{e(t['description'])}</p>
-{software_ld(t)}</div>
+    title = seo_title(t)
+    desc = seo_desc(t)
+    if len(title) > TITLE_LIMIT or re.search(r"\bReview\b", title):
+        raise SystemExit(f"{t['name']} title is not a Breakdown title of about 60 characters: {title}")
+    if len(desc) > DESC_LIMIT:
+        raise SystemExit(f"{t['name']} meta description is {len(desc)} characters")
+    cat_href = "index.html?cat=" + quote(t["category"], safe="")
+    b = f"""<div class="tool-hero"><div class="tool-copy"><p class="back"><a href="index.html">Tool directory</a> · <a href="{e(cat_href)}">{e(cat_label(t['category']))}</a>{issue_crumb}</p><h1>{e(t['name'])}</h1><p class="vrow">{badge_html(t)}{verdict_stamp(t)}</p><p class="sum">{e(t['description'])}</p>
+</div>
 <aside class="facts" aria-label="Facts">{mobile_fact(t)}<dl><dt>Use cases</dt><dd><ul>{''.join(f'<li>{e(u)}</li>' for u in t['use_cases'])}</ul></dd><dt>Pricing</dt><dd>{e(t['pricing'])}</dd><dt>Website</dt><dd><a href="{e(t['url'])}" rel="noopener">{e(t['url'])}</a></dd>
 <dt>Source</dt><dd><a href="{e(t['source'])}" rel="noopener">{e(t['source'])}</a></dd><dt>Added</dt><dd><time datetime="{e(t['date_added'])}">{e(fmt_date(t['date_added']))}</time></dd>{issue_fact}</dl>
 <a class="btn" href="{e(t['url'])}" rel="nofollow noopener">Visit website</a></aside>
 {ov}</div>
 {rule}
-<section class="take" aria-labelledby="our-take"><h2 id="our-take">Our Take</h2><p>{e(take_paragraph(t))} <a href="{e(t['source'])}" rel="noopener">Source</a></p></section>
+<section class="take take-tw" aria-labelledby="tw-take"><div class="take-head">{mark_svg()}<h2 id="tw-take">The Toolsmith Take</h2></div><p class="take-body">{e(take_paragraph(t))}</p>
+<p class="take-foot">Our independent assessment · <a href="{e(t['source'])}" rel="noopener">Source</a> · <a href="../about/">How listings work</a></p></section>
 {signup}"""
+    if re.search(r"hands-on|we tested|I tested|our testing", b, re.I):
+        raise SystemExit(f"{t['name']} listing makes a testing claim")
+    if re.search(r"AI assistance|drafted with AI|written with AI|AI-generated", b, re.I):
+        raise SystemExit(f"{t['name']} listing has AI-disclosure text")
     (OUT / "tools" / f"{t['slug']}.html").write_text(page(
-        f"{t['name']} — {N}",
-        f"{t['name']}: {t['description']}"[:300],
-        b, f"tools/{t['slug']}.html", 1))
+        title, desc, b, f"tools/{t['slug']}.html", 1,
+        nodes=listing_nodes(t, title, desc, covered),
+        og_type="article", share=True))
 def issue_card(issue):
     # Archive cards. A published letter links to its page. An upcoming letter
     # is the title and coming date only: no headline, no note, no link.
