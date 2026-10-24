@@ -386,9 +386,12 @@ h3{font-weight:650;letter-spacing:-.03em;line-height:1.15}
 .hero .lede{opacity:1}
 .actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:0}
 .hero-signup{display:flex;flex-wrap:wrap;align-items:flex-start;gap:16px 20px;max-width:40rem}
-.hero-signup-main{flex:1 1 auto;min-width:min(100%,18rem)}
-.bh-form{width:100%;min-width:0}
+.hero-signup-main{flex:0 1 auto;min-width:0}
+.bh-form{width:100%;min-width:0;background:transparent;border:0;border-radius:10px;overflow:hidden}
+/* color-scheme:dark on the page paints transparent iframe corners white. */
+.bh-form iframe{background:transparent !important;border:0 !important;border-radius:10px !important;color-scheme:light}
 .bh-hero,.bh-listing{min-height:48px}
+.bh-hero{width:440px;max-width:100%;min-width:440px}
 .bh-listing{max-width:32rem}
 .bh-form.is-fallback{min-height:0}
 .bh-fallback{margin:0}
@@ -675,7 +678,8 @@ header nav .social.menu a{width:44px;min-height:44px;flex:none}
 .pick .reason{font-size:.95rem;-webkit-line-clamp:3;margin:4px 0 8px}
 .bento .featured .reason{font-size:1.1rem;-webkit-line-clamp:3}
 .actions,.hero-signup{flex-direction:column;align-items:stretch}
-.hero .btn,.hero-signup>.btn{width:100%}
+.hero .btn,.hero-signup>.btn,.bh-hero{width:100%}
+.bh-hero{min-width:0}
 .band{padding:56px 0}
 .chips{flex-wrap:nowrap;overflow-x:auto}
 .chip{flex:none}
