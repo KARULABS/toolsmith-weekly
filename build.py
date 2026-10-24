@@ -4,7 +4,8 @@ import json, html, math, re, shutil, datetime, pathlib
 from collections import Counter
 from urllib.parse import quote
 CONFIG = {"site_name": "Toolsmith Weekly",  # <- swap the brand name here
-          "tagline": "The newest AI tools and models, sorted every Friday.",
+          "tagline": "Find the AI tools worth knowing.",
+          "hero_sub": "Detailed breakdowns, pricing, use cases, source links and independent takes, plus the newest finds delivered every Friday.",
           "base_url": "https://toolsmithweekly.com",  # no trailing slash; canonical URLs, sitemap, robots
           "subscribe_url": "https://toolsmithweekly.beehiiv.com/subscribe",
           "suggest_email": "hello@toolsmithweekly.com"}
@@ -16,7 +17,7 @@ N = CONFIG["site_name"]; R = pathlib.Path(__file__).parent; OUT = R / "dist"
 BASE = CONFIG["base_url"]
 VALUE = CONFIG["tagline"]
 # Used in llms.txt. The site does not claim a hands-on check of its own.
-SOURCE_NOTE = "Where our info comes from: official pricing pages, docs and public announcements, linked on every tool page. Written with AI help and reviewed for accuracy."
+SOURCE_NOTE = "Where our info comes from: official pricing pages, docs and public announcements, linked on every tool page."
 # Profile links. Icons in the header and footer, and sameAs on the Organization node.
 X_URL = "https://x.com/toolsmithweekly"
 REDDIT_URL = "https://www.reddit.com/user/ToolsmithWeekly/"
@@ -85,7 +86,7 @@ GUIDE = {
 _TAKE_BOILERPLATE = "Price, access, or the evidence is not settled."
 suggest_href = "mailto:" + CONFIG["suggest_email"] + "?" + "&".join([
     "subject=" + quote("Tool suggestion for Toolsmith Weekly"),
-    "body=" + quote("I'm an indie developer.\n\nTool name:\nWebsite:\nWhat it does:\nWhy it belongs in Toolsmith Weekly:\n")])
+    "body=" + quote("I'm an indie developer.\n\nTool name:\nWebsite:\nWhat it does:\nWhy it belongs in Toolsmith Weekly:\nPricing page:\nDocs or announcement link:\n")])
 # Side-view pixel anvil. Horn left, flat face, heel, waist, two feet.
 # h and t are the steel top, b the body, d the deep shade. Sparks are separate rects.
 ANVIL_FILL = {
@@ -397,6 +398,7 @@ a.metric:hover{background:rgba(255,138,61,.06)}
 .page{padding:56px 0 96px}
 .pagehead{margin:0 0 28px;max-width:40rem}
 .pagehead h1{margin:0 0 10px}
+.pagehead-wide h1{max-width:none}
 .band{padding:88px 0}
 .band-alt{background:var(--bg2);box-shadow:inset 0 1px 0 var(--bd),inset 0 -1px 0 var(--bd)}
 .band-head{display:flex;justify-content:space-between;align-items:center;gap:12px 20px;margin:0 0 28px}
@@ -515,6 +517,16 @@ time,.num,.count,.metric b{font-family:var(--mono)}
 .letter ul,.letter ol{margin:0 0 16px;padding-left:1.25rem}
 .letter li::marker{color:var(--ac)}
 .letter code{font-family:var(--mono);font-size:.92em}
+.prose{max-width:68ch}
+.prose h2{margin:36px 0 10px;max-width:none;font-size:1.35rem}
+.prose p,.prose li{font-size:1.0625rem;line-height:1.7;color:#d6dcf0}
+.prose p{margin:0 0 14px}
+.prose ul{margin:0 0 16px;padding-left:1.25rem}
+.prose li{margin:0 0 6px}
+.prose li::marker{color:var(--ac)}
+.prose .callout{padding:16px 18px;border:1px solid var(--bd-h);border-radius:12px;background:rgba(15,22,48,.6);box-shadow:inset 3px 0 0 var(--ac2)}
+.prose .callout p{margin:0;color:var(--tx)}
+.prose code{font-family:var(--mono);font-size:.92em}
 .letter .meta{margin:0 0 18px;font-family:var(--mono);color:var(--mu)}
 .letter-banner{display:block;width:min(100%,720px);height:auto;margin:0 0 24px;background:#000;image-rendering:pixelated}
 .dirlist{margin:0;padding-left:1.25rem}
@@ -541,6 +553,10 @@ footer .credit .social{margin:0}
 footer .credit .social a{width:32px;height:32px;color:var(--mu);text-decoration:none}
 footer .credit .social a:hover{color:var(--ac)}
 footer .credit .social svg{width:15px;height:15px}
+footer .foot-nav{margin:18px 0 0;text-align:center;line-height:1.4}
+footer .foot-nav a{color:var(--mu);text-decoration:none;font-size:.85rem;min-height:32px;display:inline-flex;align-items:center}
+footer .foot-nav a:hover{color:var(--ac)}
+footer .foot-nav .sep{display:inline-block;padding:0 .7em;color:var(--mu)}
 .ph{margin:16px 0 0;line-height:0}
 .ph a{display:inline-block;max-width:100%;line-height:0}
 .ph img{display:block;width:250px;max-width:100%;height:auto}
@@ -636,7 +652,7 @@ header nav .social.menu a{width:44px;min-height:44px;flex:none}
 .band{padding:56px 0}
 .chips{flex-wrap:nowrap;overflow-x:auto}
 .chip{flex:none}
-.overview p,.overview li{font-size:1rem;line-height:1.65}
+.overview p,.overview li,.prose p,.prose li{font-size:1rem;line-height:1.65}
 .overview section,.overview .whatsnew{margin-top:22px}
 .overview h2{margin-bottom:10px}
 .rule + .take{margin-top:32px}
@@ -780,8 +796,22 @@ def nav_html(depth, path):
             '<span class="m-close">Close</span></label>'
             '<nav id="site-nav" aria-label="Primary">' + "".join(links) + "</nav>")
 def foot_html(_depth):
-    # Page links stay in the header. There is no privacy page, so the footer
-    # is the badge row and the Karu Labs line only.
+    # Header keeps the page links. The footer stays the badge row, a short
+    # text nav, and the Karu Labs line at the bottom. No text link for X:
+    # the icon in the social row is the X link.
+    p = "../" * _depth
+    items = [
+        (f"{p}about/", "About"),
+        (f"{p}contact/", "Contact"),
+        (f"{p}privacy/", "Privacy"),
+        (f"{p}suggest/", "Suggest a Tool"),
+    ]
+    bits = []
+    for i, (href, label) in enumerate(items):
+        if i:
+            bits.append('<span class="sep" aria-hidden="true">·</span>')
+        bits.append(f'<a href="{href}">{e(label)}</a>')
+    fnav = f'<nav class="foot-nav" aria-label="Footer">{"".join(bits)}</nav>'
     karu = f'<a href="{e(KARU_X)}" target="_blank" rel="noopener noreferrer">{e(KARU_NAME)}</a>'
     karu_icons = (
         f'<span class="social" role="group" aria-label="{e(KARU_NAME)}">'
@@ -789,7 +819,7 @@ def foot_html(_depth):
         + ext_icon(KARU_LINKEDIN, "Karu Labs on LinkedIn", icon_linkedin())
         + "</span>"
     )
-    return (f'<div class="w foot-main"><div class="foot-promo"><p class="ph">{PH_BADGE}</p>{site_social("foot")}</div></div>'
+    return (f'<div class="w foot-main"><div class="foot-promo"><p class="ph">{PH_BADGE}</p>{site_social("foot")}</div>{fnav}</div>'
             f'<div class="foot-bar"><div class="w"><p class="credit"><span>A {karu} project</span>{karu_icons}</p></div></div>')
 def schema_graph(extra=None):
     # Organization and WebSite on every page. SearchAction matches the directory ?q= filter.
@@ -847,7 +877,9 @@ def item_list(name, items):
     }
 def page(title, desc, body, path, depth=0, nodes=None, bleed=False):
     p = "../" * depth
-    canon = f"{BASE}/{path}"
+    # The homepage file is index.html, but its public URL is the site root.
+    canon_path = "" if path == "index.html" else path
+    canon = f"{BASE}/{canon_path}"
     img = f"{BASE}/og.jpg"
     metas = (
         f'<meta property="og:title" content="{e(title)}">'
@@ -1046,17 +1078,18 @@ week_link = "See launch week" if launch_only else "See this week"
 home = f"""<section class="hero"><div class="orb orb-a" aria-hidden="true"></div>
 <div class="w hero-grid"><div class="hero-copy">
 <h1 class="rise">{e(VALUE)}</h1>
-<p class="actions rise d2"><a class="btn" href="{e(CONFIG['subscribe_url'])}">Subscribe free</a><a class="btn secondary" href="tools/">Browse the directory</a></p>
+<p class="lede rise d2">{e(CONFIG["hero_sub"])}</p>
+<p class="actions rise d2"><a class="btn" href="{e(CONFIG['subscribe_url'])}">Subscribe Free</a><a class="btn secondary" href="tools/">Browse the Directory</a></p>
 </div><div class="hero-art" aria-hidden="true"><div class="anvil-glow"></div>{anvil_svg()}</div></div>
 <div class="w"><div class="metrics rise d3"><div class="metric"><b>{len(tools)}</b><span>Tools</span></div><div class="metric"><b><time datetime="{e(checked_dates[-1])}">{e(fmt_date(checked_dates[-1]))}</time></b><span>Last checked</span></div></div></div></section>
-<section class="band band-stars" id="picks"><div class="w"><div class="band-head"><h2>{star_svg()}This Week's Stars</h2><a href="this-week.html">{week_link}</a></div>
+<section class="band band-stars" id="picks"><div class="w"><div class="band-head"><h2>{star_svg()}This Week's Picks</h2><a href="this-week.html">{week_link}</a></div>
 <div class="bento">{pick_html}</div></div></section>
 <section class="band band-alt" id="categories"><div class="w"><div class="band-head"><h2>Browse by category</h2><a href="tools/">Full directory</a></div>
 <div class="cats">{cat_cards}</div></div></section>
 <section class="band" id="letter"><div class="w"><div class="split">{letter_panel(latest_issue)}{SIGNUP}</div></div></section>"""
 (OUT / "index.html").write_text(page(
-    f"{N} — the newest AI tools, sorted every Friday",
-    VALUE,
+    f"{N}: Find the AI tools worth knowing",
+    CONFIG["hero_sub"],
     home, "index.html", nodes=[item_list("This Week's Stars", picks)], bleed=True))
 cats = sorted(counts)
 chips = '<button class="chip on" data-c="">All</button>' + "".join(
@@ -1485,15 +1518,75 @@ def alias_page(folder):
 <p><a href="{up}newsletter/">Go to the newsletter archive</a></p></main></body></html>""")
 for alias in ("issues", "archive", "newsletters", "newsletter/2"):
     alias_page(alias)
-suggest_body = f"""<header class="pagehead"><p class="kicker">For builders</p><h1>Suggest a tool</h1><p class="lede">Indie developers: send a tool you built, or one you want listed.</p></header>
+suggest_body = f"""<header class="pagehead pagehead-wide"><p class="kicker">For builders</p><h1>Suggest a tool</h1><p class="lede">Built something useful, or found a tool more people should know about? Send it over. Indie projects are welcome.</p></header>
 <p><a class="btn" href="{e(suggest_href)}">Suggest a tool by email</a></p>
-<p class="mu">Opens your mail app to {e(CONFIG['suggest_email'])} with the subject filled in. No account and no third-party form.</p><div class="sec">{SIGNUP}</div>"""
+<p class="mu">Opens your mail app to {e(CONFIG['suggest_email'])} with a short template. No account, no form.</p>
+<div class="prose"><h2>Good to know</h2><ul>
+<li>It's free. Paying is not required for consideration, and inclusion can't be bought.</li>
+<li>Every tool is evaluated independently, using its own site, docs, pricing page and announcements.</li>
+<li>Sending a tool doesn't guarantee it gets listed or featured in the newsletter.</li>
+<li>It helps to include a link to the official site, the pricing page if there is one, and where it's documented.</li>
+</ul></div><div class="sec">{SIGNUP}</div>"""
 (OUT / "suggest" / "index.html").write_text(page(
     f"Suggest a tool — {N}",
-    "Indie developers can email a tool suggestion to Toolsmith Weekly.",
+    "Send a tool to Toolsmith Weekly. Indie projects are welcome. It's free, tools are evaluated independently, and sending one doesn't guarantee a listing.",
     suggest_body, "suggest/", 1))
+(OUT / "about").mkdir(parents=True, exist_ok=True)
+about_body = f"""<header class="pagehead pagehead-wide"><p class="kicker">About</p><h1>About Toolsmith Weekly</h1>
+<p class="lede">An independent AI tool discovery publication, backed by a searchable research database. It's here to help you quickly understand the AI tools worth knowing.</p></header>
+<div class="prose">
+<h2>What it is</h2>
+<p>Three parts that work together. The <a href="../tools/">directory</a> is a searchable database of AI tools. Each listing is a breakdown of one tool, built from its own sources. The <a href="../newsletter/">newsletter</a> is a free email every Friday with the week's best new finds, and The Toolsmith Take is where we say what we think.</p>
+<h2>What's in a listing</h2>
+<p>Depending on the tool, a listing covers:</p>
+<ul><li>What it does</li><li>Who it's useful for</li><li>Use cases</li><li>Pricing</li><li>Mobile and platform availability</li><li>Original sources</li><li>Relevant links</li><li>The Toolsmith Take</li></ul>
+<p>If something can't be confirmed from a public source, the listing says so, for example "Pricing unverified", instead of guessing.</p>
+<h2>How tools are found</h2>
+<p>Tools come from product launches, developer announcements, documentation, community discoveries, indie projects, direct submissions and other primary sources. Indie projects are welcome, and anyone can <a href="../suggest/">suggest a tool</a>.</p>
+<p>Being listed doesn't mean we endorse a tool. It means it's relevant to people researching AI tools.</p>
+<h2 id="facts-and-opinion">Facts and opinion</h2>
+<p>Listings keep the two apart. Facts such as pricing, features and availability come from official pricing pages, docs and public announcements, and every listing links its sources. When a claim comes only from the developer, such as a benchmark score, the listing says so.</p>
+<p>The Toolsmith Take is our independent assessment: who the tool is for, what stands out, and what to keep in mind.</p>
+<h2>Paid placement</h2>
+<div class="callout"><p>Tool inclusion cannot be purchased. Sponsored content, if introduced in the future, will always be clearly labeled.</p></div>
+<h2>Get in touch</h2>
+<p>Spotted something out of date, or want to suggest a tool? Email <a href="mailto:{e(CONFIG['suggest_email'])}">{e(CONFIG['suggest_email'])}</a> or message <a href="{e(X_URL)}" rel="noopener">@toolsmithweekly on X</a>.</p>
+</div>"""
+(OUT / "about" / "index.html").write_text(page(
+    f"About Toolsmith Weekly: how listings work",
+    "What Toolsmith Weekly is, what a listing contains, how tools are found, and how facts, opinion and paid placement are handled.",
+    about_body, "about/", 1))
+(OUT / "contact").mkdir(parents=True, exist_ok=True)
+contact_body = f"""<header class="pagehead pagehead-wide"><p class="kicker">Contact</p><h1>Contact</h1>
+<p class="lede">Email {e(CONFIG['suggest_email'])}, or send a DM to @toolsmithweekly on X.</p></header>
+<div class="prose">
+<p>For a correction, a question, or anything else, email <a href="mailto:{e(CONFIG['suggest_email'])}">{e(CONFIG['suggest_email'])}</a>.</p>
+<p>You can also send a DM to <a href="{e(X_URL)}" rel="noopener">@toolsmithweekly on X</a>.</p>
+<p>To suggest a tool, use <a href="../suggest/">Suggest a Tool</a>. It opens one email, with a short template. No account and no form.</p>
+</div>"""
+(OUT / "contact" / "index.html").write_text(page(
+    f"Contact — {N}",
+    "Email hello@toolsmithweekly.com, or send a DM to @toolsmithweekly on X.",
+    contact_body, "contact/", 1))
+(OUT / "privacy").mkdir(parents=True, exist_ok=True)
+privacy_body = f"""<header class="pagehead pagehead-wide"><p class="kicker">Privacy</p><h1>Privacy</h1>
+<p class="lede">Toolsmith Weekly has no accounts. Subscriber emails go to beehiiv, and the footer loads the Product Hunt badge image.</p></header>
+<div class="prose">
+<h2>No accounts</h2>
+<p>This site has no accounts. There is nothing to register for here, and nothing to log in to.</p>
+<h2>Newsletter</h2>
+<p>The Friday letter is sent by beehiiv. Subscriber email addresses go to beehiiv. They are not stored in an account on this site. How beehiiv handles that address is covered in <a href="https://www.beehiiv.com/privacy" rel="noopener">beehiiv's privacy policy</a>.</p>
+<h2>Product Hunt badge</h2>
+<p>The footer loads the Product Hunt badge image from Product Hunt (<code>api.producthunt.com</code>). Your browser requests that image when a page loads.</p>
+<h2>Suggest a tool</h2>
+<p><a href="../suggest/">Suggest a Tool</a> is one email button. It opens your mail app to <a href="mailto:{e(CONFIG['suggest_email'])}">{e(CONFIG['suggest_email'])}</a>. There is no form and no account.</p>
+</div>"""
+(OUT / "privacy" / "index.html").write_text(page(
+    f"Privacy — {N}",
+    "Toolsmith Weekly has no accounts. Subscriber emails go to beehiiv, and the footer loads the Product Hunt badge image.",
+    privacy_body, "privacy/", 1))
 issue_urls = [i["path"] for i in ISSUES if issue_is_live(i)]
-urls = ["index.html", "tools/", "this-week.html", "newsletter/"] + issue_urls + ["suggest/"] + [f"tools/{t['slug']}.html" for t in tools]
+urls = ["index.html", "tools/", "this-week.html", "newsletter/"] + issue_urls + ["about/", "contact/", "privacy/", "suggest/"] + [f"tools/{t['slug']}.html" for t in tools]
 (OUT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + "".join(f"<url><loc>{BASE}/{u}</loc></url>" for u in urls) + "</urlset>")
 (OUT / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {BASE}/sitemap.xml\n")
 new_count = sum(is_new(t) for t in tools)
@@ -1506,11 +1599,14 @@ llms = [
     "",
     "## Pages",
     "",
-    f"- [Home]({BASE}/): Landing page with This Week's Stars, categories, and the latest letter.",
+    f"- [Home]({BASE}/): Landing page with This Week's Picks, categories, and the latest letter.",
     f"- [Tool directory]({BASE}/tools/): Search, filter by category, free tier, and letter, and sort the full list. A to Z is the default sort. Newest is available from the sort control and from ?sort=newest. Category links use a ?cat= query. A text search uses ?q=.",
     f"- [This week]({BASE}/this-week.html): This week's picks, each with a sourced reason, plus other tools added in the seven days up to the newest date in the directory.",
     f"- [Newsletter archive]({BASE}/newsletter/): The weekly letter. [Issue #1]({BASE}/newsletter/1/) was sent Friday, Oct 23, 2026. /newsletter/2/, /issues/, /archive/, and /newsletters/ redirect here.",
-    f"- [Suggest a tool]({BASE}/suggest/): Indie developers can email {CONFIG['suggest_email']} with a tool suggestion.",
+    f"- [About]({BASE}/about/): What the publication is, what a listing contains, how tools are found, and how facts, opinion and paid placement are handled.",
+    f"- [Contact]({BASE}/contact/): Email {CONFIG['suggest_email']}, or a DM to @toolsmithweekly on X.",
+    f"- [Privacy]({BASE}/privacy/): No accounts. Subscriber emails go to beehiiv. The footer loads the Product Hunt badge image.",
+    f"- [Suggest a tool]({BASE}/suggest/): One email to {CONFIG['suggest_email']}. Indie projects are welcome. No account and no form. Inclusion is not for sale and is not guaranteed.",
     f"- [Subscribe]({CONFIG['subscribe_url']}): Free weekly letter on beehiiv.",
     "",
     "## Tools",
