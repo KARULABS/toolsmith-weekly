@@ -519,24 +519,33 @@ time,.num,.count,.metric b{font-family:var(--mono)}
 .letter-banner{display:block;width:min(100%,720px);height:auto;margin:0 0 24px;background:#000;image-rendering:pixelated}
 .dirlist{margin:0;padding-left:1.25rem}
 .dirlist li{margin:0 0 8px}
-footer{border-top:1px solid var(--bd);padding:48px 0 64px;color:var(--mu);font-size:.85rem}
+footer{border-top:1px solid var(--bd);padding:48px 0 0;color:var(--mu);font-size:.85rem}
 footer nav{display:flex;gap:4px 18px;flex-wrap:wrap}
 footer nav a{color:var(--mu);text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
 footer nav a:hover{color:var(--ac)}
 footer p{margin:8px 0 0;max-width:46rem}
-footer .sources{margin-top:12px;max-width:40rem;line-height:1.5}
+footer .tagline{margin-top:20px}
+footer .sources{margin-top:10px;max-width:40rem;line-height:1.5}
 .social{display:flex;align-items:center;gap:2px}
 .social a{color:var(--mu);text-decoration:none;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;transition:color .15s ease,background .15s ease}
 .social a:hover,.social a:focus-visible{color:var(--ac);background:rgba(255,138,61,.1)}
 .social svg{width:18px;height:18px;display:block;flex:none}
 header .social.head{flex:none}
 header nav .social.menu{display:none}
-footer .w>.social{margin-top:2px}
-footer .credit{margin-top:16px}
-footer .credit>a{color:var(--tx);text-decoration:underline;text-decoration-color:rgba(154,166,199,.45);text-underline-offset:3px}
-footer .credit>a:hover{color:var(--ac);text-decoration-color:var(--ac)}
-footer .credit .social{display:inline-flex;vertical-align:middle;margin:0 0 0 4px}
-footer .credit .social a{width:30px;height:30px}
+footer .foot-promo{display:flex;align-items:center;gap:16px 28px;margin-top:28px}
+footer .foot-promo .ph{margin:0;flex:none}
+footer .foot-promo .social{flex:none}
+footer .foot-promo .social a{width:44px;height:44px}
+footer .foot-promo .social svg{width:20px;height:20px}
+footer .foot-bar{margin-top:36px;border-top:1px solid var(--bd);background:var(--bg2)}
+footer .foot-bar .w{display:flex;justify-content:center;padding-top:12px;padding-bottom:14px}
+footer .credit{display:flex;align-items:center;justify-content:center;gap:2px;flex-wrap:wrap;margin:0;max-width:none;line-height:1.3;text-align:center}
+footer .credit>span{color:var(--mu)}
+footer .credit a{color:var(--tx);text-decoration:underline;text-decoration-color:rgba(154,166,199,.45);text-underline-offset:3px}
+footer .credit a:hover{color:var(--ac);text-decoration-color:var(--ac)}
+footer .credit .social{margin:0}
+footer .credit .social a{width:32px;height:32px;color:var(--mu);text-decoration:none}
+footer .credit .social a:hover{color:var(--ac)}
 footer .credit .social svg{width:15px;height:15px}
 .ph{margin:16px 0 0;line-height:0}
 .ph a{display:inline-block;max-width:100%;line-height:0}
@@ -638,6 +647,11 @@ header nav .social.menu a{width:44px;min-height:44px;flex:none}
 .overview h2{margin-bottom:10px}
 .rule + .take{margin-top:32px}
 .tbl th,.tbl td{font-size:1rem}
+footer{padding-top:36px}
+footer nav{justify-content:center}
+footer .tagline,footer .sources{text-align:center;margin-left:auto;margin-right:auto}
+footer .foot-promo{flex-direction:column;align-items:center;justify-content:center;gap:12px;margin-top:24px}
+footer .foot-bar{margin-top:28px}
 }
 @media(prefers-reduced-motion:reduce){
 html{scroll-behavior:auto}
@@ -754,7 +768,7 @@ def ext_icon(href, label, svg):
             f'aria-label="{e(label)}">{svg}</a>')
 def site_social(variant):
     # head sits beside the logo on wide screens. menu is the same links inside
-    # the collapsed header. foot is the site-wide row under the footer nav.
+    # the collapsed header. foot sits beside the Product Hunt badge.
     cls = "social" if variant == "foot" else f"social {variant}"
     return (f'<div class="{cls}" role="group" aria-label="Toolsmith Weekly on social">'
             + ext_icon(X_URL, "Toolsmith Weekly on X", icon_x())
@@ -784,12 +798,12 @@ def foot_html(depth):
         + ext_icon(KARU_LINKEDIN, "Karu Labs on LinkedIn", icon_linkedin())
         + "</span>"
     )
-    return (f'<nav aria-label="Footer">{links}</nav>'
-            f'{site_social("foot")}'
-            f'<p>{e(N)}. {e(VALUE)}</p>'
+    # Nav and notes, then the badge with the site icons, then a slim Karu Labs bar.
+    return (f'<div class="w foot-main"><nav aria-label="Footer">{links}</nav>'
+            f'<p class="tagline">{e(N)}. {e(VALUE)}</p>'
             f'<p class="sources">{e(SOURCE_NOTE)}</p>'
-            f'<p class="credit">A {karu} project {karu_icons}</p>'
-            f'<p class="ph">{PH_BADGE}</p>')
+            f'<div class="foot-promo"><p class="ph">{PH_BADGE}</p>{site_social("foot")}</div></div>'
+            f'<div class="foot-bar"><div class="w"><p class="credit"><span>A {karu} project</span>{karu_icons}</p></div></div>')
 def schema_graph(extra=None):
     # Organization and WebSite on every page. SearchAction matches the directory ?q= filter.
     # Karu Labs is the publisher. Toolsmith Weekly stays the site organization.
@@ -869,7 +883,7 @@ def page(title, desc, body, path, depth=0, nodes=None, bleed=False):
 <link rel="stylesheet" href="{p}style.css">{schema_graph(nodes)}</head><body>
 <a class="skip" href="#content">Skip to content</a>
 <header><div class="w"><div class="bar"><div class="brand"><a class="logo" href="{p}index.html">{mark_svg()}{e(N)}</a>{site_social("head")}</div>{nav_html(depth, path)}</div></div></header>
-<main id="content">{inner}</main><footer><div class="w">{foot_html(depth)}</div></footer></body></html>"""
+<main id="content">{inner}</main><footer>{foot_html(depth)}</footer></body></html>"""
 def badge_html(t):
     # Website cards only. Callers on the newsletter archive must not use this.
     return '<span class="badge-new">New this week</span>' if is_new(t) else ""
