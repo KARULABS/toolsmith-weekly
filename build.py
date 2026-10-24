@@ -8,11 +8,15 @@ CONFIG = {"site_name": "Toolsmith Weekly",  # <- swap the brand name here
           "hero_sub": "Detailed breakdowns, pricing, use cases, source links and independent takes, plus the newest finds delivered every Friday.",
           "base_url": "https://toolsmithweekly.com",  # no trailing slash; canonical URLs, sitemap, robots
           "subscribe_url": "https://toolsmithweekly.beehiiv.com/subscribe",
+          "hero_form": "1a1fe2a7-5498-4a5b-8797-d678ca1c79d2",
+          "listing_form": "470bcb05-8729-444f-9de9-391d2f09a105",
           "suggest_email": "hello@toolsmithweekly.com"}
 CONFIG["base_url"] = CONFIG["base_url"].rstrip("/")
 # Links and assets stay relative (style.css, tools/<slug>.html, ../index.html) so they
 # work on the custom-domain root and in a local dist/ preview.
-# beehiiv's public subscribe page does not prefill ?email=, so signup is a link there.
+# beehiiv's public subscribe page does not prefill ?email=. Nav, letter, archive,
+# and suggest boxes stay links to subscribe_url. The homepage hero and every tool
+# page embed a form and fall back to that same link.
 N = CONFIG["site_name"]; R = pathlib.Path(__file__).parent; OUT = R / "dist"
 BASE = CONFIG["base_url"]
 VALUE = CONFIG["tagline"]
@@ -381,6 +385,17 @@ h3{font-weight:650;letter-spacing:-.03em;line-height:1.15}
 .lede{margin:0 0 22px;max-width:38rem;font-size:1.125rem;line-height:1.5;color:var(--mu)}
 .hero .lede{opacity:1}
 .actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:0}
+.hero-signup{display:flex;flex-wrap:wrap;align-items:flex-start;gap:16px 20px;max-width:40rem}
+.hero-signup-main{flex:1 1 18rem;min-width:min(100%,18rem)}
+.bh-form{width:100%;min-width:0}
+.bh-hero{min-height:200px}
+.bh-listing{min-height:140px;max-width:32rem}
+.bh-form.is-fallback{min-height:0}
+.bh-fallback{margin:0}
+.bh-note{margin:8px 0 0;color:var(--mu);font-size:.875rem;line-height:1.45}
+.hero-signup>.btn{flex:none}
+.listing-signup{margin:32px 0 0;max-width:44rem}
+.listing-signup>p{margin:0 0 12px;color:var(--tx);font-size:1.0625rem;line-height:1.55;font-weight:400}
 .sec-head > a,.actions a:not(.btn),.band-head a{min-height:44px;display:inline-flex;align-items:center}
 .hero-art{position:relative;display:grid;place-items:center;padding:8px 0 12px}
 .anvil-glow{position:absolute;left:50%;top:68%;width:min(88%,380px);height:180px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(255,138,61,.42),rgba(255,138,61,0) 68%);pointer-events:none}
@@ -659,8 +674,8 @@ header nav .social.menu a{width:44px;min-height:44px;flex:none}
 .bento .featured{grid-row:auto}
 .pick .reason{font-size:.95rem;-webkit-line-clamp:3;margin:4px 0 8px}
 .bento .featured .reason{font-size:1.1rem;-webkit-line-clamp:3}
-.actions{flex-direction:column;align-items:stretch}
-.hero .btn{width:100%}
+.actions,.hero-signup{flex-direction:column;align-items:stretch}
+.hero .btn,.hero-signup>.btn{width:100%}
 .band{padding:56px 0}
 .chips{flex-wrap:nowrap;overflow-x:auto}
 .chip{flex:none}
@@ -952,6 +967,40 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 window.addEventListener('resize', fitDesc);
 </script>""".replace("__LAUNCH__", LAUNCH.isoformat())
+# One boot per page that embeds a form. The inline script reveals the subscribe
+# link if beehiiv has not drawn an iframe of real height within about 5 seconds.
+# attribution.js is loaded once, after that, and only on those pages.
+BEEHIIV_BOOT = """<script>
+(function(){
+  var slots=document.querySelectorAll("[data-bh-slot]");
+  if(!slots.length) return;
+  function frameHeight(slot){
+    var frame=slot.querySelector("iframe");
+    if(!frame) return 0;
+    return frame.getBoundingClientRect().height;
+  }
+  function ready(slot){return frameHeight(slot)>=40;}
+  function show(slot){
+    if(ready(slot)) return;
+    var fb=slot.querySelector("[data-bh-fallback]");
+    if(fb) fb.hidden=false;
+    slot.classList.add("is-fallback");
+  }
+  function hide(slot){
+    var fb=slot.querySelector("[data-bh-fallback]");
+    if(fb) fb.hidden=true;
+    slot.classList.remove("is-fallback");
+  }
+  slots.forEach(function(slot){
+    if(window.ResizeObserver){
+      var ro=new ResizeObserver(function(){if(ready(slot)) hide(slot);});
+      ro.observe(slot);
+    }
+    window.setTimeout(function(){if(ready(slot)) hide(slot); else show(slot);},5000);
+  });
+})();
+</script>
+<script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>"""
 def page(title, desc, body, path, depth=0, nodes=None, bleed=False, og_type="website", share=False):
     p = "../" * depth
     # The homepage file is index.html, but its public URL is the site root.
@@ -989,7 +1038,7 @@ def page(title, desc, body, path, depth=0, nodes=None, bleed=False, og_type="web
 <link rel="stylesheet" href="{p}style.css">{schema_graph(nodes)}{VISITOR_JS}</head><body>
 <a class="skip" href="#content">Skip to content</a>
 <header><div class="w"><div class="bar"><div class="brand"><a class="logo" href="{p}index.html">{mark_svg()}{e(N)}</a>{site_social("head")}</div>{nav_html(depth, path)}</div></div></header>
-<main id="content">{inner}</main><footer>{foot_html(depth)}</footer></body></html>"""
+<main id="content">{inner}</main><footer>{foot_html(depth)}</footer>{BEEHIIV_BOOT if "data-bh-slot" in body else ""}</body></html>"""
 def badge_html(t):
     # Website cards only. Callers on the newsletter archive must not use this.
     # Hidden until the visitor's browser applies the rolling 7-day rule, so the
@@ -1172,12 +1221,26 @@ def weekly_picks(items):
             raise SystemExit(f"{t['name']} has pick_rank but no pick_source")
     picks.sort(key=lambda t: (t["pick_rank"], t["name"].lower()))
     return picks
+def subscribe_link():
+    return f'<a class="btn" href="{e(CONFIG["subscribe_url"])}">Subscribe free</a>'
+def beehiiv_form(form_id, kind):
+    # The loader inserts its iframe as the script's next sibling, so the slot
+    # has to wrap the script. noscript covers browsers with JavaScript off.
+    # The hidden link is the 5-second fallback for a form that never paints.
+    link = subscribe_link()
+    return (
+        f'<div class="bh-form bh-{kind}" data-bh-slot>'
+        f'<script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="{e(form_id)}"></script>'
+        f'<noscript><style>.bh-form{{min-height:0}}</style><p class="bh-fallback">{link}</p></noscript>'
+        f'<p class="bh-fallback" data-bh-fallback hidden>{link}</p>'
+        f'</div>'
+    )
 SIGNUP = f"""<div class="signup-wrap"><div class="panel" id="signup"><p class="kicker">Get the Weekly Roundup</p><h2>{e("The week's new AI tools, every Friday")}</h2>
 <p class="sub">{e("One short, free email with the newest AI tool drops, from big launches to indie projects. Each one comes with a plain-English summary, what it costs, and a direct link.")}</p>
 <ul class="points"><li>{e("Catch new AI tools the week they ship, including small indie projects")}</li>
 <li>{e("Get what each tool does and what it costs, explained in plain language")}</li>
 <li>{e("Go straight to each tool with a direct link, or browse the full directory at ")}<a href="{e(BASE)}/tools/">toolsmithweekly.com</a></li></ul>
-<p><a class="btn" href="{e(CONFIG['subscribe_url'])}">Subscribe free</a></p></div>
+<p>{subscribe_link()}</p></div>
 <p class="ph">{PH_BADGE}</p></div>"""
 picks = weekly_picks(tools)
 counts = Counter(t["category"] for t in tools)
@@ -1224,7 +1287,9 @@ home = f"""<section class="hero"><div class="orb orb-a" aria-hidden="true"></div
 <div class="w hero-grid"><div class="hero-copy">
 <h1 class="rise">{e(VALUE)}</h1>
 <p class="lede rise d2">{e(CONFIG["hero_sub"])}</p>
-<p class="actions rise d2"><a class="btn" href="{e(CONFIG['subscribe_url'])}">Subscribe Free</a><a class="btn secondary" href="tools/">Browse the Directory</a></p>
+<div class="hero-signup rise d2"><div class="hero-signup-main">{beehiiv_form(CONFIG["hero_form"], "hero")}
+<p class="bh-note">Free, every Friday. Unsubscribe anytime.</p></div>
+<a class="btn secondary" href="tools/">Browse the Directory</a></div>
 </div><div class="hero-art" aria-hidden="true"><div class="anvil-glow"></div>{anvil_svg()}</div></div>
 <div class="w"><div class="metrics rise d3"><div class="metric"><b>{len(tools)}</b><span>Tools</span></div><div class="metric"><b><time datetime="{e(checked_dates[-1])}">{e(fmt_date(checked_dates[-1]))}</time></b><span>Last checked</span></div></div></div></section>
 <section class="band band-stars" id="picks"><div class="w"><div class="band-head"><h2>{star_svg()}This Week's Picks</h2><a href="this-week.html">{week_link}</a></div>
@@ -1734,7 +1799,14 @@ for t in tools:
     covered = issues_for(t)
     issue_crumb = ""
     issue_fact = ""
-    signup = ""
+    # One signup on every listing, after The Toolsmith Take. A tool that was
+    # featured in a letter used to get the full issue box here; this replaces it.
+    signup = (
+        '<div class="listing-signup">'
+        f'<p>{e("The week\'s best new finds, every Friday.")}</p>'
+        f'{beehiiv_form(CONFIG["listing_form"], "listing")}'
+        '</div>'
+    )
     if covered:
         crumbs = []
         facts = []
@@ -1745,7 +1817,6 @@ for t in tools:
             facts.append(f'<dt>Letter</dt><dd><a href="{e(issue_href)}">{e(featured)}</a></dd>')
         issue_crumb = " · " + " · ".join(crumbs)
         issue_fact = "".join(facts)
-        signup = f'<div class="sec">{SIGNUP}</div>'
     title = seo_title(t)
     desc = seo_desc(t)
     if len(title) > TITLE_LIMIT or re.search(r"\bReview\b", title):
@@ -1938,4 +2009,50 @@ for t in tools:
     mark = " New this week." if is_new(t) else ""
     llms.append(f"- [{t['name']}]({BASE}/tools/{t['slug']}.html): {t['description']}{mark}")
 (OUT / "llms.txt").write_text("\n".join(llms) + "\n")
+def check_signup_forms():
+    # The hero embed and the listing embed stay on their own pages. A listing
+    # keeps a single form, including when it used to carry the issue box.
+    hero_id = CONFIG["hero_form"]
+    listing_id = CONFIG["listing_form"]
+    note = "Free, every Friday. Unsubscribe anytime."
+    line = e("The week's best new finds, every Friday.")
+    noscript = (
+        f'<noscript><style>.bh-form{{min-height:0}}</style>'
+        f'<p class="bh-fallback">{subscribe_link()}</p></noscript>'
+    )
+    home = (OUT / "index.html").read_text()
+    if home.count(hero_id) != 1 or home.count(listing_id) != 0:
+        raise SystemExit("homepage should include the hero form once and not the listing form")
+    if f'<p class="bh-note">{note}</p>' not in home or "Subscribe Free" in home:
+        raise SystemExit("homepage hero should replace Subscribe Free with the form and the Friday note")
+    if "Browse the Directory" not in home:
+        raise SystemExit("homepage hero is missing Browse the Directory")
+    if home.count("attribution.js") != 1 or home.count('class="bh-form bh-hero"') != 1 or noscript not in home:
+        raise SystemExit("homepage should boot beehiiv once, with one noscript fallback")
+    if home.count('id="signup"') != 1:
+        raise SystemExit("homepage letter signup should stay a single link box")
+    plain = ["tools/index.html", "about/index.html", "contact/index.html", "privacy/index.html",
+             "suggest/index.html", "newsletter/index.html", "this-week.html", "newsletter/1/index.html"]
+    for rel in plain:
+        text = (OUT / rel).read_text()
+        if "data-bh-slot" in text or "attribution.js" in text or hero_id in text or listing_id in text:
+            raise SystemExit(f"{rel} should keep the link signup and not embed a form")
+    for t in tools:
+        html_text = (OUT / "tools" / f"{t['slug']}.html").read_text()
+        rel = f"tools/{t['slug']}.html"
+        if html_text.count(listing_id) != 1 or hero_id in html_text:
+            raise SystemExit(f"{rel} should include the listing form once")
+        if f"<p>{line}</p>" not in html_text or f"<h2>{line}</h2>" in html_text or f"<h3>{line}</h3>" in html_text:
+            raise SystemExit(f"{rel} signup line should be one plain paragraph")
+        if html_text.count('id="signup"') or html_text.count('class="bh-form bh-listing"') != 1:
+            raise SystemExit(f"{rel} should have one signup form and no issue signup box")
+        if html_text.count("attribution.js") != 1 or html_text.count(noscript) != 1:
+            raise SystemExit(f"{rel} should boot beehiiv once, with one noscript fallback")
+        if "The Toolsmith Take" not in html_text:
+            raise SystemExit(f"{rel} is missing The Toolsmith Take")
+        take_at = html_text.find("The Toolsmith Take")
+        form_at = html_text.find(listing_id)
+        if form_at < take_at:
+            raise SystemExit(f"{rel} signup should follow The Toolsmith Take")
+check_signup_forms()
 print(f"Built {len(tools)} tool pages into {OUT} ({new_count} new this week as of {TODAY})")
