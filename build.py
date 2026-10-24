@@ -12,8 +12,10 @@ CONFIG = {"site_name": "Toolsmith Weekly",  # <- swap the brand name here
           "listing_form": "470bcb05-8729-444f-9de9-391d2f09a105",
           "suggest_email": "hello@toolsmithweekly.com"}
 CONFIG["base_url"] = CONFIG["base_url"].rstrip("/")
-# Links and assets stay relative (style.css, tools/<slug>.html, ../index.html) so they
-# work on the custom-domain root and in a local dist/ preview.
+# Assets and inner-page links stay relative (style.css, tools/<slug>.html, ../tools/)
+# so they work on the custom-domain root and in a local dist/ preview.
+# The homepage file is dist/index.html, but every link to it uses / (or /?… / #…).
+# A relative index.html or ../index.html leaves that filename in the address bar.
 # beehiiv's public subscribe page does not prefill ?email=. Nav, letter, archive,
 # and suggest boxes stay links to subscribe_url. The homepage hero and every tool
 # page embed a form and fall back to that same link.
@@ -776,8 +778,10 @@ def price_line(t):
 def letter_of(name):
     first = name[:1].upper()
     return first if first.isalpha() else "#"
+# Root-absolute. Relative index.html resolves to /index.html on GitHub Pages.
+HOME_HREF = "/"
 NAV = [
-    ("index.html", "Home", "home"),
+    (HOME_HREF, "Home", "home"),
     ("tools/", "Tool Directory", "tools"),
     ("this-week.html", "This Week", "week"),
     ("newsletter/", "Newsletter Archive", "news"),
@@ -819,13 +823,18 @@ def site_social(variant):
             + ext_icon(X_URL, "Toolsmith Weekly on X", icon_x())
             + ext_icon(REDDIT_URL, "Toolsmith Weekly on Reddit", icon_reddit())
             + "</div>")
+def nav_target(depth, href):
+    # Leave root-absolute, in-page, and off-site targets alone. Prefixing "/"
+    # with "../" would produce "..//", which is not the clean root URL.
+    if href.startswith(("/", "#")) or "://" in href or href.startswith("mailto:"):
+        return href
+    return "../" * depth + href
 def nav_html(depth, path):
-    p = "../" * depth
     sec = section_of(path)
     links = []
     for href, label, key in NAV:
         cls = ' class="on"' if key == sec else ""
-        links.append(f'<a href="{p}{href}"{cls}>{label}</a>')
+        links.append(f'<a href="{nav_target(depth, href)}"{cls}>{label}</a>')
     links.append(site_social("menu"))
     links.append(f'<a class="btn" href="{e(CONFIG["subscribe_url"])}">Subscribe</a>')
     return ('<input class="nav-toggle" id="nav-toggle" type="checkbox" aria-controls="site-nav">'
@@ -1038,7 +1047,7 @@ def page(title, desc, body, path, depth=0, nodes=None, bleed=False, og_type="web
 <title>{e(title)}</title><meta name="description" content="{e(desc)}">{metas}
 <link rel="stylesheet" href="{p}style.css">{schema_graph(nodes)}{VISITOR_JS}</head><body>
 <a class="skip" href="#content">Skip to content</a>
-<header><div class="w"><div class="bar"><div class="brand"><a class="logo" href="{p}index.html">{mark_svg()}{e(N)}</a>{site_social("head")}</div>{nav_html(depth, path)}</div></div></header>
+<header><div class="w"><div class="bar"><div class="brand"><a class="logo" href="{HOME_HREF}">{mark_svg()}{e(N)}</a>{site_social("head")}</div>{nav_html(depth, path)}</div></div></header>
 <main id="content">{inner}</main><footer>{foot_html(depth)}</footer>{BEEHIIV_BOOT if "data-bh-slot" in body else ""}</body></html>"""
 def badge_html(t):
     # Website cards only. Callers on the newsletter archive must not use this.
@@ -1823,8 +1832,10 @@ for t in tools:
         raise SystemExit(f"{t['name']} title is not a Breakdown title of about 60 characters: {title}")
     if len(desc) > DESC_LIMIT:
         raise SystemExit(f"{t['name']} meta description is {len(desc)} characters")
-    cat_href = "index.html?cat=" + quote(t["category"], safe="")
-    b = f"""<div class="tool-hero"><div class="tool-copy"><p class="back"><a href="index.html">Tool directory</a> · <a href="{e(cat_href)}">{e(cat_label(t['category']))}</a>{issue_crumb}</p><h1>{e(t['name'])}</h1><p class="vrow">{badge_html(t)}{verdict_stamp(t)}</p><p class="sum">{e(t['description'])}</p>
+    # Same directory the chips filter. /tools/?cat= keeps the query on the clean
+    # directory URL. index.html?cat= opens /tools/index.html instead.
+    cat_href = "/tools/?cat=" + quote(t["category"], safe="")
+    b = f"""<div class="tool-hero"><div class="tool-copy"><p class="back"><a href="/tools/">Tool directory</a> · <a href="{e(cat_href)}">{e(cat_label(t['category']))}</a>{issue_crumb}</p><h1>{e(t['name'])}</h1><p class="vrow">{badge_html(t)}{verdict_stamp(t)}</p><p class="sum">{e(t['description'])}</p>
 </div>
 <aside class="facts" aria-label="Facts">{mobile_fact(t)}<dl><dt>Use cases</dt><dd><ul>{''.join(f'<li>{e(u)}</li>' for u in t['use_cases'])}</ul></dd><dt>Pricing</dt><dd>{e(t['pricing'])}</dd><dt>Website</dt><dd><a href="{e(t['url'])}" rel="noopener">{e(t['url'])}</a></dd>
 <dt>Source</dt><dd><a href="{e(t['source'])}" rel="noopener">{e(t['source'])}</a></dd><dt>Added</dt><dd><time datetime="{e(t['date_added'])}">{e(fmt_date(t['date_added']))}</time></dd>{issue_fact}</dl>
@@ -1978,9 +1989,14 @@ privacy_body = f"""<header class="pagehead pagehead-wide"><p class="kicker">Priv
     f"Privacy — {N}",
     "Toolsmith Weekly has no accounts. Subscriber emails go to beehiiv, and the footer loads the Product Hunt badge image.",
     privacy_body, "privacy/", 1))
+def public_url(path):
+    # Match the canonical tag: the homepage file is index.html, its URL is /.
+    if path in ("", "/", "index.html"):
+        return f"{BASE}/"
+    return f"{BASE}/{path.lstrip('/')}"
 issue_urls = [i["path"] for i in ISSUES if issue_is_live(i)]
-urls = ["index.html", "tools/", "this-week.html", "newsletter/"] + issue_urls + ["about/", "contact/", "privacy/", "suggest/"] + [f"tools/{t['slug']}.html" for t in tools]
-(OUT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + "".join(f"<url><loc>{BASE}/{u}</loc></url>" for u in urls) + "</urlset>")
+urls = ["/", "tools/", "this-week.html", "newsletter/"] + issue_urls + ["about/", "contact/", "privacy/", "suggest/"] + [f"tools/{t['slug']}.html" for t in tools]
+(OUT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + "".join(f"<url><loc>{public_url(u)}</loc></url>" for u in urls) + "</urlset>")
 (OUT / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {BASE}/sitemap.xml\n")
 new_count = sum(is_new(t) for t in tools)
 llms = [
@@ -2054,5 +2070,24 @@ def check_signup_forms():
         form_at = html_text.find(listing_id)
         if form_at < take_at:
             raise SystemExit(f"{rel} signup should follow The Toolsmith Take")
+def check_clean_home_links():
+    # Grep-level guard: no href, sitemap loc, or JSON-LD URL should name the
+    # homepage (or any other page) as index.html. Directory URLs stay /tools/.
+    href_re = re.compile(r'href="([^"]*)"')
+    ld_re = re.compile(r'"(?:url|item|@id|target)"\s*:\s*"([^"]*index\.html[^"]*)"')
+    for path in sorted(OUT.rglob("*.html")):
+        text = path.read_text()
+        rel = path.relative_to(OUT)
+        for href in href_re.findall(text):
+            target = href.split("#", 1)[0].split("?", 1)[0]
+            if target.endswith("index.html") or target == "index.html":
+                raise SystemExit(f"{rel} links to index.html: {href}")
+        for match in ld_re.findall(text):
+            raise SystemExit(f"{rel} JSON-LD references index.html: {match}")
+    for name in ("sitemap.xml", "robots.txt", "llms.txt"):
+        text = (OUT / name).read_text()
+        if "index.html" in text:
+            raise SystemExit(f"{name} references index.html")
 check_signup_forms()
+check_clean_home_links()
 print(f"Built {len(tools)} tool pages into {OUT} ({new_count} new this week as of {TODAY})")

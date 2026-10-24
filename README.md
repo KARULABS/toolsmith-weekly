@@ -2,7 +2,7 @@
 
 Live site: https://toolsmithweekly.com/
 
-Brand, the one-line value prop, and the canonical base URL live in `CONFIG` at the top of `build.py`. `base_url` is `https://toolsmithweekly.com` (no trailing slash) so canonical tags, Open Graph URLs, `sitemap.xml`, and the `robots.txt` sitemap line use that domain. Page links and the stylesheet are relative (`style.css`, `tools/….html`, `../index.html`), so they work on the custom-domain root and in a local `dist/` preview. The repo-root `CNAME` (`toolsmithweekly.com`) is copied into `dist/` on every build.
+Brand, the one-line value prop, and the canonical base URL live in `CONFIG` at the top of `build.py`. `base_url` is `https://toolsmithweekly.com` (no trailing slash) so canonical tags, Open Graph URLs, `sitemap.xml`, and the `robots.txt` sitemap line use that domain. The stylesheet and links to inner pages stay relative (`style.css`, `tools/….html`, `../tools/`). Links to the homepage are the clean root (`/`), so the logo, Home, and the same link in a letter open `https://toolsmithweekly.com/` instead of `/index.html`. Directory filters use `/tools/` and `/tools/?cat=`. Both forms work on the custom-domain root and in a local `dist/` preview. The repo-root `CNAME` (`toolsmithweekly.com`) is copied into `dist/` on every build.
 
 ## Add a tool
 Append an object to `tools.json`:
