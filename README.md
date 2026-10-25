@@ -24,7 +24,7 @@ Output:
 
 - `dist/index.html` — product homepage: full-width hero, This Week's Picks, category tiles, letter and signup
 - `dist/tools/` — directory with a search box, A–Z jump links, category chips, a free-tier toggle, a New this week toggle, and compact rows. The intro does not state a tool total. A count beside the filters reads "Showing N tools" and updates as the filters change. Each row shows a one-line price summary, such as `Free tier, from $20/mo` or `Pricing unverified`, plus a Full, Partial, None, or Not confirmed badge. The tool page keeps the full pricing sentence. `?cat=` opens a category. `?q=` fills the search box. `?new=1` checks New this week. `?free=1` checks Free tier. `?letter=` selects a letter. `?sort=newest` sorts newest first. Those combine. A to Z is the default sort, including in the static HTML. Newest stays available. The New this week check runs in the browser from `date_added`: after 2026-10-20 and within the last 7 days, using the visitor's local date so it does not go stale between builds.
-- `dist/tools/<slug>.html` — one page per tool, with Open Graph and JSON-LD (`SoftwareApplication`: name, url, category, offers; no ratings). Facts come first. The category in the breadcrumb links to that filter. A long overview renders only when that tool has an `overview` object, then The Toolsmith Take, then one compact signup. The title and meta description are built from the listing.
+- `dist/tools/<slug>.html` — one page per tool, with Open Graph and JSON-LD (`SoftwareApplication`: name, url, category, offers; no ratings). Facts come first. The category in the breadcrumb links to that filter. A long overview renders only when that tool has an `overview` object, then The Toolsmith Take, then one compact signup. At the bottom, a collapsed details element, Featured here? Add the badge, holds a snippet that embeds `/badges/featured.svg` and links to that listing's absolute URL. The title and meta description are built from the listing.
 - `dist/verdicts/` — meta refresh to `/tools/` (not listed in the sitemap)
 - `dist/this-week.html` — This Week's Picks first (tools with `pick_rank`, each linking to its listing, plus a Read Issue link to the latest published letter), then Newly Added: other tools that pass the same New this week rule. That section links to `/tools/?new=1` sorted newest first. The launch batch is not listed as new, and the New this week badge is not repeated on this page. Row descriptions use the same word-boundary ellipsis as the directory. The initial batch is labeled Launch week only when it is the whole window.
 - `dist/newsletter/` — newsletter archive. A letter is built and linked only when its `published` field is true. Issue #1 is published at `dist/newsletter/1/`. An unpublished letter stays in the archive and on the homepage as its title and coming date, with no page, no link, and no letter note. The letter body stays in `content/`.
@@ -33,6 +33,8 @@ Output:
 - `dist/contact/` — email hello@toolsmithweekly.com, or a DM to @toolsmithweekly on X
 - `dist/privacy/` — no accounts; subscriber emails go to beehiiv; the footer loads the Product Hunt badge image
 - `dist/suggest/` — one mailto button for a tool suggestion. Indie projects are welcome. No account and no form.
+- `dist/badge/` — for tool makers: a preview of the free Featured on Toolsmith Weekly badge and a generic snippet. Linked from the footer.
+- `dist/badges/featured.svg` and `dist/badges/featured-dark.svg` — the badge, 250×54, navy `#041e43` and gold. The favicon is an anvil, so the mark is the letters TW.
 - `dist/og.jpg` — 1200×630 share image. The homepage anvil is an inline pixel drawing, not a photo.
 - `dist/sitemap.xml`, `dist/robots.txt`, `dist/llms.txt`, `dist/CNAME`
 
@@ -49,7 +51,7 @@ The homepage hero and every tool page embed a beehiiv signup form. Each form sit
 ## Suggest a tool
 `/suggest/` is one `mailto:hello@toolsmithweekly.com` button. The message opens with a subject and a short template, including lines for the pricing page and a docs or announcement link. Indie projects are welcome. It is free, paying is not required, tools are evaluated independently, and sending one does not guarantee a listing. No account and no form.
 
-The footer has a text row, About · Contact · Privacy · Suggest a Tool, between the Product Hunt badge and the Karu Labs line. The X icon stays in the social row. There is no separate X text link.
+The footer has a text row, About · Contact · Privacy · Suggest a Tool · Badge, between the Product Hunt badge and the Karu Labs line. The X icon stays in the social row. There is no separate X text link.
 
 ## Mobile
 Each tool in `tools.json` has `mobile` (`full`, `partial`, `none`, or `unverified`), plus `mobile_note`, `mobile_source`, and `mobile_description`. A tool page shows `Mobile: Fully supported`, `Mobile: Partial`, or `Mobile: Not supported`, then the note and a source link. `unverified` shows `Mobile: not confirmed` and no note. The description under that line is one or two plain sentences from the note and source. Directory rows show a Full, Partial, None, or Not confirmed badge.

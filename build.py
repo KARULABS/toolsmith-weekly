@@ -401,6 +401,19 @@ h3{font-weight:650;letter-spacing:-.03em;line-height:1.15}
 .hero-signup>.btn{flex:none}
 .listing-signup{margin:32px 0 0;max-width:44rem}
 .listing-signup>p{margin:0 0 12px;color:var(--tx);font-size:1.0625rem;line-height:1.55;font-weight:400}
+.badge-embed{margin:28px 0 0;max-width:44rem;padding-top:14px;border-top:1px solid var(--bd)}
+.badge-embed summary{cursor:pointer;color:var(--mu);font-size:.875rem;line-height:1.4;padding:6px 0}
+.badge-embed summary:hover{color:var(--ac)}
+.badge-embed .badge-note{margin:2px 0 10px;color:var(--mu);font-size:.875rem;line-height:1.5}
+.badge-embed .badge-note a{color:var(--mu)}
+.badge-embed .badge-note a:hover{color:var(--ac)}
+.badge-snippet{margin:0 0 16px;padding:12px 14px;overflow:auto;border:1px solid var(--bd);border-radius:10px;background:var(--bg2);color:#d6dcf0;font-family:var(--mono);font-size:.78rem;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}
+.badge-snippet code{font-family:inherit;font-size:inherit;color:inherit}
+.badge-samples{display:flex;flex-wrap:wrap;gap:20px 28px;align-items:flex-end;margin:8px 0 28px}
+.badge-samples figure{margin:0;max-width:100%}
+.badge-samples figcaption{margin:8px 0 0;font-family:var(--mono);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mu)}
+.badge-samples img{display:block;width:250px;max-width:100%;height:auto}
+.badge-pad{display:inline-block;max-width:100%;box-sizing:border-box;background:#eef2ff;padding:12px;border-radius:12px;line-height:0}
 .sec-head > a,.actions a:not(.btn),.band-head a{min-height:44px;display:inline-flex;align-items:center}
 .hero-art{position:relative;display:grid;place-items:center;padding:8px 0 12px}
 .anvil-glow{position:absolute;left:50%;top:68%;width:min(88%,380px);height:180px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(255,138,61,.42),rgba(255,138,61,0) 68%);pointer-events:none}
@@ -851,6 +864,7 @@ def foot_html(_depth):
         (f"{p}contact/", "Contact"),
         (f"{p}privacy/", "Privacy"),
         (f"{p}suggest/", "Suggest a Tool"),
+        (f"{p}badge/", "Badge"),
     ]
     bits = []
     for i, (href, label) in enumerate(items):
@@ -1014,6 +1028,8 @@ BEEHIIV_BOOT = """<script>
 # Root-absolute so nested pages still resolve /favicon.ico. Navy is the most
 # common background pixel in the provided icon-512.png.
 NAVY = "#041e43"
+GOLD = "#ffc94a"  # brand gold, same as the spark color and --ac2
+BADGE_ALT = "Featured on Toolsmith Weekly"
 FAVICON_FILES = (
     "favicon.ico",
     "favicon-16x16.png",
@@ -1288,6 +1304,10 @@ shutil.copyfile(R / "logo.png", OUT / "logo.png")
 shutil.copyfile(R / "CNAME", OUT / "CNAME")
 for name in FAVICON_FILES:
     shutil.copyfile(R / name, OUT / name)
+# Embeddable featured badge. The favicon is an anvil, so the SVG uses a TW text mark.
+(OUT / "badges").mkdir(parents=True, exist_ok=True)
+for name in ("featured.svg", "featured-dark.svg"):
+    shutil.copyfile(R / "badges" / name, OUT / "badges" / name)
 (OUT / "site.webmanifest").write_text(json.dumps({
     "name": "Toolsmith Weekly",
     "icons": [
@@ -1832,6 +1852,23 @@ def listing_nodes(t, title, desc, covered=None):
     ]
     _forbid_rating(nodes, t["name"])
     return nodes
+def featured_badge_snippet(href, src=None):
+    # Absolute URLs, so the snippet still works after it is pasted on a tool's site.
+    image = src or f"{BASE}/badges/featured.svg"
+    return (
+        f'<a href="{href}"><img alt="{BADGE_ALT}" width="250" height="54" src="{image}"></a>'
+    )
+def featured_badge_embed(t):
+    listing = f"{BASE}/tools/{t['slug']}.html"
+    snippet = featured_badge_snippet(listing)
+    return (
+        '<details class="badge-embed">'
+        "<summary>Featured here? Add the badge</summary>"
+        '<p class="badge-note">Paste this on your site. It is free, and it links to this listing. '
+        'See <a href="../badge/">light and dark badges</a>.</p>'
+        f'<pre class="badge-snippet"><code>{html.escape(snippet, quote=False)}</code></pre>'
+        "</details>"
+    )
 apply_coverage()
 for t in tools:
     ov = overview_html(t)
@@ -1875,7 +1912,8 @@ for t in tools:
 {rule}
 <section class="take take-tw" aria-labelledby="tw-take"><div class="take-head">{mark_svg()}<h2 id="tw-take">The Toolsmith Take</h2></div><p class="take-body">{e(take_paragraph(t))}</p>
 <p class="take-foot">Our independent assessment · <a href="{e(t['source'])}" rel="noopener">Source</a> · <a href="../about/">How listings work</a></p></section>
-{signup}"""
+{signup}
+{featured_badge_embed(t)}"""
     if re.search(r"hands-on|we tested|I tested|our testing", b, re.I):
         raise SystemExit(f"{t['name']} listing makes a testing claim")
     if re.search(r"AI assistance|drafted with AI|written with AI|AI-generated", b, re.I):
@@ -2021,13 +2059,37 @@ privacy_body = f"""<header class="pagehead pagehead-wide"><p class="kicker">Priv
     f"Privacy — {N}",
     "Toolsmith Weekly has no accounts. Subscriber emails go to beehiiv, and the footer loads the Product Hunt badge image.",
     privacy_body, "privacy/", 1))
+(OUT / "badge").mkdir(parents=True, exist_ok=True)
+badge_light = f"{BASE}/badges/featured.svg"
+badge_dark = f"{BASE}/badges/featured-dark.svg"
+badge_generic = featured_badge_snippet(f"{BASE}/")
+badge_generic_dark = featured_badge_snippet(f"{BASE}/", badge_dark)
+badge_body = f"""<header class="pagehead pagehead-wide"><p class="kicker">For tool makers</p><h1>Featured badge</h1>
+<p class="lede">Listed on Toolsmith Weekly? Add this badge to your site. It is free, and it links visitors back here.</p></header>
+<div class="badge-samples">
+<figure><div class="badge-pad"><img alt="{e(BADGE_ALT)}" width="250" height="54" src="../badges/featured.svg"></div><figcaption>Light</figcaption></figure>
+<figure><img alt="{e(BADGE_ALT)}" width="250" height="54" src="../badges/featured-dark.svg"><figcaption>Dark</figcaption></figure>
+</div>
+<div class="prose">
+<h2>Add it to your site</h2>
+<p>Paste this where you want the badge. It links to the Toolsmith Weekly home page.</p>
+<pre class="badge-snippet"><code>{html.escape(badge_generic, quote=False)}</code></pre>
+<p>The dark badge uses the same snippet with this image address: <a href="{e(badge_dark)}">{e(badge_dark)}</a></p>
+<pre class="badge-snippet"><code>{html.escape(badge_generic_dark, quote=False)}</code></pre>
+<h2>Link to your listing</h2>
+<p>Every tool page has a collapsed section at the bottom, Featured here? Add the badge. That snippet links to the listing itself. Use it on the tool's site.</p>
+</div>"""
+(OUT / "badge" / "index.html").write_text(page(
+    f"Featured badge — {N}",
+    "Add the free Featured on Toolsmith Weekly badge to your site. Each listing page has a snippet that links back to that tool.",
+    badge_body, "badge/", 1))
 def public_url(path):
     # Match the canonical tag: the homepage file is index.html, its URL is /.
     if path in ("", "/", "index.html"):
         return f"{BASE}/"
     return f"{BASE}/{path.lstrip('/')}"
 issue_urls = [i["path"] for i in ISSUES if issue_is_live(i)]
-urls = ["/", "tools/", "this-week.html", "newsletter/"] + issue_urls + ["about/", "contact/", "privacy/", "suggest/"] + [f"tools/{t['slug']}.html" for t in tools]
+urls = ["/", "tools/", "this-week.html", "newsletter/"] + issue_urls + ["about/", "contact/", "privacy/", "suggest/", "badge/"] + [f"tools/{t['slug']}.html" for t in tools]
 (OUT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + "".join(f"<url><loc>{public_url(u)}</loc></url>" for u in urls) + "</urlset>")
 (OUT / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {BASE}/sitemap.xml\n")
 new_count = sum(is_new(t) for t in tools)
@@ -2048,6 +2110,7 @@ llms = [
     f"- [Contact]({BASE}/contact/): Email {CONFIG['suggest_email']}, or a DM to @toolsmithweekly on X.",
     f"- [Privacy]({BASE}/privacy/): No accounts. Subscriber emails go to beehiiv. The footer loads the Product Hunt badge image.",
     f"- [Suggest a tool]({BASE}/suggest/): One email to {CONFIG['suggest_email']}. Indie projects are welcome. No account and no form. Inclusion is not for sale and is not guaranteed.",
+    f"- [Featured badge]({BASE}/badge/): Free badge for a listed tool. Light image: {badge_light}. Dark image: {badge_dark}. Each listing page includes a snippet that links back to that listing.",
     f"- [Subscribe]({CONFIG['subscribe_url']}): Free weekly letter on beehiiv.",
     "",
     "## Tools",
@@ -2080,7 +2143,7 @@ def check_signup_forms():
     if home.count('id="signup"') != 1:
         raise SystemExit("homepage letter signup should stay a single link box")
     plain = ["tools/index.html", "about/index.html", "contact/index.html", "privacy/index.html",
-             "suggest/index.html", "newsletter/index.html", "this-week.html", "newsletter/1/index.html"]
+             "suggest/index.html", "badge/index.html", "newsletter/index.html", "this-week.html", "newsletter/1/index.html"]
     for rel in plain:
         text = (OUT / rel).read_text()
         if "data-bh-slot" in text or "attribution.js" in text or hero_id in text or listing_id in text:
@@ -2120,6 +2183,62 @@ def check_clean_home_links():
         text = (OUT / name).read_text()
         if "index.html" in text:
             raise SystemExit(f"{name} references index.html")
+def check_featured_badge():
+    # Every tool listing carries a collapsed snippet that embeds the badge and
+    # links back to that listing. The badge page, sitemap, and footer stay in step.
+    phrase = BADGE_ALT
+    banned = re.compile(r"\b(paid|pricing|payment|payments|purchase|purchased|sponsor|sponsored|price|prices)\b", re.I)
+    for name in ("featured.svg", "featured-dark.svg"):
+        text = (OUT / "badges" / name).read_text()
+        if phrase not in text:
+            raise SystemExit(f"badges/{name} should read {phrase}")
+        if 'width="250"' not in text or 'height="54"' not in text:
+            raise SystemExit(f"badges/{name} should be 250 by 54")
+        if NAVY not in text or GOLD not in text:
+            raise SystemExit(f"badges/{name} should use navy and gold")
+        if ">TW</text>" not in text:
+            raise SystemExit(f"badges/{name} should keep the TW text mark")
+    badge_page = (OUT / "badge" / "index.html").read_text()
+    if html.escape(featured_badge_snippet(f"{BASE}/"), quote=False) not in badge_page:
+        raise SystemExit("badge page is missing the generic snippet")
+    if html.escape(featured_badge_snippet(f"{BASE}/", f"{BASE}/badges/featured-dark.svg"), quote=False) not in badge_page:
+        raise SystemExit("badge page is missing the dark snippet")
+    if '../badges/featured.svg' not in badge_page or '../badges/featured-dark.svg' not in badge_page:
+        raise SystemExit("badge page should preview both badges")
+    if not re.search(r"\bfree\b", badge_page, re.I):
+        raise SystemExit("badge page should say the badge is free")
+    if banned.search(badge_page):
+        raise SystemExit("badge page should not use pricing or paid language")
+    if f"{BASE}/badge/" not in (OUT / "sitemap.xml").read_text():
+        raise SystemExit("sitemap is missing /badge/")
+    if 'href="badge/">Badge</a>' not in (OUT / "index.html").read_text():
+        raise SystemExit("footer is missing the Badge link")
+    if 'href="../badge/">Badge</a>' not in (OUT / "about" / "index.html").read_text():
+        raise SystemExit("footer Badge link should stay relative on inner pages")
+    if "Featured here? Add the badge" in (OUT / "tools" / "index.html").read_text():
+        raise SystemExit("the directory index should not carry the listing badge snippet")
+    for t in tools:
+        rel = f"tools/{t['slug']}.html"
+        html_text = (OUT / "tools" / f"{t['slug']}.html").read_text()
+        if html_text.count('<details class="badge-embed">') != 1:
+            raise SystemExit(f"{rel} should have one collapsed badge section")
+        if "<summary>Featured here? Add the badge</summary>" not in html_text:
+            raise SystemExit(f"{rel} is missing the badge section")
+        start = html_text.find('<details class="badge-embed">')
+        end = html_text.find("</details>", start)
+        block = html_text[start:end]
+        if " open" in html_text[start:start + len('<details class="badge-embed">') + 8]:
+            raise SystemExit(f"{rel} badge section should stay collapsed")
+        listing = f"{BASE}/tools/{t['slug']}.html"
+        snippet = featured_badge_snippet(listing)
+        if html.escape(snippet, quote=False) not in block:
+            raise SystemExit(f"{rel} is missing the badge snippet for its listing")
+        if banned.search(block):
+            raise SystemExit(f"{rel} badge section should not use pricing or paid language")
+        form_at = html_text.find(CONFIG["listing_form"])
+        if start < form_at:
+            raise SystemExit(f"{rel} badge section should sit at the bottom, after the signup")
 check_signup_forms()
 check_clean_home_links()
+check_featured_badge()
 print(f"Built {len(tools)} tool pages into {OUT} ({new_count} new this week as of {TODAY})")
