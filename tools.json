@@ -1342,5 +1342,139 @@
     "mobile_note": "The official site doesn't mention a mobile app or mobile use, so this isn't confirmed.",
     "mobile_source": "https://infisical.com",
     "mobile_description": "The official site doesn't mention a mobile app or mobile use."
+  },
+  {
+    "name": "Cusp",
+    "url": "https://cusp.run/",
+    "category": "coding agents",
+    "description": "Agentic coding workspace from Wex Labs Limited. The October 21, 2026 post calls version 0.1 a public preview: it reads your code, edits files, runs commands, and checks its work with whichever model or gateway you choose, including Claude, GPT, Gemini, Grok, DeepSeek, Kimi, GLM, Qwen, MiniMax, Mistral, OpenRouter, or a local model.",
+    "use_cases": [
+      "Coding with a provider key or gateway you already have",
+      "Switching models without switching agents"
+    ],
+    "pricing": "Free with an account; Pro $20/mo ($16/mo billed yearly); Max $80/mo billed yearly; Team $25/seat/mo (2-seat minimum); Enterprise from $60/seat/mo, annual, 25-seat minimum. Free includes 2,500 agent actions a month on your own keys, plus $1 a month of efficient Cusp models and a $3 welcome credit. The pricing page says prices are in US dollars.",
+    "verdict": "",
+    "verdict_reason": "Cusp is for developers who want one coding workspace across many model providers, using an API key or a gateway rather than a separate agent per model. Wex Labs Limited's October 21, 2026 post calls version 0.1 a public preview and says it asks before doing anything risky. The FAQ prices Pro at $20 a month, or $16 a month billed yearly, and says Cusp does not sign in to a Claude Pro or Max subscription. Public pages do not yet agree on what is shipping: the download page says the CLI is not published yet, the installation doc says the first desktop releases are for macOS, and the legal index still lists invite-only beta terms. Check those pages before counting on Windows, Linux, or a team rollout.",
+    "verdict_checked": "2026-10-26",
+    "date_added": "2026-10-26",
+    "source": "https://cusp.run/blog/introducing-cusp",
+    "sources": [
+      "https://cusp.run/pricing",
+      "https://cusp.run/docs/reference/faq",
+      "https://cusp.run/download",
+      "https://cusp.run/docs/installation",
+      "https://cusp.run/legal"
+    ],
+    "related": ["OpenCode", "Claude Code", "Cursor"],
+    "mobile": "unverified",
+    "mobile_note": "The download page says Cusp runs on your computer and does not list a phone app.",
+    "mobile_source": "https://cusp.run/download",
+    "mobile_description": "The download page says Cusp runs on your computer. It lists macOS, Windows, and Linux sections and does not list a phone app. The installation doc says the first desktop releases are for macOS."
+  },
+  {
+    "name": "OpenCode",
+    "url": "https://opencode.ai/",
+    "category": "coding agents",
+    "description": "Open-source coding agent for the terminal, a desktop app, and an IDE extension, with a web app as well. It is MIT-licensed, includes free models, and can connect to other providers, including a ChatGPT Plus or Pro login or a GitHub Copilot login. Version 2.1.4, released October 23, 2026, shows MCP input forms during a tool call and adds experimental background compaction.",
+    "use_cases": [
+      "Terminal, desktop, or IDE coding sessions",
+      "Using a ChatGPT or Copilot login with an open-source agent"
+    ],
+    "pricing": "Free, open source (MIT). Optional OpenCode Go is $10/month; Go Plus is $40/month. Other providers bill separately.",
+    "verdict": "",
+    "verdict_reason": "OpenCode is for developers who want a free, MIT-licensed coding agent in the terminal, a desktop app, or an IDE, and who may already pay for ChatGPT Plus or Pro or for GitHub Copilot. Version 2.1.0 on October 20, 2026 gave Windows the same persistent terminal workflow as macOS and Linux, and it changed public SDK and plugin contracts. Version 2.1.4 on October 23 shows an MCP server's input form during a tool call instead of waiting until the call times out. The homepage says the agent is free to use. OpenCode Go, a separate model subscription, is $10 a month, and Go Plus is $40 a month. The project README says mobile apps that use the OpenCode name are not built by the OpenCode team.",
+    "verdict_checked": "2026-10-26",
+    "date_added": "2026-10-26",
+    "source": "https://opencode.ai/changelog",
+    "sources": [
+      "https://opencode.ai/",
+      "https://opencode.ai/go",
+      "https://github.com/anomalyco/opencode/"
+    ],
+    "related": ["Cusp", "Claude Code", "GitHub Copilot Pro"],
+    "operating_system": ["macOS", "Windows", "Linux"],
+    "mobile": "unverified",
+    "mobile_note": "Official clients are terminal, desktop, IDE, and web. The README says mobile apps using the OpenCode name are not from this project.",
+    "mobile_source": "https://github.com/anomalyco/opencode/",
+    "mobile_description": "The homepage lists a terminal interface, a desktop app, an IDE extension, and a web app. The GitHub README says projects that use the OpenCode name, including mobile apps, are not built by the OpenCode team."
+  },
+  {
+    "name": "OpenAI Decisions API",
+    "url": "https://openai.com/index/decisions-api",
+    "category": "AI agents/automation",
+    "description": "OpenAI API, generally available on October 22, 2026, that returns a probability, a fixed choice, or a rubric score from text, images, or JSON. It runs on gpt-6-luna, accepts up to 400 questions in one request, and is meant for fast routing and classification inside apps and agents.",
+    "use_cases": [
+      "Classifying or routing a request",
+      "Scoring an input against a rubric"
+    ],
+    "pricing": "Uncached input $0.10 per 1M tokens on gpt-6-luna. Output tokens are not charged. Cache-read and cache-write rates match standard gpt-6-luna prompt caching. Regional processing premiums and long-context multipliers apply.",
+    "verdict": "",
+    "verdict_reason": "The Decisions API is for applications and agents that need a bounded answer, such as a probability, a choice from a fixed set, or a rubric score, rather than a full written response. OpenAI made it generally available on October 22, 2026, on gpt-6-luna. The announcement says it is up to 10x faster than gpt-6-luna through the Responses API, and the docs allow up to 400 questions in one request. The docs price uncached input at $0.10 per 1M tokens and say output tokens are not charged. The speed claim and the customer examples on the announcement are OpenAI's.",
+    "verdict_checked": "2026-10-26",
+    "date_added": "2026-10-26",
+    "source": "https://openai.com/index/decisions-api",
+    "sources": [
+      "https://developers.openai.com/api/docs/guides/decisions",
+      "https://developers.openai.com/api/docs/changelog"
+    ],
+    "related": ["OpenAI Agent Builder", "OpenAI Codex"],
+    "mobile": "unverified",
+    "mobile_note": "The docs describe an HTTP API, not a mobile app.",
+    "mobile_source": "https://developers.openai.com/api/docs/guides/decisions",
+    "mobile_description": "The docs describe an HTTP API at POST /v1/decisions. They do not describe a mobile app."
+  },
+  {
+    "name": "Plango",
+    "url": "https://installplango.com/",
+    "category": "Security",
+    "description": "Mac security app from Acrebase, Inc. that watches coding agents such as Claude Code, Cursor, and Codex. It can keep SSH keys, .env files, and Finder-tagged folders out of reach, watch outbound connections, move secrets into the macOS Keychain, and scan skills and plugins for hidden instructions.",
+    "use_cases": [
+      "Keeping coding agents away from SSH keys and .env files",
+      "Scanning agent skills and plugins before trusting them"
+    ],
+    "pricing": "7-day free trial, no card, then $4.99/month. The trial does not turn into a paid plan. One Mac at a time.",
+    "verdict": "",
+    "verdict_reason": "Plango is for developers on an Apple silicon Mac who want a local control on what coding agents can read and where they can connect. Acrebase, Inc. sells it as Plango. The site lists guards for SSH keys, .env files, and Finder-tagged folders, a watch on outbound connections, a move of secrets into the macOS Keychain, and scans of skills and plugins. It requires macOS 15 or newer and at least 16 GB of memory. The price on the site is $4.99 a month after a 7-day trial that does not ask for a card and does not turn into a paid plan.",
+    "verdict_checked": "2026-10-26",
+    "date_added": "2026-10-26",
+    "source": "https://installplango.com/",
+    "sources": [
+      "https://installplango.com/terms",
+      "https://installplango.com/refunds"
+    ],
+    "related": ["Infisical", "Lakera"],
+    "operating_system": "macOS",
+    "mobile": "none",
+    "mobile_note": "Requires Apple silicon, macOS 15 or newer, and 16 GB of memory",
+    "mobile_source": "https://installplango.com/",
+    "mobile_description": "The site says Plango requires a Mac with Apple silicon (M1, M2, M3, or M4), macOS 15 or newer, and at least 16 GB of memory."
+  },
+  {
+    "name": "Inyon",
+    "url": "https://inyon.tech/",
+    "category": "coding agents",
+    "description": "Free MIT-licensed app by Abhash Chakraborty for watching, answering, and steering coding agents that are already running in tmux, from an Android phone or a browser. It works with Claude Code, Codex, Gemini CLI, OpenCode, GitHub Copilot, and Antigravity CLI, and each session keeps its own account.",
+    "use_cases": [
+      "Answering a coding agent from an Android phone",
+      "Steering a tmux session without changing the keyboard setup"
+    ],
+    "pricing": "Free, open source (MIT).",
+    "verdict": "",
+    "verdict_reason": "Inyon is for people who already run Claude Code, Codex, Gemini CLI, OpenCode, GitHub Copilot, or Antigravity CLI in tmux and want to answer them from an Android phone or a browser. Abhash Chakraborty publishes it under the MIT licence, and the terms updated October 23, 2026 say it is free. It drives the agent that is already running, so each session keeps its own account. The docs say there is no iPhone app yet: on an iPhone or iPad you use a hub in Safari. The terms also say Inyon does not add a limit to what an agent may do, and that you should pair only machines you control.",
+    "verdict_checked": "2026-10-26",
+    "date_added": "2026-10-26",
+    "source": "https://inyon.tech/docs/",
+    "sources": [
+      "https://inyon.tech/",
+      "https://inyon.tech/license/",
+      "https://inyon.tech/terms/",
+      "https://inyon.tech/docs/android/"
+    ],
+    "related": ["OpenCode", "Claude Code", "OpenAI Codex"],
+    "operating_system": ["Android", "macOS", "Linux", "Windows"],
+    "mobile": "partial",
+    "mobile_note": "Android app; no iPhone app yet, use a hub in Safari",
+    "mobile_source": "https://inyon.tech/docs/android/",
+    "mobile_description": "The docs say the Android app is the only phone app and needs Android 7.0 or later. There is no iPhone app yet. On an iPhone or iPad, the docs say to use a hub in Safari."
   }
 ]
