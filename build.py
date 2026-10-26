@@ -542,6 +542,7 @@ time,.num,.count,.metric b{font-family:var(--mono)}
 .letter code{font-family:var(--mono);font-size:.92em}
 .prose{max-width:68ch}
 .prose h2{margin:36px 0 10px;max-width:none;font-size:1.35rem}
+.prose h3{margin:22px 0 6px;max-width:none;font-size:1.12rem}
 .prose p,.prose li{font-size:1.0625rem;line-height:1.7;color:#d6dcf0}
 .prose p{margin:0 0 14px}
 .prose ul{margin:0 0 16px;padding-left:1.25rem}
@@ -594,6 +595,7 @@ dl dt{margin-top:16px}dl dd{margin:4px 0 0}
 .overview{grid-column:1;grid-row:2;min-width:0}
 .tool-hero h1{max-width:none;font-size:clamp(2.25rem,4vw,3.5rem);line-height:1.05}
 .sum{margin:18px 0 0;max-width:40rem;font-size:1.25rem;line-height:1.5;color:var(--tx)}
+.related{margin:14px 0 0;max-width:40rem;font-size:.95rem;line-height:1.5;color:var(--mu)}
 .overview{max-width:68ch;margin-top:8px}
 .overview h2{margin:0 0 16px;max-width:none;font-size:clamp(1.6rem,2.4vw,2rem);line-height:1.15;letter-spacing:-.03em;font-weight:650;color:var(--tx)}
 .overview .toc{display:flex;flex-wrap:wrap;gap:8px 16px;margin:0}
@@ -1036,27 +1038,29 @@ def page(title, desc, body, path, depth=0, nodes=None, bleed=False, og_type="web
     canon_path = "" if path == "index.html" else path
     canon = f"{BASE}/{canon_path}"
     img = f"{BASE}/og.jpg"
-    # Listing pages pass share=True. Other pages keep the website card.
-    share_meta = ""
-    if share:
-        share_meta = (
-            f'<meta property="og:site_name" content="{e(N)}">'
-            f'<meta name="twitter:site" content="@toolsmithweekly">'
-            f'<meta name="twitter:title" content="{e(title)}">'
-            f'<meta name="twitter:description" content="{e(desc)}">'
-        )
+    alt = N
+    # Same large-image card on every page. `share` stays so listing calls
+    # remain explicit; it does not change the tags.
+    if share and not str(title).strip():
+        raise SystemExit("a share page needs a title")
     metas = (
+        f'<meta property="og:site_name" content="{e(N)}">'
         f'<meta property="og:title" content="{e(title)}">'
         f'<meta property="og:description" content="{e(desc)}">'
         f'<meta property="og:type" content="{e(og_type)}">'
         f'<meta property="og:url" content="{canon}">'
         f'<meta property="og:image" content="{img}">'
+        f'<meta property="og:image:alt" content="{e(alt)}">'
         f'<meta property="og:image:width" content="1200">'
         f'<meta property="og:image:height" content="630">'
         f'<meta name="twitter:card" content="summary_large_image">'
-        f'{share_meta}'
+        f'<meta name="twitter:site" content="@toolsmithweekly">'
+        f'<meta name="twitter:title" content="{e(title)}">'
+        f'<meta name="twitter:description" content="{e(desc)}">'
         f'<meta name="twitter:image" content="{img}">'
+        f'<meta name="twitter:image:alt" content="{e(alt)}">'
         f'<link rel="canonical" href="{canon}">'
+        f'<link rel="alternate" type="text/plain" href="{BASE}/llms.txt" title="LLM-readable site summary">'
         f'{FAVICON_LINKS}'
         f'<meta name="color-scheme" content="dark">'
     )
@@ -1252,6 +1256,11 @@ def weekly_picks(items):
     return picks
 def subscribe_link():
     return f'<a class="btn" href="{e(CONFIG["subscribe_url"])}">Subscribe free</a>'
+def roundup_cta():
+    # Roundup box only. Form embeds and their fallbacks stay on subscribe_link().
+    # utm_campaign=friday-email is how to count clicks on this button.
+    href = CONFIG["subscribe_url"] + "?utm_source=toolsmithweekly&utm_medium=roundup-box&utm_campaign=friday-email"
+    return f'<a class="btn" href="{e(href)}">Get Friday\'s email</a>'
 def beehiiv_form(form_id, kind):
     # The loader inserts its iframe as the script's next sibling, so the slot
     # has to wrap the script. noscript covers browsers with JavaScript off.
@@ -1264,12 +1273,12 @@ def beehiiv_form(form_id, kind):
         f'<p class="bh-fallback" data-bh-fallback hidden>{link}</p>'
         f'</div>'
     )
-SIGNUP = f"""<div class="panel" id="signup"><p class="kicker">Get the Weekly Roundup</p><h2>{e("The week's new AI tools, every Friday")}</h2>
+SIGNUP = f"""<div class="panel" id="signup" data-experiment="friday-email"><p class="kicker">Get the Weekly Roundup</p><h2>{e("The week's new AI tools, every Friday")}</h2>
 <p class="sub">{e("One short, free email with the newest AI tool drops, from big launches to indie projects. Each one comes with a plain-English summary, what it costs, and a direct link.")}</p>
 <ul class="points"><li>{e("Catch new AI tools the week they ship, including small indie projects")}</li>
 <li>{e("Get what each tool does and what it costs, explained in plain language")}</li>
 <li>{e("Go straight to each tool with a direct link, or browse the full directory at ")}<a href="{e(BASE)}/tools/">toolsmithweekly.com</a></li></ul>
-<p>{subscribe_link()}</p></div>"""
+<p>{roundup_cta()}</p></div>"""
 picks = weekly_picks(tools)
 counts = Counter(t["category"] for t in tools)
 known = [c for c in CAT_ORDER if c in counts]
@@ -1772,6 +1781,92 @@ def _forbid_rating(node, name):
     elif isinstance(node, list):
         for value in node:
             _forbid_rating(value, name)
+COMPARISONS = [
+    {
+        "slug": "cusp-vs-opencode",
+        "title": "Cusp vs OpenCode",
+        "path": "compare/cusp-vs-opencode/",
+        "tools": ["Cusp", "OpenCode"],
+        "lede": "Cusp and OpenCode are both coding agents that can use models from more than one provider. Cusp is a workspace from Wex Labs Limited, in a 0.1 preview announced on October 21, 2026. OpenCode is a free MIT-licensed agent, and version 2.1.4 shipped on October 23, 2026. The notes below come from each product's public site, docs, pricing page, and changelog. This is not a hands-on test.",
+        "rows": [
+            ("Publisher", "Wex Labs Limited", "The anomalyco/opencode project on GitHub. The Go page lists help@anoma.ly for refunds."),
+            ("What shipped this week", "Version 0.1, announced October 21, 2026, as a public preview.", "Version 2.1.0 on October 20 (persistent Windows terminals; SDK and plugin contract changes) and 2.1.4 on October 23 (MCP input forms, experimental background compaction)."),
+            ("License", "Not published as an open-source product. The legal page lists open-source licences for components inside the app.", "MIT, according to the homepage and the GitHub repository."),
+            ("Price", "Free account. Pro is $20 a month, or $16 a month billed yearly. Max is $80 a month billed yearly.", "The agent is free. Optional OpenCode Go is $10 a month. Go Plus is $40 a month. Other providers bill separately."),
+            ("Where it runs", "Homepage lists macOS, Windows, and Linux. The installation doc says the first desktop releases are for macOS. The download page says the CLI is not published yet.", "Terminal, desktop app, IDE extension, and web app, with desktop builds for macOS, Windows, and Linux."),
+            ("Models", "API keys and gateways, or Cusp models. The FAQ says it does not sign in to Claude Pro or Max.", "Free models included. ChatGPT Plus or Pro login, GitHub Copilot login, other providers, or OpenCode Go."),
+            ("Phone", "No phone app is listed. The download page says it runs on your computer.", "No official phone app. The README says mobile apps that use the OpenCode name are not built by the OpenCode team. Inyon can steer an OpenCode session that is already running in tmux."),
+        ],
+        "faq": [
+            ("Is Cusp or OpenCode open source?", "OpenCode's homepage says the project is MIT-licensed, and the GitHub repository uses the MIT license. Cusp's legal page says Cusp is a product of Wex Labs Limited and lists open-source licences for components inside the app. Cusp itself is not described as an open-source product."),
+            ("What does each one cost?", "Cusp's FAQ says the Free plan is $0 with an account and Pro is $20 a month, or $16 a month billed yearly. OpenCode's homepage says the agent is free to use, with free models included and extra cost if you connect another provider. OpenCode Go, a separate model subscription, is $10 a month, and Go Plus is $40 a month."),
+            ("Can I use a Claude or ChatGPT subscription?", "Cusp's FAQ says it connects with API keys and does not sign in with consumer chat subscriptions, including Claude Pro or Max. OpenCode's homepage says you can log in with ChatGPT Plus or Pro, or with GitHub Copilot."),
+            ("Do they run on a phone?", "Neither product's own site describes an official phone app. Cusp's download page says it runs on your computer. OpenCode's README says projects that use the OpenCode name, including mobile apps, are not built by the OpenCode team. Inyon, a separate listing, can steer an OpenCode session that is already running in tmux from an Android phone."),
+        ],
+        "sources": [
+            "https://cusp.run/blog/introducing-cusp",
+            "https://cusp.run/pricing",
+            "https://cusp.run/docs/reference/faq",
+            "https://cusp.run/download",
+            "https://cusp.run/docs/installation",
+            "https://cusp.run/legal",
+            "https://opencode.ai/",
+            "https://opencode.ai/changelog",
+            "https://opencode.ai/go",
+            "https://github.com/anomalyco/opencode/",
+            "https://inyon.tech/docs/",
+        ],
+    },
+]
+def tool_named(name):
+    for t in tools:
+        if t["name"] == name:
+            return t
+    raise SystemExit(f"unknown tool {name!r}")
+def source_facts(t):
+    # One Source link unless the listing names more official pages.
+    links = []
+    seen = set()
+    for url in [t.get("source")] + list(t.get("sources") or []):
+        url = str(url or "").strip()
+        if not url or url in seen:
+            continue
+        if not url.startswith("https://"):
+            raise SystemExit(f"{t['name']} source is not an https URL: {url}")
+        seen.add(url)
+        links.append(f'<a href="{e(url)}" rel="noopener">{e(url)}</a>')
+    if not links:
+        raise SystemExit(f"{t['name']} is missing a source")
+    label = "Sources" if len(links) > 1 else "Source"
+    joined = "<br>".join(links)
+    return f"<dt>{label}</dt><dd>{joined}</dd>"
+def related_names(t):
+    # Explicit names first, then tools that point back here.
+    names = []
+    seen = set()
+    def add(name):
+        if not name or name == t["name"] or name in seen:
+            return
+        tool_named(name)
+        seen.add(name)
+        names.append(name)
+    for name in t.get("related") or []:
+        add(name)
+    for other in tools:
+        if t["name"] in (other.get("related") or []):
+            add(other["name"])
+    return names
+def related_html(t):
+    bits = []
+    for name in related_names(t):
+        other = tool_named(name)
+        bits.append(f'<a href="{e(other["slug"])}.html">{e(other["name"])}</a>')
+    for comp in COMPARISONS:
+        if t["name"] in comp["tools"]:
+            bits.append(f'<a href="../{e(comp["path"])}">{e(comp["title"])}</a>')
+    if not bits:
+        return ""
+    return f'<p class="related">Related: {" · ".join(bits)}</p>'
 def listing_nodes(t, title, desc, covered=None):
     page_url = f"{BASE}/tools/{t['slug']}.html"
     app_id = page_url + "#app"
@@ -1866,10 +1961,10 @@ for t in tools:
     # Same directory the chips filter. /tools/?cat= keeps the query on the clean
     # directory URL. index.html?cat= opens /tools/index.html instead.
     cat_href = "/tools/?cat=" + quote(t["category"], safe="")
-    b = f"""<div class="tool-hero"><div class="tool-copy"><p class="back"><a href="/tools/">Tool directory</a> · <a href="{e(cat_href)}">{e(cat_label(t['category']))}</a>{issue_crumb}</p><h1>{e(t['name'])}</h1><p class="vrow">{badge_html(t)}{verdict_stamp(t)}</p><p class="sum">{e(t['description'])}</p>
+    b = f"""<div class="tool-hero"><div class="tool-copy"><p class="back"><a href="/tools/">Tool directory</a> · <a href="{e(cat_href)}">{e(cat_label(t['category']))}</a>{issue_crumb}</p><h1>{e(t['name'])}</h1><p class="vrow">{badge_html(t)}{verdict_stamp(t)}</p><p class="sum">{e(t['description'])}</p>{related_html(t)}
 </div>
 <aside class="facts" aria-label="Facts">{mobile_fact(t)}<dl><dt>Use cases</dt><dd><ul>{''.join(f'<li>{e(u)}</li>' for u in t['use_cases'])}</ul></dd><dt>Pricing</dt><dd>{e(t['pricing'])}</dd><dt>Website</dt><dd><a href="{e(t['url'])}" rel="noopener">{e(t['url'])}</a></dd>
-<dt>Source</dt><dd><a href="{e(t['source'])}" rel="noopener">{e(t['source'])}</a></dd><dt>Added</dt><dd><time datetime="{e(t['date_added'])}">{e(fmt_date(t['date_added']))}</time></dd>{issue_fact}</dl>
+{source_facts(t)}<dt>Added</dt><dd><time datetime="{e(t['date_added'])}">{e(fmt_date(t['date_added']))}</time></dd>{issue_fact}</dl>
 <a class="btn" href="{e(t['url'])}" rel="nofollow noopener">Visit website</a></aside>
 {ov}</div>
 {rule}
@@ -2021,13 +2116,93 @@ privacy_body = f"""<header class="pagehead pagehead-wide"><p class="kicker">Priv
     f"Privacy — {N}",
     "Toolsmith Weekly has no accounts. Subscriber emails go to beehiiv, and the footer loads the Product Hunt badge image.",
     privacy_body, "privacy/", 1))
+def write_comparison(comp):
+    # One factual comparison. FAQ copy and FAQPage schema share the same strings.
+    left_name, right_name = comp["tools"]
+    left, right = tool_named(left_name), tool_named(right_name)
+    depth = comp["path"].strip("/").count("/") + 1
+    page_url = f"{BASE}/{comp['path']}"
+    heads = "".join(f'<th scope="col">{e(h)}</th>' for h in ("", left_name, right_name))
+    body = []
+    for label, a, b in comp["rows"]:
+        body.append("<tr>" + "".join(f"<td>{e(c)}</td>" for c in (label, a, b)) + "</tr>")
+    table = (f'<div class="tbl"><table><caption>{e(comp["title"])}</caption>'
+             f"<thead><tr>{heads}</tr></thead><tbody>{''.join(body)}</tbody></table></div>")
+    faqs = []
+    questions = []
+    for q, a in comp["faq"]:
+        faqs.append(f"<h3>{e(q)}</h3><p>{e(a)}</p>")
+        questions.append({
+            "@type": "Question",
+            "name": q,
+            "acceptedAnswer": {"@type": "Answer", "text": a},
+        })
+    srcs = "".join(f'<li><a href="{e(u)}" rel="noopener">{e(u)}</a></li>' for u in comp["sources"])
+    inyon = tool_named("Inyon")
+    body_html = f"""<header class="pagehead pagehead-wide"><p class="kicker">Comparison</p>
+<p class="back"><a href="/">Home</a> · <a href="/tools/">Tool directory</a></p>
+<h1>{e(comp["title"])}</h1>
+<p class="lede">{e(comp["lede"])}</p></header>
+<div class="prose">
+<p>Listings: <a href="/tools/{e(left["slug"])}.html">{e(left_name)}</a> · <a href="/tools/{e(right["slug"])}.html">{e(right_name)}</a> · <a href="/tools/{e(inyon["slug"])}.html">{e(inyon["name"])}</a></p>
+{table}
+<h2 id="faq">FAQ</h2>
+{''.join(faqs)}
+<h2>Sources</h2>
+<ul>{srcs}</ul>
+</div><div class="sec">{SIGNUP}</div>"""
+    crumb_id = page_url + "#breadcrumb"
+    nodes = [
+        {
+            "@type": "WebPage",
+            "@id": page_url + "#webpage",
+            "url": page_url,
+            "name": comp["title"],
+            "description": comp["lede"],
+            "isPartOf": {"@id": f"{BASE}/#website"},
+            "breadcrumb": {"@id": crumb_id},
+            "mainEntity": {"@id": page_url + "#faq"},
+        },
+        {
+            "@type": "BreadcrumbList",
+            "@id": crumb_id,
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Home", "item": f"{BASE}/"},
+                {"@type": "ListItem", "position": 2, "name": "Tool directory", "item": f"{BASE}/tools/"},
+                {"@type": "ListItem", "position": 3, "name": comp["title"], "item": page_url},
+            ],
+        },
+        item_list(comp["title"], [left, right]),
+        {
+            "@type": "FAQPage",
+            "@id": page_url + "#faq",
+            "url": page_url + "#faq",
+            "mainEntity": questions,
+        },
+    ]
+    _forbid_rating(nodes, comp["title"])
+    desc = "How Cusp and OpenCode differ on price, license, clients, and model access, from each product's public site. Not a hands-on test."
+    if len(desc) > DESC_LIMIT:
+        raise SystemExit(f"{comp['title']} meta description is {len(desc)} characters")
+    title = f"{comp['title']} | {N}"
+    if len(title) > TITLE_LIMIT:
+        raise SystemExit(f"{comp['title']} title is {len(title)} characters")
+    dest = OUT.joinpath(*comp["path"].strip("/").split("/"))
+    dest.mkdir(parents=True, exist_ok=True)
+    (dest / "index.html").write_text(page(
+        title, desc, body_html, comp["path"], depth, nodes=nodes, share=True))
+for comp in COMPARISONS:
+    if len(comp["tools"]) != 2:
+        raise SystemExit(f"{comp['title']} should compare two listed tools")
+    write_comparison(comp)
 def public_url(path):
     # Match the canonical tag: the homepage file is index.html, its URL is /.
     if path in ("", "/", "index.html"):
         return f"{BASE}/"
     return f"{BASE}/{path.lstrip('/')}"
 issue_urls = [i["path"] for i in ISSUES if issue_is_live(i)]
-urls = ["/", "tools/", "this-week.html", "newsletter/"] + issue_urls + ["about/", "contact/", "privacy/", "suggest/"] + [f"tools/{t['slug']}.html" for t in tools]
+compare_urls = [c["path"] for c in COMPARISONS]
+urls = ["/", "tools/", "this-week.html", "newsletter/"] + issue_urls + ["about/", "contact/", "privacy/", "suggest/"] + compare_urls + [f"tools/{t['slug']}.html" for t in tools]
 (OUT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + "".join(f"<url><loc>{public_url(u)}</loc></url>" for u in urls) + "</urlset>")
 (OUT / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {BASE}/sitemap.xml\n")
 new_count = sum(is_new(t) for t in tools)
@@ -2048,6 +2223,7 @@ llms = [
     f"- [Contact]({BASE}/contact/): Email {CONFIG['suggest_email']}, or a DM to @toolsmithweekly on X.",
     f"- [Privacy]({BASE}/privacy/): No accounts. Subscriber emails go to beehiiv. The footer loads the Product Hunt badge image.",
     f"- [Suggest a tool]({BASE}/suggest/): One email to {CONFIG['suggest_email']}. Indie projects are welcome. No account and no form. Inclusion is not for sale and is not guaranteed.",
+    f"- [Cusp vs OpenCode]({BASE}/compare/cusp-vs-opencode/): Factual comparison of price, license, clients, and model access, from each product's public pages, with an FAQ. Not a hands-on test.",
     f"- [Subscribe]({CONFIG['subscribe_url']}): Free weekly letter on beehiiv.",
     "",
     "## Tools",
@@ -2079,8 +2255,14 @@ def check_signup_forms():
         raise SystemExit("homepage should boot beehiiv once, with one noscript fallback")
     if home.count('id="signup"') != 1:
         raise SystemExit("homepage letter signup should stay a single link box")
+    cta = "Get Friday's email"
+    if home.count(f">{cta}</a>") != 1 or "utm_campaign=friday-email" not in home:
+        raise SystemExit("homepage roundup box should use the Friday email button once")
+    if subscribe_link() not in home:
+        raise SystemExit("homepage form fallback should stay Subscribe free")
     plain = ["tools/index.html", "about/index.html", "contact/index.html", "privacy/index.html",
-             "suggest/index.html", "newsletter/index.html", "this-week.html", "newsletter/1/index.html"]
+             "suggest/index.html", "newsletter/index.html", "this-week.html", "newsletter/1/index.html",
+             "compare/cusp-vs-opencode/index.html"]
     for rel in plain:
         text = (OUT / rel).read_text()
         if "data-bh-slot" in text or "attribution.js" in text or hero_id in text or listing_id in text:
@@ -2120,6 +2302,87 @@ def check_clean_home_links():
         text = (OUT / name).read_text()
         if "index.html" in text:
             raise SystemExit(f"{name} references index.html")
+def check_roundup_box():
+    # The experiment button is the roundup box only. Form fallbacks stay "Subscribe free".
+    cta = ">Get Friday's email</a>"
+    for rel in ("index.html", "this-week.html", "newsletter/index.html", "newsletter/1/index.html",
+                "suggest/index.html", "compare/cusp-vs-opencode/index.html"):
+        text = (OUT / rel).read_text()
+        if text.count(cta) != 1 or "utm_campaign=friday-email" not in text:
+            raise SystemExit(f"{rel} roundup box should use the Friday email button once")
+        if text.count('id="signup"') != 1:
+            raise SystemExit(f"{rel} should have one roundup box")
+    for t in tools:
+        text = (OUT / "tools" / f"{t['slug']}.html").read_text()
+        if cta in text or "utm_campaign=friday-email" in text:
+            raise SystemExit(f"tools/{t['slug']}.html should keep the listing form, not the roundup button")
+def check_jsonld_and_links():
+    ld_re = re.compile(r'<script type="application/ld\+json">(.*?)</script>', re.S)
+    href_re = re.compile(r'href="([^"]*)"')
+    for path in sorted(OUT.rglob("*.html")):
+        text = path.read_text()
+        rel = str(path.relative_to(OUT))
+        for raw in ld_re.findall(text):
+            try:
+                data = json.loads(raw)
+            except json.JSONDecodeError as exc:
+                raise SystemExit(f"{rel} has invalid JSON-LD: {exc}")
+            if not isinstance(data, dict) or data.get("@context") != "https://schema.org":
+                raise SystemExit(f"{rel} JSON-LD is missing schema.org context")
+            graph = data.get("@graph")
+            nodes = graph if isinstance(graph, list) else [data]
+            for node in nodes:
+                _forbid_rating(node, rel)
+        if "foot-main" in text and text.count("api.producthunt.com/widgets/embed-image") != 1:
+            raise SystemExit(f"{rel} should have one Product Hunt badge in the footer")
+        for href in href_re.findall(text):
+            target = href.split("#", 1)[0].split("?", 1)[0]
+            if not target or target.startswith(("mailto:", "http://", "https://", "javascript:")):
+                continue
+            wants_dir = target.endswith("/")
+            if target.startswith("/"):
+                raw = target
+            else:
+                parent = rel.rsplit("/", 1)[0] if "/" in rel else ""
+                raw = f"{parent}/{target}" if parent else target
+            parts = []
+            for part in raw.split("/"):
+                if part in ("", "."):
+                    continue
+                if part == "..":
+                    if not parts:
+                        raise SystemExit(f"{rel} link escapes the site: {href}")
+                    parts.pop()
+                else:
+                    parts.append(part)
+            loc = "/".join(parts)
+            if wants_dir or loc == "":
+                dest = (OUT / loc / "index.html") if loc else (OUT / "index.html")
+            else:
+                dest = OUT / loc
+                if not dest.is_file() and (OUT / loc / "index.html").is_file():
+                    dest = OUT / loc / "index.html"
+            if not dest.is_file():
+                raise SystemExit(f"{rel} broken internal link {href}")
+    comp = (OUT / "compare/cusp-vs-opencode/index.html").read_text()
+    for kind in ("FAQPage", "BreadcrumbList", "ItemList"):
+        if f'"@type": "{kind}"' not in comp:
+            raise SystemExit(f"comparison page is missing {kind}")
+    if comp.count("<h3>") != comp.count('"@type": "Question"'):
+        raise SystemExit("comparison FAQ headings and FAQPage questions differ")
+    sitemap = (OUT / "sitemap.xml").read_text()
+    if "<loc>https://toolsmithweekly.com/</loc>" not in sitemap or "index.html" in sitemap:
+        raise SystemExit("sitemap root should be / and should not name index.html")
+    for rel in ("compare/cusp-vs-opencode/", "tools/cusp.html", "tools/opencode.html",
+                "tools/openai-decisions-api.html", "tools/plango.html", "tools/inyon.html"):
+        if f"<loc>{BASE}/{rel}</loc>" not in sitemap:
+            raise SystemExit(f"sitemap is missing {rel}")
+    llms = (OUT / "llms.txt").read_text()
+    for name in ("Cusp", "OpenCode", "OpenAI Decisions API", "Plango", "Inyon", "Cusp vs OpenCode"):
+        if name not in llms:
+            raise SystemExit(f"llms.txt is missing {name}")
 check_signup_forms()
+check_roundup_box()
 check_clean_home_links()
+check_jsonld_and_links()
 print(f"Built {len(tools)} tool pages into {OUT} ({new_count} new this week as of {TODAY})")
